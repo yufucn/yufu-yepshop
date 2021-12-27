@@ -15,5 +15,16 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
-
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.yufu</groupId>
+            <artifactId>yepshop-domain</artifactId>
+            <version>${yepshop.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>
