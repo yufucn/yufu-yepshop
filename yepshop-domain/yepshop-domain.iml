@@ -17,16 +17,18 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="yepshop-types" />
-    <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.2.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.0.13.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.4.2.Final" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml:classmate:1.5.1" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.13" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.13" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.13" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.3.13" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.13" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.13" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.5.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.9" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.9" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.9" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.3.9" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.9" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.9" level="project" />
+    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.18" level="project" />
+    <orderEntry type="library" name="Maven: cn.hutool:hutool-all:5.5.8" level="project" />
   </component>
 </module>
