@@ -15,5 +15,20 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.yufu</groupId>
+            <artifactId>yepshop-web</artifactId>
+            <version>${yepshop.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

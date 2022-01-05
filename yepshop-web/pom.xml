@@ -17,6 +17,17 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.yufu</groupId>
+            <artifactId>yepshop-domain</artifactId>
+            <version>${yepshop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
@@ -33,6 +44,11 @@
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-miniapp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
     </dependencies>
 </project>
