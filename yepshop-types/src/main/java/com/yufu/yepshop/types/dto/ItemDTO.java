@@ -2,6 +2,10 @@ package com.yufu.yepshop.types.dto;
 
 import com.yufu.yepshop.types.value.Category;
 import com.yufu.yepshop.types.value.Money;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -9,85 +13,35 @@ import java.util.List;
  * @author wang
  * @date 2021/12/26 22:15
  */
+@Getter
+@Setter
+@ApiModel("闲置明细DTO")
 public class ItemDTO {
 
+    @ApiModelProperty("ID")
     private String id;
 
+    @ApiModelProperty("详情")
     private String text;
 
+    @ApiModelProperty("图片地址集合")
     private List<String> urls;
 
+    @ApiModelProperty("价格")
     private Money price;
 
+    @ApiModelProperty("原价")
     private Money originalPrice;
 
+    @ApiModelProperty("运费")
     private Money postage;
 
+    @ApiModelProperty("分类")
     private List<Category> categories;
 
-    /**
-     * 评论总数
-     */
+    @ApiModelProperty("评论总数")
     private Long totalComment;
 
-    /**
-     * 收藏总数
-     */
-    private Long totalFavorite;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public List<String> getUrls() {
-        return urls;
-    }
-
-    public void setUrls(List<String> urls) {
-        this.urls = urls;
-    }
-
-    public Money getPrice() {
-        return price;
-    }
-
-    public void setPrice(Money price) {
-        this.price = price;
-    }
-
-    public Money getOriginalPrice() {
-        return originalPrice;
-    }
-
-    public void setOriginalPrice(Money originalPrice) {
-        this.originalPrice = originalPrice;
-    }
-
-    public Money getPostage() {
-        return postage;
-    }
-
-    public void setPostage(Money postage) {
-        this.postage = postage;
-    }
-
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
+    @ApiModelProperty("收藏总数")
+    private Long totalCollect;
 }

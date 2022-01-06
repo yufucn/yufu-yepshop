@@ -31,9 +31,9 @@ public class YufuUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var optionalUser = yufuUserRepository.findByUserName(username);
-        if(!optionalUser.isPresent()){
+        if (!optionalUser.isPresent()) {
             optionalUser = yufuUserRepository.findByEmail(username);
-            if(optionalUser.isPresent()){
+            if (optionalUser.isPresent()) {
                 return optionalUser.get();
             }
         } else {
@@ -43,7 +43,6 @@ public class YufuUserDetailsService implements UserDetailsService {
     }
 
     public void register(YufuUser user) {
-        user.setPassword("a");
         user.setEnabled(true);
         user.setEmailConfirmed(true);
         user.setAccountNonLocked(true);
@@ -51,7 +50,9 @@ public class YufuUserDetailsService implements UserDetailsService {
         user.setCredentialsNonExpired(true);
         user.setAccessFailedCount(0);
         user.setNormalizedUserName(user.getUsername().toUpperCase(Locale.ROOT));
-        user.setNormalizedEmail(user.getEmail().toUpperCase(Locale.ROOT));
+        if (user.getEmail() != null) {
+            user.setNormalizedEmail(user.getEmail().toUpperCase(Locale.ROOT));
+        }
         yufuUserRepository.save(user);
     }
 }

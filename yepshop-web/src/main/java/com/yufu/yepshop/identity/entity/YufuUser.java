@@ -19,23 +19,15 @@ import java.util.Collections;
  */
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "yufu_user")
 public class YufuUser implements UserDetails {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Id
     @GeneratedValue(generator = "idGenerator")
     @GenericGenerator(name = "idGenerator", strategy = "com.yufu.yepshop.identity.entity.GenerateId")
-//    @Column(name = "scheme_model_id", nullable = false)
-    public Long getId() {
-        return id;
-    }
+    private Long id;
 
     private String userName;
 

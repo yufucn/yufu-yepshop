@@ -56,19 +56,14 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
 //            member.setStatus(GlobalConstants.STATUS_YES);
 //            memberFeignClient.add(member);
 //        }
-        YufuUser user = new YufuUser();
-        user.setUserName(code);
-        user.setEnabled(true);
-        user.setEmailConfirmed(true);
-        user.setAccountNonLocked(true);
-        user.setAccountNonExpired(true);
-        user.setCredentialsNonExpired(true);
-        user.setAccessFailedCount(0);
-        user.setNormalizedUserName(user.getUsername().toUpperCase(Locale.ROOT));
-        user.setNormalizedEmail(user.getEmail().toUpperCase(Locale.ROOT));
-        ((YufuUserDetailsService)userDetailsService).register(user);
-
         UserDetails userDetails = userDetailsService.loadUserByUsername(code);
+        if (userDetails == null) {
+            YufuUser user = new YufuUser();
+            user.setUserName(code);
+            ((YufuUserDetailsService) userDetailsService).register(user);
+        }
+
+        userDetails = userDetailsService.loadUserByUsername(code);
 
         WechatAuthenticationToken result = new WechatAuthenticationToken(userDetails, new HashSet<>());
         result.setDetails(authentication.getDetails());

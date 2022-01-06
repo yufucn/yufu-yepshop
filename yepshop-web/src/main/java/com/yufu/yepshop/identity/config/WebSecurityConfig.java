@@ -13,6 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * WebSecurity 配置
@@ -31,33 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(wechatAuthenticationProvider());
-    }
-
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers
-                ("/swagger-ui.html/**", "/webjars/**",
-                        "/swagger-resources/**", "/v2/api-docs/**",
-                        "/swagger-resources/configuration/ui/**", "/swagger-resources/configuration/security/**",
-                        "/images/**");
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .requestMatchers()
-                .antMatchers("/oauth2/login", "/oauth2/login", "/oauth/authorize")
-                .and()
-                .authorizeRequests()
-                .antMatchers("/oauth2/login", "/oauth2/login")
-                .permitAll()
-                .anyRequest()
-                .authenticated();
-
-        http.formLogin()
-                .loginPage("/oauth2/login")
-                .loginProcessingUrl("/oauth2/login");
     }
 
     @Bean

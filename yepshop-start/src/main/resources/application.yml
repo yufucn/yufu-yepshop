@@ -1,8 +1,5 @@
 server:
   port: 5001
-Snowflake:
-
-
 spring:
   application:
     name: yepshop-service
