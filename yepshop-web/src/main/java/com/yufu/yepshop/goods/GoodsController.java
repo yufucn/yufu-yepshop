@@ -6,7 +6,8 @@ import com.yufu.yepshop.types.command.CreateGoodsCommand;
 import com.yufu.yepshop.types.command.CreateGoodsCommentCommand;
 import com.yufu.yepshop.types.command.CreateGoodsCommentReplyCommand;
 import com.yufu.yepshop.types.command.UpdateGoodsCommand;
-import com.yufu.yepshop.types.dto.ItemDTO;
+import com.yufu.yepshop.types.dto.GoodsDTO;
+import com.yufu.yepshop.types.dto.GoodsListDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,19 +24,20 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class GoodsController {
 
-    private GoodsService goodsService;
+    private final GoodsService goodsService;
 
     public GoodsController(GoodsService goodsService) {
+
         this.goodsService = goodsService;
     }
 
     @ApiOperation(value = "闲置 - 列表")
     @GetMapping()
-    public Result<Page<ItemDTO>> getGoods(
+    public Result<Page<GoodsListDTO>> getGoods(
             @RequestParam Integer page,
             @RequestParam(name = "per_page") Integer perPage
     ) {
-        return null;
+        return goodsService.pagedList(page, perPage);
     }
 
     @ApiOperation(value = "新增闲置")
@@ -72,8 +74,8 @@ public class GoodsController {
 
     @ApiOperation(value = "闲置详情")
     @GetMapping("/{id}")
-    public Result<ItemDTO> getGoods(@PathVariable String id) {
-        return null;
+    public Result<GoodsDTO> getGoods(@PathVariable String id) {
+        return goodsService.get(id);
     }
 
     @ApiOperation(value = "闲置删除")

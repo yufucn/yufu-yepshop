@@ -4,11 +4,13 @@ import com.yufu.yepshop.domain.types.auditing.FullAuditedEntity;
 import com.yufu.yepshop.types.enums.AuditState;
 import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.enums.SellerType;
+import com.yufu.yepshop.types.value.RegionValue;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
@@ -50,4 +52,7 @@ public class GoodsDO extends FullAuditedEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 16)
     private AuditState auditState;
+
+    @Embedded
+    private RegionValue region;
 }

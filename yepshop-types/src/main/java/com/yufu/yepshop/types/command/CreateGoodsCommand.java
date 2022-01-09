@@ -25,7 +25,7 @@ public class CreateGoodsCommand {
     private String picUrl;
 
     @NotNull(message = "图片不能为空")
-    private List<String> urls;
+    private String[] urls;
 
     @NotNull(message = "金额不能为空")
     private BigDecimal price;

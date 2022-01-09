@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Api(tags = "主数据 - 分类")
 @RestController
-@RequestMapping("/api/v1/category")
+@RequestMapping("/api/v1/mdm/category")
 public class CategoryController {
     private final GoodsCategoryService service;
 

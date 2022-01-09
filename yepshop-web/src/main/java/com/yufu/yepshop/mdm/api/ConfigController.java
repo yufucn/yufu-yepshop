@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "主数据 - 配置")
 @RestController
-@RequestMapping("/api/v1/config")
+@RequestMapping("/api/v1/mdm/config")
 public class ConfigController extends BaseController {
 
     @Value("${aliyun.ak}")

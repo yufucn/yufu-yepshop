@@ -1,7 +1,7 @@
 package com.yufu.yepshop.users.api;
 
 import com.yufu.yepshop.common.Result;
-import com.yufu.yepshop.types.dto.ItemDTO;
+import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.dto.UserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +28,7 @@ public class UserController {
 
     @ApiOperation(value = "闲置 - 列表（上架的、下架的、卖出的、草稿）")
     @GetMapping("/{id}/goods")
-    public Result<Page<ItemDTO>> getUserGoods(
+    public Result<Page<GoodsListDTO>> getUserGoods(
             @PathVariable String id,
             @RequestParam Integer page,
             @RequestParam(name = "per_page") Integer perPage,
@@ -39,7 +39,7 @@ public class UserController {
 
     @ApiOperation(value = "订单 - 列表")
     @GetMapping("/{id}/orders")
-    public Result<Page<ItemDTO>> getUserOrders(
+    public Result<Page<GoodsListDTO>> getUserOrders(
             @PathVariable String id,
             @RequestParam Integer page,
             @RequestParam(name = "per_page") Integer perPage,

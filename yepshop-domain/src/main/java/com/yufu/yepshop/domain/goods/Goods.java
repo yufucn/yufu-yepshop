@@ -31,4 +31,11 @@ public class Goods {
 
     private String text;
 
+    public String getTitleFromText() {
+        if (text.length() > 9) {
+            return text.substring(0, 8);
+        }
+        return text;
+    }
+
 }

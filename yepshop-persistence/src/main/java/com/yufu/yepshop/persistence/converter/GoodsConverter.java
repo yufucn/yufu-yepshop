@@ -6,6 +6,7 @@ import com.yufu.yepshop.persistence.DO.GoodsDO;
 import com.yufu.yepshop.persistence.DO.GoodsDetailDO;
 import com.yufu.yepshop.persistence.DO.RegionDO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
@@ -30,8 +31,10 @@ public interface GoodsConverter {
      * @param model DO
      * @return Entity
      */
+    @Mapping(target = "region.", source = "region.")
     Goods toEntity(GoodsDO model);
 
+    Goods toEntity(GoodsDetailDO model, @MappingTarget Goods entity);
 
     List<Goods> toEntityList(List<GoodsDO> models);
 }

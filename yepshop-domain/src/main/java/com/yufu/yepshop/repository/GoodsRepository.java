@@ -1,7 +1,7 @@
 package com.yufu.yepshop.repository;
 
 import com.yufu.yepshop.domain.goods.Goods;
-import com.yufu.yepshop.mdm.GoodsCategory;
+import org.springframework.data.domain.Page;
 
 /**
  * @author wang
@@ -9,4 +9,8 @@ import com.yufu.yepshop.mdm.GoodsCategory;
  */
 public interface GoodsRepository {
     Boolean save(Goods entity);
+
+    Page<Goods> pagedList(Integer page, Integer perPage);
+
+    Goods get(String id);
 }

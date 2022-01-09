@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Api(tags = "主数据 - 行政区域")
 @RestController
-@RequestMapping("/api/v1/region")
+@RequestMapping("/api/v1/mdm/region")
 public class RegionController {
 
     private final RegionService regionService;
