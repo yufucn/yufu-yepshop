@@ -1,5 +1,6 @@
 package com.yufu.yepshop.identity.config;
 
+import com.yufu.yepshop.identity.entity.UserAccountDO;
 import lombok.val;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -7,7 +8,6 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Jwt Token 扩展信息
@@ -19,8 +19,10 @@ public class JwtTokenEnhancer implements TokenEnhancer {
 
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
+        UserAccountDO user = (UserAccountDO) oAuth2Authentication.getPrincipal();
         val info = new HashMap<String, Object>();
-        info.put("jwt-ext", "JWT 扩展信息");
+        info.put("nick_name", user.getNickName());
+        info.put("user_id", user.getId().toString());
         ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(info);
         return oAuth2AccessToken;
     }

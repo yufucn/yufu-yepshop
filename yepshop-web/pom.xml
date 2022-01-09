@@ -20,12 +20,8 @@
 
         <dependency>
             <groupId>com.yufu</groupId>
-            <artifactId>yepshop-domain</artifactId>
+            <artifactId>yepshop-application</artifactId>
             <version>${yepshop.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
         </dependency>
 
         <dependency>
@@ -53,9 +49,6 @@
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-miniapp</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
+
     </dependencies>
 </project>

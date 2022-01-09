@@ -1,6 +1,6 @@
 package com.yufu.yepshop.types.dto;
 
-import com.yufu.yepshop.types.value.Category;
+import com.yufu.yepshop.types.value.CategoryValue;
 import com.yufu.yepshop.types.value.Money;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -37,7 +37,7 @@ public class ItemDTO {
     private Money postage;
 
     @ApiModelProperty("分类")
-    private List<Category> categories;
+    private List<CategoryValue> categories;
 
     @ApiModelProperty("评论总数")
     private Long totalComment;

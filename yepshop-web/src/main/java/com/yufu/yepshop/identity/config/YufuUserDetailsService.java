@@ -1,17 +1,14 @@
 package com.yufu.yepshop.identity.config;
 
-import com.yufu.yepshop.identity.entity.YufuUser;
-import com.yufu.yepshop.identity.repository.YufuUserRepository;
+import com.yufu.yepshop.identity.entity.UserAccountDO;
+import com.yufu.yepshop.identity.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 /**
@@ -24,12 +21,11 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class YufuUserDetailsService implements UserDetailsService {
 
-    private final YufuUserRepository yufuUserRepository;
-//    private final PasswordEncoder passwordEncoder;
+    private final UserAccountRepository yufuUserRepository;
 
     //http://localhost:5000/oauth/authorize?client_id=user-client&response_type=code&scope=all&redirect_uri=http://www.baidu.com
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserAccountDO loadUserByUsername(String username) throws UsernameNotFoundException {
         var optionalUser = yufuUserRepository.findByUserName(username);
         if (!optionalUser.isPresent()) {
             optionalUser = yufuUserRepository.findByEmail(username);
@@ -42,7 +38,9 @@ public class YufuUserDetailsService implements UserDetailsService {
         return null;
     }
 
-    public void register(YufuUser user) {
+
+
+    public void register(UserAccountDO user) {
         user.setEnabled(true);
         user.setEmailConfirmed(true);
         user.setAccountNonLocked(true);

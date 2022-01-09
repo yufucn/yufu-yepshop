@@ -1,6 +1,6 @@
 package com.yufu.yepshop.identity.service.impl;
 
-import com.yufu.yepshop.identity.repository.YufuUserRepository;
+import com.yufu.yepshop.identity.repository.UserAccountRepository;
 import com.yufu.yepshop.identity.service.YufuUserService;
 import lombok.AllArgsConstructor;
 import lombok.var;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class YufuUserServiceImpl implements YufuUserService {
 
-    private final YufuUserRepository yufuUserRepository;
+    private final UserAccountRepository yufuUserRepository;
     private static final int MAX_FAILED_COUNT = 5;
 
     @Override

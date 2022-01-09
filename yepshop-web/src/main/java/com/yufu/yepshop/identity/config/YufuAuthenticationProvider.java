@@ -3,7 +3,6 @@ package com.yufu.yepshop.identity.config;
 import com.yufu.yepshop.identity.service.YufuUserService;
 import lombok.var;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

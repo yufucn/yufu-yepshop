@@ -3,20 +3,20 @@ package com.yufu.yepshop.identity.oauth2.wechat;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
-import cn.hutool.core.bean.BeanUtil;
 import com.yufu.yepshop.identity.config.YufuUserDetailsService;
-import com.yufu.yepshop.identity.entity.YufuUser;
+import com.yufu.yepshop.identity.entity.UserAccountDO;
+import com.yufu.yepshop.identity.repository.UserAccountRepository;
+import com.yufu.yepshop.types.value.RegionValue;
 import lombok.Data;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.HashSet;
-import java.util.Locale;
+import java.util.Optional;
 
 /**
  * @author wang
@@ -25,47 +25,45 @@ import java.util.Locale;
 @Data
 public class WechatAuthenticationProvider implements AuthenticationProvider {
 
-    private final UserDetailsService userDetailsService;
-//    private WxMaService wxMaService;
+    private final YufuUserDetailsService userDetailsService;
+    private final WxMaService wxMaService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         WechatAuthenticationToken authenticationToken = (WechatAuthenticationToken) authentication;
         String code = (String) authenticationToken.getPrincipal();
 
-//        WxMaJscode2SessionResult sessionInfo = null;
-//        try {
-//            sessionInfo = wxMaService.getUserService().getSessionInfo(code);
-//        } catch (WxErrorException e) {
-//            e.printStackTrace();
-//        }
-//        String openid = sessionInfo.getOpenid();
-//        Result<MemberAuthDTO> memberAuthResult = memberFeignClient.loadUserByOpenId(openid);
-//        // 微信用户不存在，注册成为新会员
-//        if (memberAuthResult != null && ResultCode.USER_NOT_EXIST.getCode().equals(memberAuthResult.getCode())) {
-//
-//            String sessionKey = sessionInfo.getSessionKey();
-//            String encryptedData = authenticationToken.getEncryptedData();
-//            String iv = authenticationToken.getIv();
-//            // 解密 encryptedData 获取用户信息
-//            WxMaUserInfo userInfo = wxMaService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
-//
-//            UmsMember member = new UmsMember();
-//            BeanUtil.copyProperties(userInfo, member);
-//            member.setOpenid(openid);
-//            member.setStatus(GlobalConstants.STATUS_YES);
-//            memberFeignClient.add(member);
-//        }
-        UserDetails userDetails = userDetailsService.loadUserByUsername(code);
-        if (userDetails == null) {
-            YufuUser user = new YufuUser();
-            user.setUserName(code);
-            ((YufuUserDetailsService) userDetailsService).register(user);
+        WxMaJscode2SessionResult sessionInfo = null;
+        try {
+            sessionInfo = wxMaService.getUserService().getSessionInfo(code);
+        } catch (WxErrorException e) {
+            e.printStackTrace();
         }
-
-        userDetails = userDetailsService.loadUserByUsername(code);
-
-        WechatAuthenticationToken result = new WechatAuthenticationToken(userDetails, new HashSet<>());
+        String unionId = sessionInfo.getUnionid();
+        String openId = sessionInfo.getOpenid();
+        UserAccountDO user = userDetailsService.loadUserByUsername(openId);
+        if (user == null) {
+            String sessionKey = sessionInfo.getSessionKey();
+            String encryptedData = authenticationToken.getEncryptedData();
+            String iv = authenticationToken.getIv();
+            WxMaUserInfo userInfo = wxMaService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
+            user = new UserAccountDO();
+            user.setUnionId(unionId);
+            user.setOpenId(openId);
+            user.setUserName(openId);
+            user.setAvatarUrl(userInfo.getAvatarUrl());
+            user.setGender(userInfo.getGender());
+            user.setNickName(userInfo.getNickName());
+            user.setLanguage(userInfo.getLanguage());
+            RegionValue regionValue = new RegionValue();
+            regionValue.setArea("");
+            regionValue.setProvince(userInfo.getProvince());
+            regionValue.setCity(userInfo.getCity());
+            regionValue.setCountry(userInfo.getCountry());
+            user.setRegion(regionValue);
+            userDetailsService.register(user);
+        }
+        WechatAuthenticationToken result = new WechatAuthenticationToken(user, new HashSet<>());
         result.setDetails(authentication.getDetails());
         return result;
     }

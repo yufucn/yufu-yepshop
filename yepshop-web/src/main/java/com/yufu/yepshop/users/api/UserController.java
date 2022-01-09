@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * @author wang
  * @date 2022/1/7 1:02
  */
-@Api(tags = "校闲 - 用户")
+@Api(tags = "Shop - 用户")
 @RestController
 @RequestMapping("/api/v1/users")
 @Slf4j

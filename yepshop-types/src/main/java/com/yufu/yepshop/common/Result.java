@@ -1,6 +1,8 @@
 package com.yufu.yepshop.common;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -11,13 +13,27 @@ import java.io.Serializable;
 @Data
 public class Result<T> implements Serializable {
 
+    private String code;
+
     private T data;
 
-    public Result(T data) {
-        this.data = data;
+    private String msg;
+
+    public static <T> Result<T> success() {
+        return success(null);
     }
 
-    public static Result success(boolean data) {
-        return new Result(data);
+    public static <T> Result<T> success(T data) {
+
+        return result("0", data, "成功");
     }
+
+    private static <T> Result<T> result(String code, T data, String msg) {
+        Result<T> result = new Result<>();
+        result.setCode(code);
+        result.setData(data);
+        result.setMsg(msg);
+        return result;
+    }
+
 }

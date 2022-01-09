@@ -1,5 +1,7 @@
 server:
   port: 5001
+  compression:
+    enabled: true
 spring:
   application:
     name: yepshop-service
@@ -8,8 +10,13 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://localhost:3306/yufu-identity?characterEncoding=UTF-8&useSSL=false
-    username: root
-    password: root
+    url: ${mysql_url:jdbc:mysql://127.0.0.1:3306/yepshop-dev?characterEncoding=UTF-8&useSSL=false}
+    username: ${mysql_username:root}
+    password: ${mysql_password:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+wechat:
+  appid: ${wechat_appid:wx8e7de310601bf8d4}
+  secret: ${wechat_secret:475e822dbb4a49969240bcd7c1092522}
+  token: ${wechat_token:}
+  aesKey: ${wechat_aesKey:}

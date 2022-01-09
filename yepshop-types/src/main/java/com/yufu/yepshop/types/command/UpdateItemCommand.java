@@ -1,12 +1,12 @@
 package com.yufu.yepshop.types.command;
 
-import com.yufu.yepshop.types.value.Category;
-import com.yufu.yepshop.types.value.Money;
-import com.yufu.yepshop.types.value.Region;
+import com.yufu.yepshop.types.value.CategoryValue;
+import com.yufu.yepshop.types.value.RegionValue;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -24,14 +24,14 @@ public class UpdateItemCommand {
     private List<String> urls;
 
     @NotNull(message = "金额不能为空")
-    private Money price;
+    private BigDecimal price;
 
-    private Money originalPrice;
+    private BigDecimal originalPrice;
 
-    private Money postage;
+    private BigDecimal postFee;
 
-    private List<Category> categories;
+    private List<CategoryValue> categories;
 
     @NotNull(message = "发货地址不能为空")
-    private Region shippingAddress;
+    private RegionValue shippingAddress;
 }
