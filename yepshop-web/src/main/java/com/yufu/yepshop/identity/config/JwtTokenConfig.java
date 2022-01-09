@@ -12,24 +12,36 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
  * Jwt Token 配置
  *
  * @author wang
- * @date  2021/7/13 22:30
+ * @date 2021/7/13 22:30
  */
 @Configuration
 public class JwtTokenConfig {
-    @Bean
-    public TokenStore jwtTokenStore() {
-        return new JwtTokenStore(jwtAccessTokenConverter());
-    }
+//    @Bean
+//    public TokenStore jwtTokenStore() {
+//        return new JwtTokenStore(jwtAccessTokenConverter());
+//    }
+//
+//    @Bean
+//    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+//        val accessTokenConverter = new JwtAccessTokenConverter();
+//        accessTokenConverter.setSigningKey("dev");
+//        return accessTokenConverter;
+//    }
+
+//    @Bean
+//    public TokenStore jwtTokenStore(JwtAccessTokenConverter converter) {
+//        return new JwtTokenStore(converter);
+//    }
 
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        val accessTokenConverter = new JwtAccessTokenConverter();
+    public JwtAccessTokenConverter jwtAccessTokenConverter(YufuUserDetailsService userService) {
+        JwtAccessTokenConverter accessTokenConverter = new OauthJwtAccessTokenConverter(userService);
         accessTokenConverter.setSigningKey("dev");
         return accessTokenConverter;
     }
 
     @Bean
-    public TokenEnhancer jwtTokenEnhancer(){
+    public TokenEnhancer jwtTokenEnhancer() {
         return new JwtTokenEnhancer();
     }
 }

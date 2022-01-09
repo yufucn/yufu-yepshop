@@ -20,3 +20,9 @@ wechat:
   secret: ${wechat_secret:475e822dbb4a49969240bcd7c1092522}
   token: ${wechat_token:}
   aesKey: ${wechat_aesKey:}
+aliyun:
+  bucket: ${aliyun_bucket}
+  ak: ${aliyun_ak}
+  sk: ${aliyun_sk}
+  region: ${aliyun_region:cn-hangzhou}
+  arn: ${aliyun_arn}

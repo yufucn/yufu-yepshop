@@ -67,14 +67,13 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
                 endpoints.getOAuth2RequestFactory(), authenticationManager
         ));
         CompositeTokenGranter compositeTokenGranter = new CompositeTokenGranter(granterList);
-        endpoints.tokenStore(tokenStore())
+        endpoints
+                .tokenStore(tokenStore())
                 .authenticationManager(authenticationManager)
                 .tokenEnhancer(enhancerChain)
                 .accessTokenConverter(jwtAccessTokenConverter)
                 .tokenGranter(compositeTokenGranter)
         ;
-
-//        endpoints.pathMapping("/oauth/confirm_access","/oauth2/confirm_access");
     }
 
     @Override

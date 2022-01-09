@@ -1,4 +1,4 @@
-package com.yufu.yepshop.identity.controller;
+package com.yufu.yepshop.identity.api;
 
 import com.yufu.yepshop.identity.entity.UserAccountDO;
 import com.yufu.yepshop.identity.oauth2.wechat.WechatAuthenticationToken;
@@ -18,7 +18,7 @@ import java.util.Map;
  * @author wang
  * @date 2022/1/9 11:54
  */
-@Api(tags = "授权 - 用户")
+@Api(tags = "身份 - 用户")
 @RestController
 public class OauthController {
 

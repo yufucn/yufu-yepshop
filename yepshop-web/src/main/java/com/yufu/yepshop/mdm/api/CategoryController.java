@@ -2,14 +2,14 @@ package com.yufu.yepshop.mdm.api;
 
 import com.yufu.yepshop.application.GoodsCategoryService;
 import com.yufu.yepshop.common.Result;
+import com.yufu.yepshop.types.command.CreateGoodsCategoryCommand;
 import com.yufu.yepshop.types.dto.GoodsCategoryDTO;
 import com.yufu.yepshop.types.dto.RegionDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -30,5 +30,11 @@ public class CategoryController {
     @GetMapping
     public Result<List<GoodsCategoryDTO>> getAll() {
         return service.getAll();
+    }
+
+    @ApiOperation(value = "新增分类")
+    @PostMapping
+    public Result<Boolean> create(@RequestBody @Valid CreateGoodsCategoryCommand command) {
+        return service.create(command);
     }
 }

@@ -26,3 +26,4 @@ hs_err_pid*
 target/
 
 *.iml
+/yepshop-start/src/main/resources/application-dev.yml
