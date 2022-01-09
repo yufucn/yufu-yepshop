@@ -5,10 +5,13 @@ import lombok.Setter;
 
 /**
  * @author wang
- * @date 2021/12/26 23:10
+ * @date 2021/12/26 23:14
  */
 @Getter
 @Setter
-public class CreateItemCommentCommand {
+public class CreateGoodsCommentReplyCommand {
+
     private String text;
+
+    private String replyToUserId;
 }

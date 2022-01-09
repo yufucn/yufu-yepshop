@@ -1,6 +1,5 @@
 package com.yufu.yepshop.types.command;
 
-
 import com.yufu.yepshop.types.value.CategoryValue;
 import com.yufu.yepshop.types.value.RegionValue;
 import lombok.Getter;
@@ -12,11 +11,11 @@ import java.util.List;
 
 /**
  * @author wang
- * @date 2021/12/26 20:39
+ * @date 2021/12/26 21:58
  */
 @Getter
 @Setter
-public class CreateItemCommand {
+public class UpdateGoodsCommand {
 
     @NotNull(message = "内容不能为空")
     private String text;
@@ -37,5 +36,9 @@ public class CreateItemCommand {
     private String categoryId;
 
     @NotNull(message = "发货地址不能为空")
-    private RegionValue shippingAddress;
+    private RegionValue region;
+
+    public String buildUrls(){
+        return String.join(",",urls);
+    }
 }

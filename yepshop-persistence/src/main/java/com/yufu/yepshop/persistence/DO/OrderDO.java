@@ -7,6 +7,8 @@ import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.value.DeliveryAddressValue;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -19,6 +21,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity(name = "yufu_order")
+@EntityListeners(AuditingEntityListener.class)
 public class OrderDO extends FullAuditedEntity {
 
     private Long sellerId;
@@ -30,12 +33,8 @@ public class OrderDO extends FullAuditedEntity {
      */
     @Column(length = 1)
     private SellerType sellerType;
-
-    private String sellerNick;
-
+    
     private Long buyerId;
-
-    private String buyerNick;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 32)

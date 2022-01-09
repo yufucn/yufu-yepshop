@@ -4,8 +4,10 @@ import com.yufu.yepshop.domain.types.auditing.FullAuditedEntity;
 import com.yufu.yepshop.types.enums.AuditState;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
@@ -16,6 +18,7 @@ import javax.persistence.Enumerated;
 @Getter
 @Setter
 @Entity(name = "yufu_goods_comment")
+@EntityListeners(AuditingEntityListener.class)
 public class GoodsCommentDO extends FullAuditedEntity {
     private Long goodsId;
 

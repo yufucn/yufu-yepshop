@@ -1,10 +1,11 @@
 package com.yufu.yepshop.goods;
 
+import com.yufu.yepshop.application.GoodsService;
 import com.yufu.yepshop.common.Result;
-import com.yufu.yepshop.types.command.CreateItemCommand;
-import com.yufu.yepshop.types.command.CreateItemCommentCommand;
-import com.yufu.yepshop.types.command.CreateItemCommentReplyCommand;
-import com.yufu.yepshop.types.command.UpdateItemCommand;
+import com.yufu.yepshop.types.command.CreateGoodsCommand;
+import com.yufu.yepshop.types.command.CreateGoodsCommentCommand;
+import com.yufu.yepshop.types.command.CreateGoodsCommentReplyCommand;
+import com.yufu.yepshop.types.command.UpdateGoodsCommand;
 import com.yufu.yepshop.types.dto.ItemDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +23,12 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class GoodsController {
 
+    private GoodsService goodsService;
+
+    public GoodsController(GoodsService goodsService) {
+        this.goodsService = goodsService;
+    }
+
     @ApiOperation(value = "闲置 - 列表")
     @GetMapping()
     public Result<Page<ItemDTO>> getGoods(
@@ -33,16 +40,16 @@ public class GoodsController {
 
     @ApiOperation(value = "新增闲置")
     @PostMapping
-    public Result<Boolean> createGoods(@RequestBody CreateItemCommand command) {
-        return null;
+    public Result<Boolean> createGoods(@RequestBody CreateGoodsCommand command) {
+        return goodsService.create(command);
     }
 
     @ApiOperation(value = "更新闲置")
     @PutMapping("/{id}")
     public Result<Boolean> updateGoods(
             @PathVariable String id,
-            @RequestBody UpdateItemCommand command) {
-        return null;
+            @RequestBody UpdateGoodsCommand command) {
+        return goodsService.update(id, command);
     }
 
     @ApiOperation(value = "闲置上架")
@@ -79,7 +86,7 @@ public class GoodsController {
     @PostMapping("/{id}/comments")
     public Result<Boolean> createGoodsComment(
             @PathVariable String id,
-            @RequestBody CreateItemCommentCommand command) {
+            @RequestBody CreateGoodsCommentCommand command) {
         return null;
     }
 
@@ -98,7 +105,7 @@ public class GoodsController {
     public Result<Boolean> commentReplyGoods(
             @PathVariable String id,
             @PathVariable String commentId,
-            @RequestBody CreateItemCommentReplyCommand command) {
+            @RequestBody CreateGoodsCommentReplyCommand command) {
         return null;
     }
 }

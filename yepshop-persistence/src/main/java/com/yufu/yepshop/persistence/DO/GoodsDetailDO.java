@@ -1,6 +1,7 @@
 package com.yufu.yepshop.persistence.DO;
 
 import com.yufu.yepshop.common.Constants;
+import com.yufu.yepshop.domain.types.auditing.AuditedEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity(name = "yufu_goods_detail")
-public class GoodsDetailDO {
+public class GoodsDetailDO{
     @Id
     private Long id;
 

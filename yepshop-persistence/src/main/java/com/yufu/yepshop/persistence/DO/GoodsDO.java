@@ -6,11 +6,9 @@ import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.enums.SellerType;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
@@ -20,20 +18,15 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity(name = "yufu_goods")
+@EntityListeners(AuditingEntityListener.class)
 public class GoodsDO extends FullAuditedEntity {
+
+    private Long schoolId;
 
     private Long sellerId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 1)
-    private SellerType sellerType;
-
     private String title;
 
-    /**
-     * 产品的主图片地址
-     *
-     */
     private String picUrl;
 
     private Long categoryId;
@@ -45,6 +38,10 @@ public class GoodsDO extends FullAuditedEntity {
     private Integer totalComment;
 
     private Integer totalCollect;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 1)
+    private SellerType sellerType;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 16)
