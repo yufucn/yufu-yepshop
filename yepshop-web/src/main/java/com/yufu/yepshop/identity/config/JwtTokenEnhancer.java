@@ -23,6 +23,7 @@ public class JwtTokenEnhancer implements TokenEnhancer {
         val info = new HashMap<String, Object>();
         info.put("nick_name", user.getNickName());
         info.put("user_id", user.getId().toString());
+        info.put("user_name", user.getUsername());
         ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(info);
         return oAuth2AccessToken;
     }

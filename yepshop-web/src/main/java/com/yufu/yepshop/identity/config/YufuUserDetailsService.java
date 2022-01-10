@@ -7,6 +7,7 @@ import lombok.var;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
@@ -23,9 +24,13 @@ public class YufuUserDetailsService implements UserDetailsService {
 
     private final UserAccountRepository yufuUserRepository;
 
-    //http://localhost:5000/oauth/authorize?client_id=user-client&response_type=code&scope=all&redirect_uri=http://www.baidu.com
+
+
+    //http://localhost:5001/oauth/authorize?client_id=user-client&response_type=code&scope=all&redirect_uri=http://www.baidu.com
     @Override
     public UserAccountDO loadUserByUsername(String username) throws UsernameNotFoundException {
+
+
         var optionalUser = yufuUserRepository.findByUserName(username);
         if (!optionalUser.isPresent()) {
             optionalUser = yufuUserRepository.findByEmail(username);

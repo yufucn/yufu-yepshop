@@ -6,8 +6,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
  * @author wang
  * @date 2022/1/9 16:43
  */
-public class OauthJwtAccessTokenConverter extends JwtAccessTokenConverter {
-    public OauthJwtAccessTokenConverter(YufuUserDetailsService userService) {
-        super.setAccessTokenConverter(new OauthAccessTokenConverter(userService));
-    }
-}
+//public class OauthJwtAccessTokenConverter extends JwtAccessTokenConverter {
+//    public OauthJwtAccessTokenConverter(YufuUserDetailsService userService) {
+//        super.setAccessTokenConverter(new OauthAccessTokenConverter(userService));
+//    }
+//}

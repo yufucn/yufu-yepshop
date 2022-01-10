@@ -1,7 +1,6 @@
 package com.yufu.yepshop.identity.config;
 
 import com.yufu.yepshop.identity.service.YufuUserService;
-import lombok.var;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -32,9 +31,9 @@ public class YufuAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        var userName = authentication.getName();
+        String userName = authentication.getName();
         try {
-            var auth = super.authenticate(authentication);
+            Authentication auth = super.authenticate(authentication);
             yufuUserService.resetAccessFailedCount(userName);
             return auth;
         } catch (BadCredentialsException exception) {
