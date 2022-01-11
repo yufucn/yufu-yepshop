@@ -1,6 +1,6 @@
 package com.yufu.yepshop.config;
 
-import com.yufu.yepshop.identity.entity.UserAccountDO;
+import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

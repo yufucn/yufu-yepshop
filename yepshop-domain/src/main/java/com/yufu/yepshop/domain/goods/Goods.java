@@ -32,10 +32,10 @@ public class Goods {
     private String text;
 
     public String getTitleFromText() {
-        if (text.length() > 9) {
-            return text.substring(0, 8);
+        int length = 64;
+        if (text.length() > length) {
+            return text.substring(0, length - 1);
         }
         return text;
     }
-
 }

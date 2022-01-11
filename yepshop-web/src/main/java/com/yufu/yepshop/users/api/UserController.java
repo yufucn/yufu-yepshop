@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "Shop - 用户")
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/shop/users")
 @Slf4j
 public class UserController {
 

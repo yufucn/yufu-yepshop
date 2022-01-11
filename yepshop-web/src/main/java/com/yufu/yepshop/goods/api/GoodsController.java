@@ -1,4 +1,4 @@
-package com.yufu.yepshop.goods;
+package com.yufu.yepshop.goods.api;
 
 import com.yufu.yepshop.application.GoodsService;
 import com.yufu.yepshop.common.Result;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "Shop - 闲置")
 @RestController
-@RequestMapping("/api/v1/goods")
+@RequestMapping("/api/v1/shop/goods")
 @Slf4j
 public class GoodsController {
 

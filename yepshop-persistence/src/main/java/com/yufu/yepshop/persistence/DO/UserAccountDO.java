@@ -1,4 +1,4 @@
-package com.yufu.yepshop.identity.entity;
+package com.yufu.yepshop.persistence.DO;
 
 import com.yufu.yepshop.common.Constants;
 import com.yufu.yepshop.domain.types.auditing.FullAuditedEntity;

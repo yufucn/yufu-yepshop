@@ -7,7 +7,6 @@ import com.aliyuncs.auth.sts.AssumeRoleResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.profile.DefaultProfile;
-import com.google.gson.Gson;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.shared.BaseController;
 import com.yufu.yepshop.types.dto.UploadConfigDTO;
@@ -52,7 +51,7 @@ public class ConfigController extends BaseController {
     @SneakyThrows
     public Result<UploadConfigDTO> getOssUpload() {
         UploadConfigDTO configDTO = new UploadConfigDTO();
-        String userId = user().getId().toString();
+        String userId = currentUser().getId().toString();
         String prefix = configDTO.buildPrefix(userId);
         configDTO.setRegion(region);
         configDTO.setPrefix(prefix);

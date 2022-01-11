@@ -1,10 +1,9 @@
 package com.yufu.yepshop.identity.config;
 
-import com.yufu.yepshop.identity.entity.UserAccountDO;
+import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import com.yufu.yepshop.identity.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

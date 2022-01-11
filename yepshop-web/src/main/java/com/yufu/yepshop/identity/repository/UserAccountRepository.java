@@ -1,6 +1,6 @@
 package com.yufu.yepshop.identity.repository;
 
-import com.yufu.yepshop.identity.entity.UserAccountDO;
+import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

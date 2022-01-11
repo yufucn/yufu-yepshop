@@ -4,19 +4,15 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import com.yufu.yepshop.identity.config.YufuUserDetailsService;
-import com.yufu.yepshop.identity.entity.UserAccountDO;
-import com.yufu.yepshop.identity.repository.UserAccountRepository;
+import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import com.yufu.yepshop.types.value.RegionValue;
 import lombok.Data;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.HashSet;
-import java.util.Optional;
 
 /**
  * @author wang
