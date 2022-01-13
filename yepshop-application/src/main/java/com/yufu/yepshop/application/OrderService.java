@@ -1,6 +1,7 @@
 package com.yufu.yepshop.application;
 
 import com.yufu.yepshop.common.Result;
+import com.yufu.yepshop.types.command.CheckoutCommand;
 import com.yufu.yepshop.types.command.CreateGoodsCommand;
 import com.yufu.yepshop.types.command.CreateOrderCommand;
 
@@ -9,7 +10,7 @@ import com.yufu.yepshop.types.command.CreateOrderCommand;
  * @date 2022/1/12 0:23
  */
 public interface OrderService {
-    Result<Boolean> create(CreateOrderCommand command);
+    Result<Boolean> checkout(CheckoutCommand command);
 
 
 //    // 下单

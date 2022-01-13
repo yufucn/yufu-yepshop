@@ -47,6 +47,7 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <aliyun-java-sdk-sts.version>3.0.0</aliyun-java-sdk-sts.version>
         <aliyun-java-sdk-core.version>4.4.6</aliyun-java-sdk-core.version>
+        <wechatpay-apiv3.version>0.4.1</wechatpay-apiv3.version>
     </properties>
     <dependencies>
         <dependency>
@@ -145,6 +146,11 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-core</artifactId>
                 <version>${aliyun-java-sdk-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.wechatpay-apiv3</groupId>
+                <artifactId>wechatpay-apache-httpclient</artifactId>
+                <version>${wechatpay-apiv3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

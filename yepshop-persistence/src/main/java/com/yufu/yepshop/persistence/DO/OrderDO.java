@@ -11,8 +11,8 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author wang
@@ -33,7 +33,7 @@ public class OrderDO extends FullAuditedEntity {
      */
     @Column(length = 1)
     private SellerType sellerType;
-    
+
     private Long buyerId;
 
     @Enumerated(EnumType.STRING)
@@ -46,25 +46,32 @@ public class OrderDO extends FullAuditedEntity {
     @Embedded
     private DeliveryAddressValue deliveryAddress;
 
+    @OneToMany(
+            targetEntity = OrderItemDO.class,
+            mappedBy = "order",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<OrderItemDO> items;
+
     /**
      * 实付金额
      */
-    private BigDecimal payment;
+    private Integer payment;
 
     /**
      * 商品总金额
      */
-    private BigDecimal totalFee;
+    private Integer totalFee;
 
     /**
      * 系统优惠金额
      */
-    private BigDecimal discountFee;
+    private Integer discountFee;
 
     /**
      * 邮费
      */
-    private BigDecimal postFee;
+    private Integer postFee;
 
     /**
      * 付款时间
@@ -79,12 +86,12 @@ public class OrderDO extends FullAuditedEntity {
     /**
      * 买家获得积分,返点的积分。格 式:100;单位:个
      */
-    private BigDecimal buyerPointFee;
+    private Integer buyerPointFee;
 
     /**
      * 卖家获得积分,返点的积分。格 式:100;单位:个
      */
-    private BigDecimal sellerPointFee;
+    private Integer sellerPointFee;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 32)

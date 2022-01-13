@@ -3,6 +3,8 @@ package com.yufu.yepshop.repository;
 import com.yufu.yepshop.domain.goods.Goods;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 /**
  * @author wang
  * @date 2022/1/9 18:36
@@ -13,4 +15,6 @@ public interface GoodsRepository {
     Page<Goods> pagedList(Integer page, Integer perPage);
 
     Goods get(String id);
+//
+//    List<Goods> getList(List<String> ids);
 }

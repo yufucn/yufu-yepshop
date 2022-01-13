@@ -4,9 +4,6 @@ import com.yufu.yepshop.types.value.RegionValue;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 /**
  * @author wang
  * @date 2022/1/9 18:33
@@ -23,9 +20,9 @@ public class GoodsDTO {
 
     private String categoryId;
 
-    private BigDecimal price;
+    private Integer price;
 
-    private BigDecimal originalPrice;
+    private Integer originalPrice;
 
     private RegionValue region;
 

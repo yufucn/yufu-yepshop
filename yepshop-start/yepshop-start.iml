@@ -70,6 +70,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:5.3.9" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.3.9" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.3.9" level="project" />
+    <orderEntry type="library" name="Maven: com.github.wechatpay-apiv3:wechatpay-apache-httpclient:0.4.1" level="project" />
     <orderEntry type="library" name="Maven: com.aliyun:aliyun-java-sdk-sts:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.aliyun:aliyun-java-sdk-core:4.4.6" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.7" level="project" />

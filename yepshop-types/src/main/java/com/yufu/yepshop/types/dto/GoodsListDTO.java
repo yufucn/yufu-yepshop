@@ -3,8 +3,6 @@ package com.yufu.yepshop.types.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 /**
  * @author wang
  * @date 2022/1/9 22:16
@@ -21,7 +19,7 @@ public class GoodsListDTO {
 
     private String categoryId;
 
-    private BigDecimal price;
+    private Integer price;
 
-    private BigDecimal originalPrice;
+    private Integer originalPrice;
 }

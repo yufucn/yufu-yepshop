@@ -1,4 +1,4 @@
-package com.yufu.yepshop.persistence.repository.impl;
+package com.yufu.yepshop.repository.impl;
 
 import com.yufu.yepshop.mdm.RegionInfo;
 import com.yufu.yepshop.persistence.DO.RegionDO;

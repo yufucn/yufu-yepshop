@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,11 +26,11 @@ public class UpdateGoodsCommand {
     private List<String> urls;
 
     @NotNull(message = "金额不能为空")
-    private BigDecimal price;
+    private Integer price;
 
-    private BigDecimal originalPrice;
+    private Integer originalPrice;
 
-    private BigDecimal postFee;
+    private Integer postFee;
 
     private String categoryId;
 

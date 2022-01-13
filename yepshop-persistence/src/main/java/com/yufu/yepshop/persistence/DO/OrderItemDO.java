@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import java.math.BigDecimal;
+import javax.persistence.*;
 
 /**
  * @author wang
@@ -19,7 +16,10 @@ import java.math.BigDecimal;
 @Entity(name = "yufu_order_item")
 @EntityListeners(AuditingEntityListener.class)
 public class OrderItemDO extends CreationAuditedEntity {
-    private Long orderId;
+
+    @ManyToOne
+    @JoinColumn(name = "orderId")
+    private OrderDO order;
 
     private Long goodsId;
 
@@ -30,7 +30,7 @@ public class OrderItemDO extends CreationAuditedEntity {
 
     private String goodsImageUrl;
 
-    private BigDecimal price;
+    private Integer price;
 
     private Integer num;
 }

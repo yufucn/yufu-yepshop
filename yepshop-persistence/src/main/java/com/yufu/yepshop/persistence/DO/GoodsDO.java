@@ -10,8 +10,6 @@ import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 /**
  * @author wang
@@ -33,9 +31,15 @@ public class GoodsDO extends FullAuditedEntity {
 
     private Long categoryId;
 
-    private BigDecimal price;
+    /**
+     * 价格，单位为分
+     */
+    private Integer price;
 
-    private BigDecimal originalPrice;
+    /**
+     * 价格，单位为分
+     */
+    private Integer originalPrice;
 
     private Integer totalComment;
 

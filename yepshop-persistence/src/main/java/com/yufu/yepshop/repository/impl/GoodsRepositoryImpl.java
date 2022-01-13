@@ -1,4 +1,4 @@
-package com.yufu.yepshop.persistence.repository.impl;
+package com.yufu.yepshop.repository.impl;
 
 import com.yufu.yepshop.domain.goods.Goods;
 import com.yufu.yepshop.persistence.DO.GoodsDO;
@@ -12,6 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author wang
@@ -35,7 +39,7 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     public Boolean save(Goods entity) {
         GoodsDO goodsDo = new GoodsDO();
         if (entity.getId() != null) {
-            goodsDo = dao.findById(Long.parseLong(entity.getId())).get();
+            goodsDo = dao.findById(entity.getId()).get();
         }
         converter.toDO(entity, goodsDo);
         dao.save(goodsDo);
@@ -64,6 +68,14 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         converter.toEntity(goodsDetailDO, result);
         return result;
     }
+
+//    @Override
+//    public List<Goods> getList(List<Long> ids) {
+//        Iterable<GoodsDO> dos = dao.findAllById(ids);
+//        List<GoodsDO> goodsDOList = new ArrayList<>();
+//        dos.forEach(goodsDOList::add);
+//        return converter.toEntityList(goodsDOList);
+//    }
 
     private Goods convert(GoodsDO gDo) {
         return converter.toEntity(gDo);

@@ -20,6 +20,11 @@ wechat:
   secret: ${wechat_secret:475e822dbb4a49969240bcd7c1092522}
   token: ${wechat_token:}
   aesKey: ${wechat_aesKey:}
+  pay:
+    privateKey: ${wechat_pay_privateKey}
+    mchId: ${wechat_pay_mchId}
+    mchSerialNo: ${wechat_pay_mchSerialNo}
+    notifyUrl: ${notify_url}
 aliyun:
   bucket: ${aliyun_bucket}
   ak: ${aliyun_ak}

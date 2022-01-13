@@ -7,12 +7,8 @@ import com.yufu.yepshop.types.value.DeliveryAddressValue;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author wang
@@ -22,7 +18,9 @@ import java.util.Date;
 @Setter
 public class Order {
 
-    private Long sellerId;
+    private String id;
+
+    private String sellerId;
 
     /**
      * A（平台）
@@ -31,7 +29,7 @@ public class Order {
      */
     private SellerType sellerType;
 
-    private Long buyerId;
+    private String buyerId;
 
     private PayType payType;
 
@@ -40,24 +38,24 @@ public class Order {
     private DeliveryAddressValue deliveryAddress;
 
     /**
-     * 实付金额
+     * 实付金额,单位为分
      */
-    private BigDecimal payment;
+    private Integer payment;
 
     /**
-     * 商品总金额
+     * 商品总金额,单位为分
      */
-    private BigDecimal totalFee;
+    private Integer totalFee;
 
     /**
-     * 系统优惠金额
+     * 系统优惠金额,单位为分
      */
-    private BigDecimal discountFee;
+    private Integer discountFee;
 
     /**
-     * 邮费
+     * 邮费,单位为分
      */
-    private BigDecimal postFee;
+    private Integer postFee;
 
     /**
      * 付款时间
@@ -72,13 +70,14 @@ public class Order {
     /**
      * 买家获得积分,返点的积分。格 式:100;单位:个
      */
-    private BigDecimal buyerPointFee;
+    private Integer buyerPointFee;
 
     /**
      * 卖家获得积分,返点的积分。格 式:100;单位:个
      */
-    private BigDecimal sellerPointFee;
+    private Integer sellerPointFee;
 
     private OrderState state;
 
+    private List<OrderItem> items;
 }

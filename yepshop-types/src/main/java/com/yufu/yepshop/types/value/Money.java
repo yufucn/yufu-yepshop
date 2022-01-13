@@ -5,8 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.Currency;
 
 /**
  * @author wang
@@ -18,7 +16,7 @@ import java.util.Currency;
 public class Money {
 
     @NotNull(message = "金额不能为空")
-    private BigDecimal amount;
+    private Integer amount;
 
     @NotNull(message = "币种不能为空")
     private String currency;
