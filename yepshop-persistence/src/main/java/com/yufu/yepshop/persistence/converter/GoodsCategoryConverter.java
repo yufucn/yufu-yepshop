@@ -1,9 +1,8 @@
 package com.yufu.yepshop.persistence.converter;
 
-import com.yufu.yepshop.mdm.GoodsCategory;
-import com.yufu.yepshop.mdm.RegionInfo;
 import com.yufu.yepshop.persistence.DO.GoodsCategoryDO;
 import com.yufu.yepshop.persistence.DO.RegionDO;
+import com.yufu.yepshop.types.dto.GoodsCategoryDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -21,14 +20,14 @@ public interface GoodsCategoryConverter {
      * @param entity Entity
      * @return DO
      */
-    GoodsCategoryDO toDO(GoodsCategory entity);
-    
+    GoodsCategoryDO toDO(GoodsCategoryDTO entity);
+
     /**
      * @param model DO
      * @return Entity
      */
-    GoodsCategory toEntity(GoodsCategoryDO model);
+    GoodsCategoryDTO toDTO(GoodsCategoryDO model);
 
 
-    List<GoodsCategory> toEntityList(List<GoodsCategoryDO> models);
+    List<GoodsCategoryDTO> toDTOList(List<GoodsCategoryDO> models);
 }

@@ -1,5 +1,6 @@
 package com.yufu.yepshop.types.command;
 
+import com.yufu.yepshop.types.value.GoodsValue;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,17 +12,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateOrderItemCommand {
-    @ApiModelProperty(value = "商品Id")
-    private String goodId;
 
-    @ApiModelProperty(value = "商品标题")
-    private String title;
-
-    @ApiModelProperty(value = "商品图片")
-    private String picUrl;
-
-    @ApiModelProperty(value = "商品单价")
-    private Integer price;
+    @ApiModelProperty(value = "商品")
+    private GoodsValue goods;
 
     @ApiModelProperty(value = "商品数量")
     private Integer num;

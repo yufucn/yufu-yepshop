@@ -1,7 +1,5 @@
 package com.yufu.yepshop.repository.impl;
 
-import com.yufu.yepshop.mdm.GoodsCategory;
-import com.yufu.yepshop.mdm.RegionInfo;
 import com.yufu.yepshop.persistence.DO.GoodsCategoryDO;
 import com.yufu.yepshop.persistence.DO.RegionDO;
 import com.yufu.yepshop.persistence.converter.GoodsCategoryConverter;
@@ -10,6 +8,7 @@ import com.yufu.yepshop.persistence.dao.GoodsCategoryDAO;
 import com.yufu.yepshop.persistence.dao.RegionDAO;
 import com.yufu.yepshop.repository.GoodsCategoryRepository;
 import com.yufu.yepshop.repository.RegionRepository;
+import com.yufu.yepshop.types.dto.GoodsCategoryDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -31,13 +30,13 @@ public class GoodsCategoryRepositoryImpl implements GoodsCategoryRepository {
     }
 
     @Override
-    public List<GoodsCategory> findAll() {
+    public List<GoodsCategoryDTO> findAll() {
         List<GoodsCategoryDO> doList = (List<GoodsCategoryDO>) accountDAO.findAll();
-        return converter.toEntityList(doList);
+        return converter.toDTOList(doList);
     }
 
     @Override
-    public Boolean save(GoodsCategory entity) {
+    public Boolean save(GoodsCategoryDTO entity) {
         accountDAO.save(converter.toDO(entity));
         return true;
     }

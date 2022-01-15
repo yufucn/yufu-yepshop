@@ -1,24 +1,22 @@
 package com.yufu.yepshop.goods.api;
 
 import com.yufu.yepshop.application.GoodsService;
+import com.yufu.yepshop.application.OrderService;
+import com.yufu.yepshop.application.impl.GoodsServiceImpl;
 import com.yufu.yepshop.common.Result;
-import com.yufu.yepshop.types.command.CreateGoodsCommand;
 import com.yufu.yepshop.types.command.CreateGoodsCommentCommand;
 import com.yufu.yepshop.types.command.CreateGoodsCommentReplyCommand;
-import com.yufu.yepshop.types.command.UpdateGoodsCommand;
 import com.yufu.yepshop.types.dto.GoodsDTO;
-import com.yufu.yepshop.types.dto.GoodsListDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author wang
- * @date 2022/1/6 21:15
+ * @date 2022/1/15 22:01
  */
-@Api(tags = "Shop - 闲置")
+@Api(tags = "Shop - 商品")
 @RestController
 @RequestMapping("/api/v1/shop/goods")
 @Slf4j
@@ -27,64 +25,23 @@ public class GoodsController {
     private final GoodsService goodsService;
 
     public GoodsController(GoodsService goodsService) {
-
         this.goodsService = goodsService;
     }
 
-    @ApiOperation(value = "闲置 - 列表")
-    @GetMapping()
-    public Result<Page<GoodsListDTO>> getGoods(
-            @RequestParam Integer page,
-            @RequestParam(name = "per_page") Integer perPage
-    ) {
-        return goodsService.pagedList(page, perPage);
-    }
-
-    @ApiOperation(value = "新增闲置")
-    @PostMapping
-    public Result<Boolean> createGoods(@RequestBody CreateGoodsCommand command) {
-        return goodsService.create(command);
-    }
-
-    @ApiOperation(value = "更新闲置")
-    @PutMapping("/{id}")
-    public Result<Boolean> updateGoods(
-            @PathVariable String id,
-            @RequestBody UpdateGoodsCommand command) {
-        return goodsService.update(id, command);
-    }
-
-    @ApiOperation(value = "闲置上架")
-    @PutMapping("/{id}/up-shelf")
-    public Result<Boolean> upshelfGoods(@PathVariable String id) {
-        return null;
-    }
-
-    @ApiOperation(value = "闲置下架")
-    @PutMapping("/{id}/down-shelf")
-    public Result<Boolean> downshelfGoods(@PathVariable String id) {
-        return null;
-    }
-
-    @ApiOperation(value = "闲置收藏")
+    @ApiOperation(value = "收藏")
     @PostMapping("/{id}/collect")
     public Result<Boolean> collectGoods(@PathVariable String id) {
         return null;
     }
 
-    @ApiOperation(value = "闲置详情")
+    @ApiOperation(value = "详情")
     @GetMapping("/{id}")
     public Result<GoodsDTO> getGoods(@PathVariable String id) {
         return goodsService.get(id);
     }
 
-    @ApiOperation(value = "闲置删除")
-    @DeleteMapping("/{id}")
-    public Result<Boolean> deleteGoods(@PathVariable String id) {
-        return null;
-    }
 
-    @ApiOperation(value = "闲置评论")
+    @ApiOperation(value = "评论")
     @PostMapping("/{id}/comments")
     public Result<Boolean> createGoodsComment(
             @PathVariable String id,
@@ -92,7 +49,7 @@ public class GoodsController {
         return null;
     }
 
-    @ApiOperation(value = "闲置评论 - 列表")
+    @ApiOperation(value = "评论 - 列表")
     @GetMapping("/{id}/comments")
     public Result<Boolean> commentsGoods(
             @PathVariable String id,
@@ -102,7 +59,7 @@ public class GoodsController {
         return null;
     }
 
-    @ApiOperation(value = "闲置评论 - 回复")
+    @ApiOperation(value = "评论 - 回复")
     @PostMapping("/{id}/comment/{commentId}/reply")
     public Result<Boolean> commentReplyGoods(
             @PathVariable String id,

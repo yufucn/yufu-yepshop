@@ -1,13 +1,16 @@
 package com.yufu.yepshop.persistence.converter;
 
-import com.yufu.yepshop.domain.goods.Goods;
-import com.yufu.yepshop.mdm.RegionInfo;
 import com.yufu.yepshop.persistence.DO.GoodsDO;
 import com.yufu.yepshop.persistence.DO.GoodsDetailDO;
 import com.yufu.yepshop.persistence.DO.RegionDO;
+import com.yufu.yepshop.types.command.CreateGoodsCommand;
+import com.yufu.yepshop.types.command.UpdateGoodsCommand;
+import com.yufu.yepshop.types.dto.GoodsDTO;
+import com.yufu.yepshop.types.dto.GoodsListDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -16,25 +19,52 @@ import java.util.List;
  * @author wang
  * @date 2022/1/8 14:05
  */
-@Mapper(disableSubMappingMethodsGeneration = true)
+@Mapper(disableSubMappingMethodsGeneration = true, uses = {StringLongMapper.class})
 public interface GoodsConverter {
     GoodsConverter INSTANCE = Mappers.getMapper(GoodsConverter.class);
 
     /**
-     * @param entity Entity
      * @return DO
      */
-    GoodsDO toDO(Goods entity, @MappingTarget GoodsDO goodsDO);
+    GoodsDO toDO(GoodsDTO UpdateGoodsCommand, @MappingTarget GoodsDO goodsDO);
 
-    GoodsDetailDO toDO(Goods entity, @MappingTarget GoodsDetailDO goodsDetailDO);
+    @Mapping(expression = "java(MapStruct.listToStr(entity.getImageUrlList()))", target = "imageUrls")
+    GoodsDetailDO toDO(GoodsDTO entity, @MappingTarget GoodsDetailDO goodsDetailDO);
+
     /**
      * @param model DO
      * @return Entity
      */
-    @Mapping(target = "region.", source = "region.")
-    Goods toEntity(GoodsDO model);
+    @Mappings({
+            @Mapping(source = "id", target = "goods.id"),
+            @Mapping(source = "title", target = "goods.title"),
+            @Mapping(source = "skuId", target = "goods.skuId"),
+            @Mapping(source = "picUrl", target = "goods.picUrl"),
+            @Mapping(source = "price", target = "goods.price"),
+            @Mapping(source = "sellerId", target = "seller.id"),
+            @Mapping(source = "sellerType", target = "seller.type")
+    })
+    GoodsDTO toDTO(GoodsDO model);
 
-    Goods toEntity(GoodsDetailDO model, @MappingTarget Goods entity);
+    @Mapping(expression = "java(MapStruct.strToList(model.getImageUrls()))", target = "imageUrlList")
+    GoodsDTO toDTO(GoodsDetailDO model, @MappingTarget GoodsDTO entity);
 
-    List<Goods> toEntityList(List<GoodsDO> models);
+    List<GoodsDTO> toDTOList(List<GoodsDO> models);
+
+    @Mappings({
+            @Mapping(source = "id", target = "goods.id"),
+            @Mapping(source = "title", target = "goods.title"),
+            @Mapping(source = "skuId", target = "goods.skuId"),
+            @Mapping(source = "picUrl", target = "goods.picUrl"),
+            @Mapping(source = "price", target = "goods.price"),
+            @Mapping(source = "sellerId", target = "seller.id"),
+            @Mapping(source = "sellerType", target = "seller.type")
+    })
+    GoodsListDTO toListDTO(GoodsDO entity);
+
+    GoodsDTO toDTO(CreateGoodsCommand command);
+
+    GoodsDO toDO(CreateGoodsCommand command);
+
+    GoodsDO toDO(UpdateGoodsCommand command);
 }

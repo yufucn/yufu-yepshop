@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 public enum PayType {
     /**
-     * 微信支付
+     * 微信支付 小程序支付
      */
-    WECHAT;
+    WECHAT_MINI;
 }

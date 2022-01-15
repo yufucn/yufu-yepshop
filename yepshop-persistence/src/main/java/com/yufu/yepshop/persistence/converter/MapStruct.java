@@ -11,4 +11,8 @@ public class MapStruct {
     public static String[] strToList(String hand) {
         return hand.split(",");
     }
+
+    public static String listToStr(String[] hands) {
+        return String.join(",", hands);
+    }
 }

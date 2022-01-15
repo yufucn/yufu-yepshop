@@ -23,6 +23,6 @@ public class CheckoutCommand {
     @ApiModelProperty(value = "付款方式")
     private PayType payType;
 
-    @ApiModelProperty(value = "卖家收货地址")
+    @ApiModelProperty(value = "买家收货地址")
     private DeliveryAddressValue deliveryAddress;
 }

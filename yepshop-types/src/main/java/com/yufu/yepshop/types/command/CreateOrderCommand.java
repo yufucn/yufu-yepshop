@@ -7,6 +7,7 @@ import com.yufu.yepshop.types.value.DeliveryAddressValue;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.List;
 
 /**
@@ -20,7 +21,10 @@ public class CreateOrderCommand {
     @ApiModelProperty(value = "商品列表")
     private List<CreateOrderItemCommand> items;
 
-    @ApiModelProperty(value = "实付款")
+    @ApiModelProperty(value = "商品总价格")
+    private Integer totalFee;
+
+    @ApiModelProperty(value = "实付款(totalFee + postFee) 可手动修改")
     private Integer payment;
 
     @ApiModelProperty(value = "邮费")

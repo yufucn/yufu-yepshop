@@ -1,7 +1,7 @@
 package com.yufu.yepshop.identity.config;
 
 import com.yufu.yepshop.persistence.DO.UserAccountDO;
-import com.yufu.yepshop.identity.repository.UserAccountRepository;
+import com.yufu.yepshop.persistence.dao.UserAccountDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +20,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class YufuUserDetailsService implements UserDetailsService {
 
-    private final UserAccountRepository yufuUserRepository;
+    private final UserAccountDAO yufuUserRepository;
 
     //http://localhost:5000/oauth/authorize?client_id=user-client&response_type=code&scope=all&redirect_uri=http://www.baidu.com
     @Override

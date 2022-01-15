@@ -1,4 +1,4 @@
-package com.yufu.yepshop.identity.repository;
+package com.yufu.yepshop.persistence.dao;
 
 import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import org.springframework.data.repository.CrudRepository;
@@ -11,7 +11,7 @@ import java.util.Optional;
  * @date 2022/1/5 23:09
  */
 @Repository
-public interface UserAccountRepository extends CrudRepository<UserAccountDO, Long> {
+public interface UserAccountDAO extends CrudRepository<UserAccountDO, Long> {
     Optional<UserAccountDO> findByUserName(String userName);
     Optional<UserAccountDO> findByOpenId(String openId);
     Optional<UserAccountDO> findByEmail(String email);

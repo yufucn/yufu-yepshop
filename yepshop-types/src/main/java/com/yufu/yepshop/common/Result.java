@@ -20,7 +20,11 @@ public class Result<T> implements Serializable {
     private String msg;
 
     public static <T> Result<T> success() {
-        return success(null);
+        return success("成功");
+    }
+
+    public static <T> Result<T> success(String msg) {
+        return success(null, msg);
     }
 
     public static <T> Result<T> success(T data) {
@@ -28,7 +32,12 @@ public class Result<T> implements Serializable {
         return result("0", data, "成功");
     }
 
-    public static <T> Result<T> fail(String code,String msg) {
+    public static <T> Result<T> success(T data, String msg) {
+
+        return result("0", data, msg);
+    }
+
+    public static <T> Result<T> fail(String code, String msg) {
         return result(code, null, msg);
     }
 

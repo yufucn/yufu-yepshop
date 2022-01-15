@@ -1,6 +1,10 @@
 package com.yufu.yepshop.types.dto;
 
+import com.yufu.yepshop.types.enums.AuditState;
+import com.yufu.yepshop.types.enums.SellerType;
+import com.yufu.yepshop.types.value.GoodsValue;
 import com.yufu.yepshop.types.value.RegionValue;
+import com.yufu.yepshop.types.value.Seller;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,25 +16,25 @@ import lombok.Setter;
 @Setter
 public class GoodsDTO {
 
-    private String id;
-
-    private String title;
-
-    private String picUrl;
+    private GoodsValue goods;
 
     private String categoryId;
-
-    private Integer price;
 
     private Integer originalPrice;
 
     private RegionValue region;
 
-    private String[] imageUrls;
+    private Seller seller;
+
+    private AuditState auditState;
+
+    private String[] imageUrlList;
 
     private String text;
 
     private Integer totalComment;
 
     private Integer totalCollect;
+
+
 }

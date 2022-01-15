@@ -2,6 +2,7 @@ package com.yufu.yepshop.persistence.DO;
 
 import com.yufu.yepshop.domain.types.auditing.FullAuditedEntity;
 import com.yufu.yepshop.types.enums.OrderState;
+import com.yufu.yepshop.types.enums.PayState;
 import com.yufu.yepshop.types.enums.PayType;
 import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.value.DeliveryAddressValue;
@@ -25,23 +26,18 @@ import java.util.List;
 public class OrderDO extends FullAuditedEntity {
 
     private Long sellerId;
-
     /**
      * A（平台）
      * B（商城商家）
      * C（普通卖家）
      */
+    @Enumerated(EnumType.STRING)
     @Column(length = 1)
     private SellerType sellerType;
 
     private Long buyerId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 32)
-    private PayType payType;
-
-    @Column(length = 64)
-    private String payNo;
+    private Long tradeId;
 
     @Embedded
     private DeliveryAddressValue deliveryAddress;
@@ -95,5 +91,5 @@ public class OrderDO extends FullAuditedEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 32)
-    private OrderState state;
+    private OrderState orderState;
 }

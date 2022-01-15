@@ -1,7 +1,6 @@
 package com.yufu.yepshop.repository;
 
-import com.yufu.yepshop.domain.goods.Goods;
-import com.yufu.yepshop.domain.ordering.Order;
+import com.yufu.yepshop.types.dto.OrderDTO;
 
 import java.util.List;
 
@@ -10,5 +9,5 @@ import java.util.List;
  * @date 2022/1/12 22:00
  */
 public interface OrderRepository {
-    Long save(Order entity);
+    OrderDTO save(OrderDTO entity);
 }

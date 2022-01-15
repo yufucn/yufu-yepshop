@@ -1,12 +1,16 @@
 package com.yufu.yepshop.repository.impl;
 
-import com.yufu.yepshop.domain.ordering.Order;
 import com.yufu.yepshop.persistence.DO.OrderDO;
+import com.yufu.yepshop.persistence.DO.OrderItemDO;
 import com.yufu.yepshop.persistence.converter.GoodsConverter;
 import com.yufu.yepshop.persistence.converter.OrderConverter;
 import com.yufu.yepshop.persistence.dao.OrderDAO;
 import com.yufu.yepshop.repository.OrderRepository;
+import com.yufu.yepshop.types.dto.OrderDTO;
 import org.springframework.stereotype.Repository;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author wang
@@ -23,9 +27,13 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Long save(Order entity) {
+    public OrderDTO save(OrderDTO entity) {
         OrderDO orderDO = converter.toDO(entity);
+        for (OrderItemDO doo :
+                orderDO.getItems()) {
+            doo.setOrder(orderDO);
+        }
         orderDAO.save(orderDO);
-        return orderDO.getId();
+        return converter.toDTO(orderDO);
     }
 }

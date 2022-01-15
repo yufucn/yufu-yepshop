@@ -2,6 +2,7 @@ package com.yufu.yepshop.persistence.dao;
 
 import com.yufu.yepshop.persistence.DO.GoodsDO;
 import com.yufu.yepshop.persistence.DO.OrderDO;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @date 2022/1/12 22:39
  */
 @Repository
-public interface OrderDAO extends PagingAndSortingRepository<OrderDO, Long> {
+public interface OrderDAO extends PagingAndSortingRepository<OrderDO, Long>, JpaSpecificationExecutor<OrderDO> {
 }

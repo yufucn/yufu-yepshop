@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
 import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
-import com.yufu.yepshop.domain.ordering.Order;
-import com.yufu.yepshop.domain.ordering.OrderItem;
 import com.yufu.yepshop.external.ExternalWeChatPayService;
+import com.yufu.yepshop.types.dto.OrderDTO;
+import com.yufu.yepshop.types.dto.OrderItemDTO;
+import com.yufu.yepshop.types.dto.TradeDTO;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -32,7 +33,7 @@ import java.util.logging.Logger;
 @Service
 public class ExternalWeChatPayServiceImpl implements ExternalWeChatPayService {
 
-    private final CloseableHttpClient httpClient;
+//    private final CloseableHttpClient httpClient;
 
     @Value("wechat.pay.privateKey")
     private String privateKey;
@@ -53,22 +54,23 @@ public class ExternalWeChatPayServiceImpl implements ExternalWeChatPayService {
     private String notifyUrl;
 
     public ExternalWeChatPayServiceImpl() {
-        PrivateKey merchantPrivateKey = PemUtil.loadPrivateKey(privateKey);
-        X509Certificate wechatPayCertificate = PemUtil.loadCertificate(
-                new ByteArrayInputStream(certificate.getBytes(StandardCharsets.UTF_8)));
-        ArrayList<X509Certificate> listCertificates = new ArrayList<>();
-        listCertificates.add(wechatPayCertificate);
-        httpClient = WechatPayHttpClientBuilder.create()
-                .withMerchant(mchId, mchSerialNo, merchantPrivateKey)
-                .withWechatPay(listCertificates)
-                .build();
+//        PrivateKey merchantPrivateKey = PemUtil.loadPrivateKey(privateKey);
+//        X509Certificate wechatPayCertificate = PemUtil.loadCertificate(
+//                new ByteArrayInputStream(certificate.getBytes(StandardCharsets.UTF_8)));
+//        ArrayList<X509Certificate> listCertificates = new ArrayList<>();
+//        listCertificates.add(wechatPayCertificate);
+//        httpClient = WechatPayHttpClientBuilder.create()
+//                .withMerchant(mchId, mchSerialNo, merchantPrivateKey)
+//                .withWechatPay(listCertificates)
+//                .build();
     }
 
     @Override
-    public String pay(String openId, List<Order> orders) {
-        if (orders.size() == 1) {
-            Order order = orders.get(0);
-            OrderItem item = order.getItems().get(0);
+    public String pay(List<TradeDTO> trades) {
+        if (trades.size() == 1) {
+            TradeDTO trade = trades.get(0);
+            OrderDTO order = trade.getOrder();
+            OrderItemDTO item = order.getItems().get(0);
             HttpPost httpPost = new HttpPost("https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi");
             httpPost.addHeader("Accept", "application/json");
             httpPost.addHeader("Content-type", "application/json; charset=utf-8");
@@ -78,18 +80,18 @@ public class ExternalWeChatPayServiceImpl implements ExternalWeChatPayService {
 
             rootNode.put("mchid", mchId)
                     .put("appid", appid)
-                    .put("description", item.getGoodsTitle())
+                    .put("description", item.getGoods().getTitle())
                     .put("notify_url", notifyUrl)
                     .put("out_trade_no", order.getId());
             rootNode.putObject("amount")
                     .put("total", order.getPayment());
             rootNode.putObject("payer")
-                    .put("openid", openId);
+                    .put("openid", trade.getOpenId());
             try {
                 objectMapper.writeValue(bos, rootNode);
                 httpPost.setEntity(new StringEntity(bos.toString("UTF-8"), "UTF-8"));
-                CloseableHttpResponse response = httpClient.execute(httpPost);
-                String bodyAsString = EntityUtils.toString(response.getEntity());
+//                CloseableHttpResponse response = httpClient.execute(httpPost);
+//                String bodyAsString = EntityUtils.toString(response.getEntity());
             } catch (Exception e) {
 
             }
@@ -98,10 +100,10 @@ public class ExternalWeChatPayServiceImpl implements ExternalWeChatPayService {
             httpPost.addHeader("Accept", "application/json");
             httpPost.addHeader("Content-type", "application/json; charset=utf-8");
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-            Order order = orders.get(0);
-            OrderItem item = order.getItems().get(0);
-            String trade_no = order.getId();
+            TradeDTO trade = trades.get(0);
+            OrderDTO order = trade.getOrder();
+            OrderItemDTO item = order.getItems().get(0);
+            String tradeNo = order.getId();
 
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode rootNode = objectMapper.createObjectNode();
@@ -109,22 +111,22 @@ public class ExternalWeChatPayServiceImpl implements ExternalWeChatPayService {
                     .put("combine_appid", appid)
 
                     .put("notify_url", notifyUrl)
-                    .put("combine_out_trade_no", trade_no);
-            ArrayNode sub_orders = rootNode.putArray("sub_orders");
-            for (Order o : orders) {
+                    .put("combine_out_trade_no", tradeNo);
+            ArrayNode subOrders = rootNode.putArray("sub_orders");
+            for (TradeDTO o : trades) {
                 ObjectNode att = objectMapper.createObjectNode();
                 att.put("mchid", mchId);
-                att.putObject("amount").put("total_amount", o.getPayment());
-                att.put("description", item.getGoodsTitle());
-                sub_orders.add(att);
+                att.putObject("amount").put("total_amount", o.getOrder().getPayment());
+                att.put("description", item.getGoods().getTitle());
+                subOrders.add(att);
             }
             rootNode.putObject("combine_payer_info")
-                    .put("openid", openId);
+                    .put("openid", trade.getOpenId());
             try {
                 objectMapper.writeValue(bos, rootNode);
                 httpPost.setEntity(new StringEntity(bos.toString("UTF-8"), "UTF-8"));
-                CloseableHttpResponse response = httpClient.execute(httpPost);
-                String bodyAsString = EntityUtils.toString(response.getEntity());
+//                CloseableHttpResponse response = httpClient.execute(httpPost);
+//                String bodyAsString = EntityUtils.toString(response.getEntity());
             } catch (Exception e) {
 
             }

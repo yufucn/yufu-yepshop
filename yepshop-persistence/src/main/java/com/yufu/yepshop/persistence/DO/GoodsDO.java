@@ -4,6 +4,7 @@ import com.yufu.yepshop.domain.types.auditing.FullAuditedEntity;
 import com.yufu.yepshop.types.enums.AuditState;
 import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.enums.SellerType;
+import com.yufu.yepshop.types.value.GoodsValue;
 import com.yufu.yepshop.types.value.RegionValue;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,12 +30,13 @@ public class GoodsDO extends FullAuditedEntity {
 
     private String picUrl;
 
-    private Long categoryId;
-
+    private String skuId;
     /**
      * 价格，单位为分
      */
     private Integer price;
+
+    private Long categoryId;
 
     /**
      * 价格，单位为分

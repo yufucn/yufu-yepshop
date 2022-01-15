@@ -10,5 +10,12 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum PayState {
-
+    /**
+     * 微信支付 小程序支付
+     */
+    TAY_CANCEL("付款取消"),
+    TAY_SUCCESS("付款成功"),
+    TAY_FAIL("付款失败"),
+    TAY_TIMEOUT("支付超时");
+    private final String message;
 }

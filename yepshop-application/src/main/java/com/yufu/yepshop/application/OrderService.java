@@ -1,36 +1,17 @@
 package com.yufu.yepshop.application;
 
 import com.yufu.yepshop.common.Result;
-import com.yufu.yepshop.types.command.CheckoutCommand;
-import com.yufu.yepshop.types.command.CreateGoodsCommand;
-import com.yufu.yepshop.types.command.CreateOrderCommand;
+import com.yufu.yepshop.types.dto.BuyerOrderDTO;
+import com.yufu.yepshop.types.dto.SellerOrderDTO;
+import org.springframework.data.domain.Page;
 
 /**
  * @author wang
- * @date 2022/1/12 0:23
+ * @date 2022/1/15 13:13
  */
 public interface OrderService {
-    Result<Boolean> checkout(CheckoutCommand command);
 
+    Result<Page<BuyerOrderDTO>> pagedBuyerList(Integer page, Integer perPage, String orderSate);
 
-//    // 下单
-//    OrderDTO checkout(@Valid CheckoutCommand cmd);
-//
-//    // 支付成功
-//    OrderDTO payReceived(@Valid PaymentReceivedEvent event);
-//
-//    // 支付取消
-//    OrderDTO payCanceled(@Valid PaymentCanceledEvent event);
-//
-//    // 发货
-//    OrderDTO packageSent(@Valid PackageSentEvent event);
-//
-//    // 收货
-//    OrderDTO delivered(@Valid DeliveredEvent event);
-//
-//    // 批量查询
-//    List<OrderDTO> query(OrderQuery query);
-//
-//    // 单个查询
-//    OrderDTO getOrder(Long orderId);
+    Result<Page<SellerOrderDTO>> pagedSellerList(Integer page, Integer perPage, String orderSate);
 }

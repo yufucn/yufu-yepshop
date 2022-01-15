@@ -1,7 +1,6 @@
-package com.yufu.yepshop.domain.ordering;
+package com.yufu.yepshop.types.dto;
 
 import com.yufu.yepshop.types.enums.OrderState;
-import com.yufu.yepshop.types.enums.PayType;
 import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.value.DeliveryAddressValue;
 import lombok.Getter;
@@ -12,11 +11,11 @@ import java.util.List;
 
 /**
  * @author wang
- * @date 2022/1/12 0:31
+ * @date 2022/1/15 16:18
  */
 @Getter
 @Setter
-public class Order {
+public class OrderDTO {
 
     private String id;
 
@@ -31,9 +30,7 @@ public class Order {
 
     private String buyerId;
 
-    private PayType payType;
-
-    private String payNo;
+    private String tradeId;
 
     private DeliveryAddressValue deliveryAddress;
 
@@ -77,7 +74,8 @@ public class Order {
      */
     private Integer sellerPointFee;
 
-    private OrderState state;
+    private OrderState orderState;
 
-    private List<OrderItem> items;
+    private List<OrderItemDTO> items;
 }
+

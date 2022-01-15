@@ -1,7 +1,7 @@
 package com.yufu.yepshop.persistence.converter;
 
-import com.yufu.yepshop.mdm.RegionInfo;
 import com.yufu.yepshop.persistence.DO.RegionDO;
+import com.yufu.yepshop.types.dto.RegionDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -19,15 +19,15 @@ public interface RegionConverter {
      * @param entity Entity
      * @return DO
      */
-    RegionDO toDO(RegionInfo entity);
+    RegionDO toDO(RegionDTO entity);
 
 
     /**
      * @param model DO
      * @return Entity
      */
-    RegionInfo toEntity(RegionDO model);
+    RegionDTO toDTO(RegionDO model);
 
 
-    List<RegionInfo> toEntityList(List<RegionDO> models);
+    List<RegionDTO> toDTOList(List<RegionDO> models);
 }

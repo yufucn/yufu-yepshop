@@ -1,7 +1,6 @@
 package com.yufu.yepshop.repository;
 
-import com.yufu.yepshop.mdm.GoodsCategory;
-import com.yufu.yepshop.mdm.RegionInfo;
+import com.yufu.yepshop.types.dto.GoodsCategoryDTO;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
  * @date 2022/1/9 10:40
  */
 public interface GoodsCategoryRepository {
-    List<GoodsCategory> findAll();
+    List<GoodsCategoryDTO> findAll();
 
-    Boolean save(GoodsCategory entity);
+    Boolean save(GoodsCategoryDTO entity);
 }

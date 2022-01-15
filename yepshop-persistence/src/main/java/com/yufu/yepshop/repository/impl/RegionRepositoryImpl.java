@@ -1,10 +1,10 @@
 package com.yufu.yepshop.repository.impl;
 
-import com.yufu.yepshop.mdm.RegionInfo;
 import com.yufu.yepshop.persistence.DO.RegionDO;
 import com.yufu.yepshop.persistence.converter.RegionConverter;
 import com.yufu.yepshop.persistence.dao.RegionDAO;
 import com.yufu.yepshop.repository.RegionRepository;
+import com.yufu.yepshop.types.dto.RegionDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,8 +25,8 @@ public class RegionRepositoryImpl implements RegionRepository {
     }
 
     @Override
-    public List<RegionInfo> findAll() {
+    public List<RegionDTO> findAll() {
         List<RegionDO> doList = (List<RegionDO>) accountDAO.findAll();
-        return converter.toEntityList(doList);
+        return converter.toDTOList(doList);
     }
 }

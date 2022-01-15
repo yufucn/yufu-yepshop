@@ -1,10 +1,8 @@
 package com.yufu.yepshop.application.impl;
 
 import com.yufu.yepshop.application.GoodsCategoryService;
-import com.yufu.yepshop.application.assembler.GoodsCategoryAssembler;
 import com.yufu.yepshop.common.Result;
-import com.yufu.yepshop.mdm.GoodsCategory;
-import com.yufu.yepshop.mdm.RegionInfo;
+import com.yufu.yepshop.persistence.converter.GoodsCategoryConverter;
 import com.yufu.yepshop.repository.GoodsCategoryRepository;
 import com.yufu.yepshop.types.command.CreateGoodsCategoryCommand;
 import com.yufu.yepshop.types.dto.GoodsCategoryDTO;
@@ -20,7 +18,6 @@ import java.util.List;
 public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
     private final GoodsCategoryRepository repository;
-    private final GoodsCategoryAssembler assembler = GoodsCategoryAssembler.INSTANCE;
 
     public GoodsCategoryServiceImpl(GoodsCategoryRepository repository) {
         this.repository = repository;
@@ -28,13 +25,13 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
     @Override
     public Result<List<GoodsCategoryDTO>> getAll() {
-        List<GoodsCategory> list = repository.findAll();
-        return Result.success(assembler.toDTOList(list));
+        List<GoodsCategoryDTO> list = repository.findAll();
+        return Result.success(list);
     }
 
     @Override
     public Result<Boolean> create(CreateGoodsCategoryCommand command) {
-        GoodsCategory entity = new GoodsCategory();
+        GoodsCategoryDTO entity = new GoodsCategoryDTO();
         entity.setDescription(command.getDescription());
         entity.setName(command.getName());
         entity.setParentId(command.getParentId());
