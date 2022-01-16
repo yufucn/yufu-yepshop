@@ -2,15 +2,11 @@ package com.yufu.yepshop.repository.impl;
 
 import com.yufu.yepshop.persistence.DO.OrderDO;
 import com.yufu.yepshop.persistence.DO.OrderItemDO;
-import com.yufu.yepshop.persistence.converter.GoodsConverter;
 import com.yufu.yepshop.persistence.converter.OrderConverter;
 import com.yufu.yepshop.persistence.dao.OrderDAO;
 import com.yufu.yepshop.repository.OrderRepository;
 import com.yufu.yepshop.types.dto.OrderDTO;
 import org.springframework.stereotype.Repository;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author wang

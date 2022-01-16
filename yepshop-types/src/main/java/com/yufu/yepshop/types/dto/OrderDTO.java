@@ -2,7 +2,9 @@ package com.yufu.yepshop.types.dto;
 
 import com.yufu.yepshop.types.enums.OrderState;
 import com.yufu.yepshop.types.enums.SellerType;
+import com.yufu.yepshop.types.value.Buyer;
 import com.yufu.yepshop.types.value.DeliveryAddressValue;
+import com.yufu.yepshop.types.value.Seller;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +13,7 @@ import java.util.List;
 
 /**
  * @author wang
- * @date 2022/1/15 16:18
+ * @date 2022/1/16 1:27
  */
 @Getter
 @Setter
@@ -19,16 +21,9 @@ public class OrderDTO {
 
     private String id;
 
-    private String sellerId;
+    private Seller seller;
 
-    /**
-     * A（平台）
-     * B（商城商家）
-     * C（普通卖家）
-     */
-    private SellerType sellerType;
-
-    private String buyerId;
+    private Buyer buyer;
 
     private String tradeId;
 
@@ -78,4 +73,3 @@ public class OrderDTO {
 
     private List<OrderItemDTO> items;
 }
-

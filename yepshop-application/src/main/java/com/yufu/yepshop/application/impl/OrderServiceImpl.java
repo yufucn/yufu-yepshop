@@ -2,6 +2,7 @@ package com.yufu.yepshop.application.impl;
 
 import com.yufu.yepshop.application.BaseService;
 import com.yufu.yepshop.application.OrderService;
+import com.yufu.yepshop.common.Constants;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.persistence.DO.OrderDO;
 import com.yufu.yepshop.persistence.DO.UserAccountDO;
@@ -9,6 +10,7 @@ import com.yufu.yepshop.persistence.converter.OrderConverter;
 import com.yufu.yepshop.persistence.dao.OrderDAO;
 import com.yufu.yepshop.persistence.dao.UserAccountDAO;
 import com.yufu.yepshop.types.dto.BuyerOrderDTO;
+import com.yufu.yepshop.types.dto.OrderDTO;
 import com.yufu.yepshop.types.dto.SellerOrderDTO;
 import com.yufu.yepshop.types.enums.OrderState;
 import com.yufu.yepshop.types.value.Buyer;
@@ -30,14 +32,14 @@ import java.util.Optional;
  */
 @Service
 public class OrderServiceImpl extends BaseService implements OrderService {
-    private final UserAccountDAO userAccountDAO;
+    private final UserAccountDAO accountDAO;
     private final OrderDAO orderDAO;
     private OrderConverter orderAssembler = OrderConverter.INSTANCE;
 
     public OrderServiceImpl(
-            UserAccountDAO userAccountDAO,
+            UserAccountDAO accountDAO,
             OrderDAO orderDAO) {
-        this.userAccountDAO = userAccountDAO;
+        this.accountDAO = accountDAO;
         this.orderDAO = orderDAO;
     }
 
@@ -47,7 +49,7 @@ public class OrderServiceImpl extends BaseService implements OrderService {
         Specification<OrderDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("creatorId"), user.getId()));
-            if (!"ALL".equalsIgnoreCase(orderSate)) {
+            if (!Constants.QUERY_ALL.equalsIgnoreCase(orderSate)) {
                 list.add(z.equal(x.get("orderState"), OrderState.valueOf(orderSate)));
             }
             Predicate[] predicates = new Predicate[list.size()];
@@ -65,7 +67,7 @@ public class OrderServiceImpl extends BaseService implements OrderService {
         Specification<OrderDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("sellerId"), user.getId()));
-            if (!"ALL".equalsIgnoreCase(orderSate)) {
+            if (!Constants.QUERY_ALL.equalsIgnoreCase(orderSate)) {
                 list.add(z.equal(x.get("orderState"), OrderState.valueOf(orderSate)));
             }
             Predicate[] predicates = new Predicate[list.size()];
@@ -76,9 +78,23 @@ public class OrderServiceImpl extends BaseService implements OrderService {
         return Result.success(paged);
     }
 
+    @Override
+    public Result<OrderDTO> get(Long id) {
+        OrderDO doo = orderDAO.findById(id).get();
+        OrderDTO dto = orderAssembler.toDTO(doo);
+        Long userId = currentUser().getId();
+        if (doo.getSellerId().equals(userId) || doo.getBuyerId().equals(userId)) {
+            buildSeller(dto.getSeller());
+            buildBuyer(dto.getBuyer());
+            return Result.success(dto);
+        } else {
+            return Result.fail("该订单您无权查看");
+        }
+    }
+
     private BuyerOrderDTO convertBuyerDTO(OrderDO gDo) {
         BuyerOrderDTO dto = orderAssembler.toBuyerDTO(gDo);
-        Optional<UserAccountDO> sellerOptional = userAccountDAO.findById(gDo.getSellerId());
+        Optional<UserAccountDO> sellerOptional = accountDAO.findById(gDo.getSellerId());
         if (sellerOptional.isPresent()) {
             UserAccountDO sellerDO = sellerOptional.get();
             Seller seller = dto.getSeller();
@@ -90,13 +106,28 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 
     private SellerOrderDTO convertSellerDTO(OrderDO gDo) {
         SellerOrderDTO dto = orderAssembler.toSellerDTO(gDo);
-        Optional<UserAccountDO> buyerOptional = userAccountDAO.findById(gDo.getBuyerId());
-        if (buyerOptional.isPresent()) {
-            UserAccountDO buyerDO = buyerOptional.get();
-            Buyer buyer = dto.getBuyer();
-            buyer.setNickName(buyerDO.getNickName());
-            buyer.setAvatarUrl(buyerDO.getAvatarUrl());
-        }
+        buildBuyer(dto.getBuyer());
         return dto;
+    }
+
+    private void buildSeller(Seller seller) {
+        UserAccountDO doo = findUser(seller.getLongId());
+        if (doo != null) {
+            seller.setNickName(doo.getNickName());
+            seller.setAvatarUrl(doo.getAvatarUrl());
+        }
+    }
+
+    private void buildBuyer(Buyer buyer) {
+        UserAccountDO doo = findUser(buyer.getLongId());
+        if (doo != null) {
+            buyer.setNickName(doo.getNickName());
+            buyer.setAvatarUrl(doo.getAvatarUrl());
+        }
+    }
+
+    private UserAccountDO findUser(Long id){
+        Optional<UserAccountDO> sellerOptional = accountDAO.findById(id);
+        return sellerOptional.orElse(null);
     }
 }

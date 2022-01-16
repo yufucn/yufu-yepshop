@@ -3,28 +3,17 @@ package com.yufu.yepshop.external.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
-import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import com.yufu.yepshop.external.ExternalWeChatPayService;
 import com.yufu.yepshop.types.dto.OrderDTO;
 import com.yufu.yepshop.types.dto.OrderItemDTO;
 import com.yufu.yepshop.types.dto.TradeDTO;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * @author wang

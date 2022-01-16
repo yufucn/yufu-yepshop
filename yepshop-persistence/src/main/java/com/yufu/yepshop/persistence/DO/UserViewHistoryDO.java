@@ -1,5 +1,6 @@
 package com.yufu.yepshop.persistence.DO;
 
+import com.yufu.yepshop.domain.types.auditing.AuditedEntity;
 import com.yufu.yepshop.domain.types.auditing.CreationAuditedEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import javax.persistence.EntityListeners;
 @Setter
 @Entity(name = "yufu_view_history")
 @EntityListeners(AuditingEntityListener.class)
-public class UserViewHistoryDO  extends CreationAuditedEntity {
+public class UserViewHistoryDO  extends AuditedEntity {
+    private Integer viewCount;
     private Long goodsId;
 }

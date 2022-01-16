@@ -22,10 +22,10 @@ public class GoodsValue {
     @ApiModelProperty(value = "id")
     private String id;
 
-    @ApiModelProperty(value = "标题")
+    @ApiModelProperty(value = "标题，保存时从text中截取了前64个字符作为标题")
     private String title;
 
-    @ApiModelProperty(value = "标题")
+    @ApiModelProperty(value = "skuId")
     private String skuId;
 
     @ApiModelProperty(value = "图片url地址")

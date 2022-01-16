@@ -6,6 +6,7 @@ import com.yufu.yepshop.types.command.UpdateGoodsCommand;
 import com.yufu.yepshop.types.dto.GoodsDTO;
 import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.enums.GoodsState;
+import com.yufu.yepshop.types.query.GoodsQuery;
 import org.springframework.data.domain.Page;
 
 /**
@@ -15,13 +16,15 @@ import org.springframework.data.domain.Page;
 public interface GoodsService {
     Result<Boolean> create(CreateGoodsCommand command);
 
-    Result<Boolean> update(String id, UpdateGoodsCommand command);
+    Result<Boolean> update(Long id, UpdateGoodsCommand command);
 
-    Result<Boolean> update(String id, GoodsState state);
+    Result<Boolean> update(Long id, GoodsState state);
 
-    Result<Boolean> delete(String id);
+    Result<Boolean> delete(Long id);
 
-    Result<Page<GoodsListDTO>> pagedList(Integer page, Integer perPage, String goodsState);
+    Result<Page<GoodsListDTO>> pagedList(Long creatorId, Integer page, Integer perPage, String goodsState);
 
-    Result<GoodsDTO> get(String id);
+    Result<GoodsDTO> get(Long id);
+
+    Result<Page<GoodsListDTO>> search(GoodsQuery query);
 }

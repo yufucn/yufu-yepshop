@@ -13,7 +13,7 @@ public class CommentReplyDTO {
 
     private String text;
 
-    private UserDTO user;
+    private UserAccountDTO user;
 
     private Date createTime;
 
@@ -43,11 +43,11 @@ public class CommentReplyDTO {
         this.text = text;
     }
 
-    public UserDTO getUser() {
+    public UserAccountDTO getUser() {
         return user;
     }
 
-    public void setUser(UserDTO user) {
+    public void setUser(UserAccountDTO user) {
         this.user = user;
     }
 

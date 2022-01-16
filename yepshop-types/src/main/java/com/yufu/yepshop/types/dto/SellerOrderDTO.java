@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 public class SellerOrderDTO {
+    private String id;
     private Buyer buyer;
     private Integer totalFee;
     private Integer payment;

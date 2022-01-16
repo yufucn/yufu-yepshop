@@ -29,7 +29,7 @@ public class Knife4jConfiguration {
                         .description("# yepshop RESTful APIs")
                         .termsOfServiceUrl("http://yepshop.wangrujian.com/")
                         .contact("120733889@qq.com")
-                        .version("1.0")
+                        .version("1.0.4")
                         .build())
                 .groupName("1.0版本")
                 .select()

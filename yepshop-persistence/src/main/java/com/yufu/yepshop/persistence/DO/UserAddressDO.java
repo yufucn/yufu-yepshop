@@ -20,10 +20,8 @@ import javax.persistence.EntityListeners;
 @EntityListeners(AuditingEntityListener.class)
 public class UserAddressDO extends AuditedEntity {
 
-    private Long userId;
-
     @Embedded
     private DeliveryAddressValue deliveryAddress;
 
-    private Integer isDefault;
+    private Boolean isDefault;
 }

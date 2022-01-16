@@ -38,6 +38,8 @@ public class GoodsDO extends FullAuditedEntity {
 
     private Long categoryId;
 
+    private Long conditionId;
+
     /**
      * 价格，单位为分
      */

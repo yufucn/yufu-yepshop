@@ -2,6 +2,7 @@ package com.yufu.yepshop.persistence.DO;
 
 import com.yufu.yepshop.common.Constants;
 import com.yufu.yepshop.domain.types.auditing.FullAuditedEntity;
+import com.yufu.yepshop.types.value.Location;
 import com.yufu.yepshop.types.value.RegionValue;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,6 +52,9 @@ public class UserAccountDO extends FullAuditedEntity implements UserDetails {
 
     @Column(length = Constants.MOBILE_LENGTH)
     private String mobile;
+
+    @Embedded
+    private Location location;
 
     private String mobileConfirmed;
 

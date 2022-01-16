@@ -42,7 +42,8 @@ public interface GoodsConverter {
             @Mapping(source = "picUrl", target = "goods.picUrl"),
             @Mapping(source = "price", target = "goods.price"),
             @Mapping(source = "sellerId", target = "seller.id"),
-            @Mapping(source = "sellerType", target = "seller.type")
+            @Mapping(source = "sellerType", target = "seller.type"),
+            @Mapping(source = "schoolId", target = "school.id")
     })
     GoodsDTO toDTO(GoodsDO model);
 

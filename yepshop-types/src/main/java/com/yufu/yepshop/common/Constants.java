@@ -6,4 +6,6 @@ package com.yufu.yepshop.common;
  */
 public class Constants {
     public static final int MOBILE_LENGTH = 32;
+
+    public static final String QUERY_ALL = "all";
 }

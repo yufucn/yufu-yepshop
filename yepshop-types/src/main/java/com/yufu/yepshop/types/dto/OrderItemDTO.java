@@ -18,5 +18,6 @@ public class OrderItemDTO {
     @ApiModelProperty(value = "商品")
     private GoodsValue goods;
 
+    @ApiModelProperty(value = "数量")
     private Integer num;
 }

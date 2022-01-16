@@ -2,23 +2,23 @@ package com.yufu.yepshop.application.impl;
 
 import com.yufu.yepshop.application.BaseService;
 import com.yufu.yepshop.application.GoodsService;
+import com.yufu.yepshop.common.Constants;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.persistence.DO.GoodsDO;
 import com.yufu.yepshop.persistence.DO.GoodsDetailDO;
-import com.yufu.yepshop.persistence.DO.OrderDO;
+import com.yufu.yepshop.persistence.DO.SchoolDO;
 import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import com.yufu.yepshop.persistence.converter.GoodsConverter;
-import com.yufu.yepshop.persistence.dao.GoodsDAO;
-import com.yufu.yepshop.persistence.dao.GoodsDetailDAO;
-import com.yufu.yepshop.persistence.dao.UserAccountDAO;
+import com.yufu.yepshop.persistence.dao.*;
 import com.yufu.yepshop.types.command.CreateGoodsCommand;
 import com.yufu.yepshop.types.command.UpdateGoodsCommand;
 import com.yufu.yepshop.types.dto.GoodsDTO;
 import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.enums.AuditState;
 import com.yufu.yepshop.types.enums.GoodsState;
-import com.yufu.yepshop.types.enums.OrderState;
 import com.yufu.yepshop.types.enums.SellerType;
+import com.yufu.yepshop.types.query.GoodsQuery;
+import com.yufu.yepshop.types.value.SchoolValue;
 import com.yufu.yepshop.types.value.Seller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,15 +40,18 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     private final GoodsDAO goodsDAO;
     private final UserAccountDAO accountDAO;
     private final GoodsDetailDAO goodsDetailDAO;
+    private final SchoolDAO schoolDAO;
     private final GoodsConverter goodsAssembler = GoodsConverter.INSTANCE;
 
     public GoodsServiceImpl(
             GoodsDAO goodsDAO,
             UserAccountDAO accountDAO,
-            GoodsDetailDAO goodsDetailDAO) {
+            GoodsDetailDAO goodsDetailDAO,
+            SchoolDAO schoolDAO) {
         this.accountDAO = accountDAO;
         this.goodsDAO = goodsDAO;
         this.goodsDetailDAO = goodsDetailDAO;
+        this.schoolDAO = schoolDAO;
     }
 
     @Override
@@ -71,9 +74,8 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     }
 
     @Override
-    public Result<Boolean> update(String id, UpdateGoodsCommand command) {
-        Long lId = Long.parseLong(id);
-        GoodsDO entity = goodsDAO.findById(lId).get();
+    public Result<Boolean> update(Long id, UpdateGoodsCommand command) {
+        GoodsDO entity = goodsDAO.findById(id).get();
         goodsAssembler.toDO(command);
         entity.setTitle(command.getTitleFromText());
         goodsDAO.save(entity);
@@ -89,26 +91,26 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     }
 
     @Override
-    public Result<Boolean> update(String id, GoodsState state) {
-        Long lId = Long.parseLong(id);
-        GoodsDO entity = goodsDAO.findById(lId).get();
+    public Result<Boolean> update(Long id, GoodsState state) {
+        GoodsDO entity = goodsDAO.findById(id).get();
         entity.setGoodsState(state);
         goodsDAO.save(entity);
         return Result.success(true);
     }
 
     @Override
-    public Result<Boolean> delete(String id) {
-        goodsDAO.deleteById(Long.parseLong(id));
+    public Result<Boolean> delete(Long id) {
+        goodsDAO.deleteById(id);
         return Result.success(true);
     }
 
     @Override
-    public Result<Page<GoodsListDTO>> pagedList(Integer page, Integer perPage, String goodsState) {
+    public Result<Page<GoodsListDTO>> pagedList(Long creatorId, Integer page, Integer perPage, String goodsState) {
         Pageable pageable = PageRequest.of(page, perPage, Sort.Direction.DESC, "id");
         Specification<GoodsDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
-            if (!"ALL".equalsIgnoreCase(goodsState)) {
+            list.add(z.equal(x.get("creatorId"), creatorId));
+            if (!Constants.QUERY_ALL.equalsIgnoreCase(goodsState)) {
                 list.add(z.equal(x.get("goodsState"), GoodsState.valueOf(goodsState)));
             }
             Predicate[] predicates = new Predicate[list.size()];
@@ -128,25 +130,72 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     }
 
     @Override
-    public Result<GoodsDTO> get(String id) {
-        Long lId = Long.parseLong(id);
-        GoodsDO goodsDO = goodsDAO.findById(lId).get();
-        GoodsDetailDO goodsDetailDO = goodsDetailDAO.findById(lId).get();
+    public Result<GoodsDTO> get(Long id) {
+        GoodsDO goodsDO = goodsDAO.findById(id).get();
+        GoodsDetailDO goodsDetailDO = goodsDetailDAO.findById(id).get();
         GoodsDTO result = goodsAssembler.toDTO(goodsDO);
         goodsAssembler.toDTO(goodsDetailDO, result);
         buildSeller(result.getSeller());
+        builderSchool(result.getSchool());
         return Result.success(result);
     }
 
-    private Seller buildSeller(Seller seller){
+    @Override
+    public Result<Page<GoodsListDTO>> search(GoodsQuery query) {
+        Sort.Direction sortDirection = Sort.Direction.DESC;
+        String column = "id";
+        switch (query.getSort()) {
+            case PRICE_ASC: {
+                sortDirection = Sort.Direction.ASC;
+                column = "price";
+                break;
+            }
+            case PRICE_DESC: {
+                sortDirection = Sort.Direction.DESC;
+                column = "price";
+                break;
+            }
+            case LATEST:
+            case ALL:
+            default:
+        }
+        Pageable pageable = PageRequest.of(query.getPage(), query.getPerPage(), sortDirection, column);
+        Specification<GoodsDO> spc = (x, y, z) -> {
+            ArrayList<Predicate> list = new ArrayList<>();
+            if (query.getKeyword() != null) {
+                list.add(z.like(x.get("title"), query.getKeyword()));
+            }
+            if (query.getSchoolId() != null) {
+                list.add(z.equal(x.get("schoolId"), query.getSchoolId()));
+            }
+            if (query.getCategoryId() != null) {
+                list.add(z.equal(x.get("categoryId"), query.getCategoryId()));
+            }
+            if (query.getConditionId() != null) {
+                list.add(z.equal(x.get("conditionId"), query.getConditionId()));
+            }
+            Predicate[] predicates = new Predicate[list.size()];
+            return z.and(list.toArray(predicates));
+        };
+        Page<GoodsListDTO> paged =
+                goodsDAO.findAll(spc, pageable).map(this::convert);
+        return Result.success(paged);
+    }
+
+    private void buildSeller(Seller seller) {
         Optional<UserAccountDO> sellerOptional = accountDAO.findById(seller.getLongId());
         if (sellerOptional.isPresent()) {
             UserAccountDO sellerDO = sellerOptional.get();
             seller.setNickName(sellerDO.getNickName());
             seller.setAvatarUrl(sellerDO.getAvatarUrl());
-            return seller;
         }
-        return null;
     }
 
+    private void builderSchool(SchoolValue schoolValue) {
+        Optional<SchoolDO> optional = schoolDAO.findById(schoolValue.getLongId());
+        if (optional.isPresent()) {
+            SchoolDO doo = optional.get();
+            schoolValue.setName(doo.getName());
+        }
+    }
 }

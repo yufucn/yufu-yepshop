@@ -15,6 +15,8 @@ import lombok.Setter;
 @Setter
 public class GoodsListDTO {
 
+    private String schoolId;
+
     private GoodsValue goods;
 
     private String categoryId;
@@ -26,4 +28,8 @@ public class GoodsListDTO {
     private GoodsState goodsState;
 
     private AuditState auditState;
+
+    private Integer totalComment;
+
+    private Integer totalCollect;
 }

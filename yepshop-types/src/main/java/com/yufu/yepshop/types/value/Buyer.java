@@ -1,5 +1,6 @@
 package com.yufu.yepshop.types.value;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,4 +20,9 @@ public class Buyer {
 
     @ApiModelProperty(value = "头像")
     private String avatarUrl;
+
+    @JsonIgnore
+    public Long getLongId(){
+        return Long.parseLong(id);
+    }
 }

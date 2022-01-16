@@ -3,6 +3,8 @@ server:
   compression:
     enabled: true
 spring:
+  jackson:
+    time-zone: GMT+8
   application:
     name: yepshop-service
   jpa:
