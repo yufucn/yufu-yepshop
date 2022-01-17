@@ -1,5 +1,13 @@
-package com.yufu.yepshop.types.enums;/**
+package com.yufu.yepshop.types.enums;
+
+/**
  * @author wang
- * @date  2022/1/18 0:10
- */public class FollowState {
+ * @date 2022/1/18 0:10
+ */
+public enum FollowState {
+    /**
+     * 关注状态
+     */
+    FOLLOW,
+    UNFOLLOW;
 }

@@ -16,15 +16,10 @@ import javax.persistence.MappedSuperclass;
 @Getter
 @Embeddable
 @MappedSuperclass
-public class SchoolValue {
+public class SchoolValue extends ValueObject{
     @ApiModelProperty(value = "学校Id")
     private String id;
 
     @ApiModelProperty(value = "学校名称")
     private String name;
-
-    @JsonIgnore
-    public Long getLongId(){
-        return Long.parseLong(id);
-    }
 }

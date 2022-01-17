@@ -84,8 +84,8 @@ public class OrderServiceImpl extends BaseService implements OrderService {
         OrderDTO dto = orderAssembler.toDTO(doo);
         Long userId = currentUser().getId();
         if (doo.getSellerId().equals(userId) || doo.getBuyerId().equals(userId)) {
-            buildSeller(dto.getSeller());
-            buildBuyer(dto.getBuyer());
+            buildSeller(accountDAO, dto.getSeller());
+            buildBuyer(accountDAO, dto.getBuyer());
             return Result.success(dto);
         } else {
             return Result.fail("该订单您无权查看");
@@ -106,28 +106,7 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 
     private SellerOrderDTO convertSellerDTO(OrderDO gDo) {
         SellerOrderDTO dto = orderAssembler.toSellerDTO(gDo);
-        buildBuyer(dto.getBuyer());
+        buildBuyer(accountDAO, dto.getBuyer());
         return dto;
-    }
-
-    private void buildSeller(Seller seller) {
-        UserAccountDO doo = findUser(seller.getLongId());
-        if (doo != null) {
-            seller.setNickName(doo.getNickName());
-            seller.setAvatarUrl(doo.getAvatarUrl());
-        }
-    }
-
-    private void buildBuyer(Buyer buyer) {
-        UserAccountDO doo = findUser(buyer.getLongId());
-        if (doo != null) {
-            buyer.setNickName(doo.getNickName());
-            buyer.setAvatarUrl(doo.getAvatarUrl());
-        }
-    }
-
-    private UserAccountDO findUser(Long id){
-        Optional<UserAccountDO> sellerOptional = accountDAO.findById(id);
-        return sellerOptional.orElse(null);
     }
 }

@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 @Getter
 @Setter
 @Embeddable
-public class CategoryValue {
+public class CategoryValue extends ValueObject{
     /**
      * 分类Code
      */

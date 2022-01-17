@@ -1,5 +1,6 @@
 package com.yufu.yepshop.persistence.converter;
 
+import com.yufu.yepshop.ConvertUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -8,11 +9,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class StringLongMapper {
-    public Long stringToLong(String string) {
-        return string != null && !string.isEmpty() ? Long.parseLong(string) : null;
+    public Long stringToLong(String id) {
+        return ConvertUtils.getLongId(id);
     }
 
-    public String longToString(Long lon) {
-        return lon.toString();
+    public String longToString(Long id) {
+        return ConvertUtils.getStringId(id);
     }
 }

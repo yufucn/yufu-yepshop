@@ -1,5 +1,6 @@
 package com.yufu.yepshop.types.dto;
 
+import com.yufu.yepshop.types.value.Follower;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +11,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserListDTO {
-    private String id;
-
-    private String userName;
-
-    private String avatarUrl;
+    private Follower follower;
 }

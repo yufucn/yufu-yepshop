@@ -1,6 +1,7 @@
 package com.yufu.yepshop.config;
 
 import com.google.common.base.Predicates;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,10 @@ import java.util.function.Predicate;
 @Configuration
 @EnableSwagger2WebMvc
 public class Knife4jConfiguration {
+
+    @Value("${yufu.version}")
+    private String version;
+
     @Bean(value = "defaultApi2")
     public Docket defaultApi2() {
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
@@ -29,7 +34,7 @@ public class Knife4jConfiguration {
                         .description("# yepshop RESTful APIs")
                         .termsOfServiceUrl("http://yepshop.wangrujian.com/")
                         .contact("120733889@qq.com")
-                        .version("1.0.4")
+                        .version(version)
                         .build())
                 .groupName("1.0版本")
                 .select()

@@ -1,3 +1,5 @@
+yufu:
+  version: 1.1.0
 server:
   port: 5001
   compression:
@@ -33,3 +35,4 @@ aliyun:
   sk: ${aliyun_sk}
   region: ${aliyun_region:cn-hangzhou}
   arn: ${aliyun_arn}
+  host: ${aliyun_host}

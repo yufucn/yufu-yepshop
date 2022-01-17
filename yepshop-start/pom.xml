@@ -8,7 +8,7 @@
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>1.0.6</version>
+    <version>${yepshop.version}</version>
     <artifactId>yepshop-start</artifactId>
 
     <properties>
@@ -19,7 +19,6 @@
         <dependency>
             <groupId>com.yufu</groupId>
             <artifactId>yepshop-web</artifactId>
-            <version>${yepshop.version}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

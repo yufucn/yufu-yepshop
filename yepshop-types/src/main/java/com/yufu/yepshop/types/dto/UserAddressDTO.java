@@ -13,6 +13,8 @@ import lombok.Setter;
 @Setter
 public class UserAddressDTO {
 
+    private String id;
+
     @ApiModelProperty(value = "收货地址")
     private DeliveryAddressValue deliveryAddress;
 

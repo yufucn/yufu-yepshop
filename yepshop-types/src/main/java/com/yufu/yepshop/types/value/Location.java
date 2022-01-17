@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.Embeddable;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 
 /**
  * @author wang
@@ -15,7 +16,7 @@ import javax.persistence.MappedSuperclass;
 @Getter
 @Embeddable
 @MappedSuperclass
-public class Location {
+public class Location extends ValueObject{
 
     @ApiModelProperty(value = "纬度，范围为 -90~90，负数表示南纬")
     private Double latitude;

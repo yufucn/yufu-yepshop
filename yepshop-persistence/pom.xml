@@ -19,7 +19,6 @@
         <dependency>
             <groupId>com.yufu</groupId>
             <artifactId>yepshop-domain</artifactId>
-            <version>${yepshop.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

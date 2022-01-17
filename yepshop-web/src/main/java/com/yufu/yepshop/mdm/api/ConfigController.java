@@ -42,6 +42,9 @@ public class ConfigController extends BaseController {
     @Value("${aliyun.bucket}")
     private String bucket;
 
+    @Value("${aliyun.host}")
+    private String host;
+
     public ConfigController(){
 
     }
@@ -56,6 +59,7 @@ public class ConfigController extends BaseController {
         configDTO.setRegion(region);
         configDTO.setPrefix(prefix);
         configDTO.setBucket(bucket);
+        configDTO.setHost(host);
         DefaultProfile profile = DefaultProfile.getProfile(
                 region,
                 ak,

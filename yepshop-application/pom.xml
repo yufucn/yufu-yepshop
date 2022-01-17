@@ -19,13 +19,11 @@
         <dependency>
             <groupId>com.yufu</groupId>
             <artifactId>yepshop-domain</artifactId>
-            <version>${yepshop.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.yufu</groupId>
             <artifactId>yepshop-persistence</artifactId>
-            <version>${yepshop.version}</version>
         </dependency>
     </dependencies>
 </project>

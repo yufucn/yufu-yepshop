@@ -12,7 +12,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Seller {
+public class Seller extends ValueObject{
 
     @ApiModelProperty(value = "id")
     private String id;
@@ -25,9 +25,4 @@ public class Seller {
 
     @ApiModelProperty(value = "头像")
     private String avatarUrl;
-
-    @JsonIgnore
-    public Long getLongId(){
-        return Long.parseLong(id);
-    }
 }

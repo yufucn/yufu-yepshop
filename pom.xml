@@ -25,7 +25,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <properties>
-        <yepshop.version>1.0.0</yepshop.version>
+        <yepshop.version>1.1.0</yepshop.version>
         <spring-boot.version>2.5.4</spring-boot.version>
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
@@ -67,6 +67,37 @@
     </dependencies>
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>com.yufu</groupId>
+                <artifactId>yepshop-application</artifactId>
+                <version>${yepshop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yufu</groupId>
+                <artifactId>yepshop-domain</artifactId>
+                <version>${yepshop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yufu</groupId>
+                <artifactId>yepshop-persistence</artifactId>
+                <version>${yepshop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yufu</groupId>
+                <artifactId>yepshop-start</artifactId>
+                <version>${yepshop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yufu</groupId>
+                <artifactId>yepshop-types</artifactId>
+                <version>${yepshop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yufu</groupId>
+                <artifactId>yepshop-web</artifactId>
+                <version>${yepshop.version}</version>
+            </dependency>
             <!--Spring Cloud 相关依赖-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -99,16 +130,7 @@
                 <version>${hibernate-validator.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.yufu</groupId>
-                <artifactId>yepshop-types</artifactId>
-                <version>${yepshop.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.yufu</groupId>
-                <artifactId>yepshop-application</artifactId>
-                <version>${yepshop.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-miniapp</artifactId>

@@ -125,7 +125,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     private GoodsListDTO convert(GoodsDO gDo) {
         GoodsListDTO dto = goodsAssembler.toListDTO(gDo);
         Seller seller = dto.getSeller();
-        buildSeller(seller);
+        buildSeller(accountDAO, seller);
         return dto;
     }
 
@@ -135,8 +135,8 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         GoodsDetailDO goodsDetailDO = goodsDetailDAO.findById(id).get();
         GoodsDTO result = goodsAssembler.toDTO(goodsDO);
         goodsAssembler.toDTO(goodsDetailDO, result);
-        buildSeller(result.getSeller());
-        builderSchool(result.getSchool());
+        buildSeller(accountDAO, result.getSeller());
+        builderSchool(schoolDAO, result.getSchool());
         return Result.success(result);
     }
 
@@ -182,20 +182,5 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         return Result.success(paged);
     }
 
-    private void buildSeller(Seller seller) {
-        Optional<UserAccountDO> sellerOptional = accountDAO.findById(seller.getLongId());
-        if (sellerOptional.isPresent()) {
-            UserAccountDO sellerDO = sellerOptional.get();
-            seller.setNickName(sellerDO.getNickName());
-            seller.setAvatarUrl(sellerDO.getAvatarUrl());
-        }
-    }
 
-    private void builderSchool(SchoolValue schoolValue) {
-        Optional<SchoolDO> optional = schoolDAO.findById(schoolValue.getLongId());
-        if (optional.isPresent()) {
-            SchoolDO doo = optional.get();
-            schoolValue.setName(doo.getName());
-        }
-    }
 }

@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @Setter
 @Embeddable
 @MappedSuperclass
-public class GoodsValue {
+public class GoodsValue extends ValueObject {
 
     @ApiModelProperty(value = "id")
     private String id;

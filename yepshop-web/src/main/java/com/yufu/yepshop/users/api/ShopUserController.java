@@ -1,20 +1,18 @@
 package com.yufu.yepshop.users.api;
 
 import com.yufu.yepshop.application.GoodsService;
+import com.yufu.yepshop.application.UserFollowService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.identity.service.YufuUserService;
 import com.yufu.yepshop.shared.BaseController;
 import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.dto.UserAccountDTO;
 import com.yufu.yepshop.types.dto.UserListDTO;
-import com.yufu.yepshop.types.enums.OrderState;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author wang
@@ -22,17 +20,20 @@ import java.util.List;
  */
 @Api(tags = "Shop - 用户")
 @RestController
-@RequestMapping("/api/v1/shop/users")
+@RequestMapping("/api/v1/shop/user")
 @Slf4j
 public class ShopUserController extends BaseController {
 
     private final YufuUserService yufuUserService;
     private final GoodsService goodsService;
+    private final UserFollowService userFollowService;
 
     public ShopUserController(YufuUserService yufuUserService,
-                              GoodsService goodsService) {
+                              GoodsService goodsService,
+                              UserFollowService userFollowService) {
         this.yufuUserService = yufuUserService;
         this.goodsService = goodsService;
+        this.userFollowService = userFollowService;
     }
 
     @ApiOperation(value = "详情")
@@ -42,7 +43,7 @@ public class ShopUserController extends BaseController {
     }
 
 
-    @ApiOperation(value = "闲置 - 列表（上架的、下架的、卖出的、草稿）")
+    @ApiOperation(value = "商品 - 列表（上架的、下架的、卖出的、草稿）")
     @GetMapping("/{id}/goods")
     public Result<Page<GoodsListDTO>> getUserGoods(
             @PathVariable Long id,
@@ -75,7 +76,20 @@ public class ShopUserController extends BaseController {
     @ApiOperation(value = "关注")
     @PostMapping("/follow/{id}")
     public Result<Boolean> follow(@PathVariable Long id) {
-        return null;
+
+        return userFollowService.follow(id);
+    }
+
+    @ApiOperation(value = "取消关注")
+    @PostMapping("/unfollow/{id}")
+    public Result<Boolean> unfollow(@PathVariable Long id) {
+        return userFollowService.unfollow(id);
+    }
+
+    @ApiOperation(value = "是否已关注")
+    @GetMapping("/followed/{id}")
+    public Result<Boolean> followed(@PathVariable Long id) {
+        return userFollowService.followed(id);
     }
 
 

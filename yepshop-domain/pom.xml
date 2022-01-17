@@ -19,7 +19,6 @@
         <dependency>
             <groupId>com.yufu</groupId>
             <artifactId>yepshop-types</artifactId>
-            <version>${yepshop.version}</version>
         </dependency>
 
         <dependency>

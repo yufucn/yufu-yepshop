@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Embeddable
-public class Money {
+public class Money extends ValueObject{
 
     @NotNull(message = "金额不能为空")
     private Integer amount;

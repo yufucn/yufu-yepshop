@@ -14,9 +14,8 @@ import javax.persistence.EntityListeners;
  */
 @Getter
 @Setter
-@Entity(name = "yufu_user_fans")
+@Entity(name = "yufu_user_follow")
 @EntityListeners(AuditingEntityListener.class)
-public class UserFansDO extends CreationAuditedEntity {
+public class UserFollowDO extends CreationAuditedEntity {
     private Long userId;
-    private Long fansId;
 }

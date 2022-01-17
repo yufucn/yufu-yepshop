@@ -13,8 +13,6 @@ import java.util.Date;
 @Getter
 @Setter
 public class UploadConfigDTO {
-
-
     private String bucket;
     private String region;
     private String accessKeyId;
@@ -24,10 +22,11 @@ public class UploadConfigDTO {
     private String expiration;
     private String arn;
     private String assumedRoleId;
+    private String host;
 
     public String buildPrefix(String userId) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date now = new Date();
-        return String.format("//goods//%s//%s//", userId, sdf.format(now));
+        return String.format("goods/%s/%s/", userId, sdf.format(now));
     }
 }

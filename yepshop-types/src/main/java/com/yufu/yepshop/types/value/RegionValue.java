@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Setter
 @Embeddable
 @MappedSuperclass
-public class RegionValue implements Serializable {
+public class RegionValue extends ValueObject {
     /**
      * 国家
      */

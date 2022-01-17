@@ -21,9 +21,7 @@
         <dependency>
             <groupId>com.yufu</groupId>
             <artifactId>yepshop-application</artifactId>
-            <version>${yepshop.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-sts</artifactId>
@@ -58,6 +56,5 @@
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-miniapp</artifactId>
         </dependency>
-
     </dependencies>
 </project>
