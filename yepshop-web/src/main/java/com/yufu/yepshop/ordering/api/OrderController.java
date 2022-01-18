@@ -2,6 +2,9 @@ package com.yufu.yepshop.ordering.api;
 
 import com.yufu.yepshop.application.OrderService;
 import com.yufu.yepshop.common.Result;
+import com.yufu.yepshop.types.command.OrderRateCommand;
+import com.yufu.yepshop.types.command.OrderSendCommand;
+import com.yufu.yepshop.types.command.UpdateOrderAddressCommand;
 import com.yufu.yepshop.types.dto.BuyerOrderDTO;
 import com.yufu.yepshop.types.dto.OrderDTO;
 import com.yufu.yepshop.types.dto.SellerOrderDTO;
@@ -43,9 +46,7 @@ public class OrderController {
 
     @ApiOperation(value = "详情")
     @GetMapping("/{id}")
-    public Result<OrderDTO> get(
-            @PathVariable Long id
-    ) {
+    public Result<OrderDTO> get(@PathVariable Long id) {
         return orderService.get(id);
     }
 
@@ -62,41 +63,35 @@ public class OrderController {
     @ApiOperation(value = "卖家 - 发货")
     @PostMapping("/{id}/send")
     public Result<Boolean> sendGoods(
-            @PathVariable Long id
+            @PathVariable Long id,
+            @RequestBody OrderSendCommand command
     ) {
-        return null;
+        return orderService.send(id, command);
     }
 
     @ApiOperation(value = "买家 - 确认收货")
-    @PostMapping("/{id}/confirm")
-    public Result<Boolean> confirmGoods(
+    @PostMapping("/{id}/sign")
+    public Result<Boolean> signGoods(
             @PathVariable Long id
     ) {
-        return null;
+        return orderService.sign(id);
     }
 
-    @ApiOperation(value = "买家 - 评价")
-    @PostMapping("/{id}/buyer-evaluate")
-    public Result<Boolean> buyerEvaluate(
-            @PathVariable Long id
+    @ApiOperation(value = "评价")
+    @PostMapping("/{id}/rate")
+    public Result<Boolean> rate(
+            @PathVariable Long id,
+            @RequestBody OrderRateCommand command
     ) {
-        return null;
-    }
-
-    @ApiOperation(value = "卖家 - 评价")
-    @PostMapping("/{id}/seller-evaluate")
-    public Result<Boolean> sellerEvaluate(
-            @PathVariable Long id
-    ) {
-        return null;
+        return orderService.rate(id, command);
     }
 
     @ApiOperation(value = "买家 - 修改地址")
     @PostMapping("/{id}/change-address")
     public Result<Boolean> changeAddress(
-            @PathVariable Long id
+            @PathVariable Long id,
+            @RequestBody UpdateOrderAddressCommand command
     ) {
-        return null;
+        return orderService.changeAddress(id, command);
     }
-
 }

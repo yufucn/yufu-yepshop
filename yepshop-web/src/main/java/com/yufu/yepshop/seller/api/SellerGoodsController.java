@@ -50,7 +50,7 @@ public class SellerGoodsController extends BaseController {
 
     @ApiOperation(value = "新增")
     @PostMapping
-    public Result<Boolean> createGoods(
+    public Result<String> createGoods(
             @RequestBody CreateGoodsCommand command) {
         return goodsService.create(command);
     }

@@ -1,10 +1,7 @@
 package com.yufu.yepshop.persistence.DO;
 
 import com.yufu.yepshop.domain.types.auditing.FullAuditedEntity;
-import com.yufu.yepshop.types.enums.OrderState;
-import com.yufu.yepshop.types.enums.PayState;
-import com.yufu.yepshop.types.enums.PayType;
-import com.yufu.yepshop.types.enums.SellerType;
+import com.yufu.yepshop.types.enums.*;
 import com.yufu.yepshop.types.value.DeliveryAddressValue;
 import lombok.Getter;
 import lombok.Setter;
@@ -92,4 +89,123 @@ public class OrderDO extends FullAuditedEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 32)
     private OrderState orderState;
+
+    /**
+     * 卖家是否已评价 可选值:true(已评价),false(未评价)
+     */
+    private Boolean sellerRate;
+
+    /**
+     * 买家是否已评价 可选值:true(已评价),false(未评价)
+     */
+    private Boolean buyerRate;
+
+    /**
+     * 签收时间
+     */
+    private Date signTime;
+
+    /**
+     * 快递公司名称
+     */
+    @Column(length = 128)
+    private String logisticsCompany;
+
+    @Column(length = 64)
+    private String invoiceNo;
+
+    /**
+     * 发货时间
+     */
+    private Date deliveryTime;
+
+
+    /**
+     * 交易关闭时间
+     */
+    private Date closeTime;
+
+    /**
+     * 评价状态
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 32)
+    private RateState rateState;
+
+    /**
+     * 付款
+     */
+    public void pay() {
+        this.setOrderState(OrderState.WAIT_SELLER_SEND_GOODS);
+        this.setPayTime(new Date());
+        this.setBuyerPointFee(this.getPayment());
+        this.setSellerPointFee(this.getPayment());
+    }
+
+    /**
+     * 评价
+     */
+    public void rate(OrderRole role) {
+        if (role == OrderRole.BUYER) {
+            buyerRate();
+        } else {
+            sellerRate();
+        }
+    }
+
+    /**
+     * 签收
+     */
+    public void sign() {
+        this.setOrderState(OrderState.TRADE_FINISHED);
+        Date now = new Date();
+        this.setSignTime(now);
+        this.setEndTime(now);
+    }
+
+    /**
+     * 发货
+     */
+    public void send(String logisticsCompany, String invoiceNo) {
+        this.setLogisticsCompany(logisticsCompany);
+        this.setInvoiceNo(invoiceNo);
+        this.setDeliveryTime(new Date());
+        this.setOrderState(OrderState.WAIT_BUYER_CONFIRM_GOODS);
+    }
+
+    /**
+     * 买家评价
+     */
+    private void buyerRate() {
+        this.setBuyerRate(true);
+        if (sellerRate == null) {
+            this.setRateState(RateState.RATE_BUYER_UN_SELLER);
+        } else {
+            this.setRateState(RateState.RATE_BUYER_SELLER);
+            close();
+        }
+    }
+
+
+    /**
+     * 卖家评价
+     */
+    private void sellerRate() {
+        this.setSellerRate(true);
+        if (buyerRate == null) {
+            this.setRateState(RateState.RATE_UN_BUYER_SELLER);
+        } else {
+            this.setRateState(RateState.RATE_BUYER_SELLER);
+            close();
+        }
+    }
+
+    /**
+     * 交易关闭
+     */
+    private void close() {
+        this.setCloseTime(new Date());
+        this.setOrderState(OrderState.TRADE_CLOSED);
+    }
+
 }

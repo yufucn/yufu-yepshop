@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
  * @date 2022/1/9 18:24
  */
 public interface GoodsService {
-    Result<Boolean> create(CreateGoodsCommand command);
+    Result<String> create(CreateGoodsCommand command);
 
     Result<Boolean> update(Long id, UpdateGoodsCommand command);
 

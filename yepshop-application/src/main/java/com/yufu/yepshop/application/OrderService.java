@@ -1,6 +1,9 @@
 package com.yufu.yepshop.application;
 
 import com.yufu.yepshop.common.Result;
+import com.yufu.yepshop.types.command.OrderRateCommand;
+import com.yufu.yepshop.types.command.OrderSendCommand;
+import com.yufu.yepshop.types.command.UpdateOrderAddressCommand;
 import com.yufu.yepshop.types.dto.BuyerOrderDTO;
 import com.yufu.yepshop.types.dto.OrderDTO;
 import com.yufu.yepshop.types.dto.SellerOrderDTO;
@@ -18,4 +21,11 @@ public interface OrderService {
 
     Result<OrderDTO> get(Long id);
 
+    Result<Boolean> changeAddress(Long id, UpdateOrderAddressCommand command);
+
+    Result<Boolean> sign(Long id);
+
+    Result<Boolean> send(Long id, OrderSendCommand command);
+
+    Result<Boolean> rate(Long id, OrderRateCommand command);
 }

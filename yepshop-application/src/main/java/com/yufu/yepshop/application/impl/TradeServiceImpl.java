@@ -78,8 +78,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 
             order.setTotalFee(orderCommand.getTotalFee());
             order.setPayment(orderCommand.getPayment());
-            // todo:调试解决默认支付成功
-            order.setOrderState(OrderState.WAIT_SELLER_SEND_GOODS);
+
             order.setDeliveryAddress(command.getDeliveryAddress());
             List<OrderItemDTO> items = new ArrayList<>();
             for (CreateOrderItemCommand itemCommand : orderCommand.getItems()) {
@@ -94,6 +93,8 @@ public class TradeServiceImpl extends BaseService implements TradeService {
                     orderDO.getItems()) {
                 itemDO.setOrder(orderDO);
             }
+            // todo:调试解决默认支付成功
+            orderDO.pay();
             orderDAO.save(orderDO);
 
             trade.setOrder(orderConverter.toDTO(orderDO));

@@ -12,7 +12,6 @@ import com.yufu.yepshop.types.command.CreateOrderCommand;
 public interface TradeService {
     Result<Boolean> checkout(CheckoutCommand command);
 
-
 //    // 下单
 //    BuyerOrderDTO checkout(@Valid CheckoutCommand cmd);
 //

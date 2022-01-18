@@ -55,7 +55,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     }
 
     @Override
-    public Result<Boolean> create(CreateGoodsCommand command) {
+    public Result<String> create(CreateGoodsCommand command) {
         UserAccountDO user = currentUser();
         GoodsDO entity = goodsAssembler.toDO(command);
         entity.setTitle(command.getTitleFromText());
@@ -65,37 +65,44 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         entity.setGoodsState(GoodsState.UP);
         entity.setAuditState(AuditState.SUCCESS);
         goodsDAO.save(entity);
+        Long id = entity.getId();
         GoodsDetailDO detail = new GoodsDetailDO();
-        detail.setId(entity.getId());
+        detail.setId(id);
         detail.setText(command.getText());
         detail.setImageUrls(String.join(",", command.getImageUrlList()));
         goodsDetailDAO.save(detail);
-        return Result.success(true);
+        return Result.success(id.toString(), "发布成功");
     }
 
     @Override
     public Result<Boolean> update(Long id, UpdateGoodsCommand command) {
-        GoodsDO entity = goodsDAO.findById(id).get();
-        goodsAssembler.toDO(command);
-        entity.setTitle(command.getTitleFromText());
-        goodsDAO.save(entity);
+        GoodsDO goodsDO = getById(id);
+        if (goodsDO != null) {
+            goodsAssembler.toDO(command);
+            goodsDO.setTitle(command.getTitleFromText());
+            goodsDAO.save(goodsDO);
 
-        GoodsDetailDO detailDO = new GoodsDetailDO();
+            GoodsDetailDO detailDO = new GoodsDetailDO();
 
-        detailDO.setId(entity.getId());
-        detailDO.setText(command.getText());
-        detailDO.setImageUrls(String.join(",", command.getImageUrlList()));
-        goodsDetailDAO.save(detailDO);
+            detailDO.setId(goodsDO.getId());
+            detailDO.setText(command.getText());
+            detailDO.setImageUrls(String.join(",", command.getImageUrlList()));
+            goodsDetailDAO.save(detailDO);
 
-        return Result.success(true);
+            return Result.success(true);
+        }
+        return Result.fail("商品不存在！");
     }
 
     @Override
     public Result<Boolean> update(Long id, GoodsState state) {
-        GoodsDO entity = goodsDAO.findById(id).get();
-        entity.setGoodsState(state);
-        goodsDAO.save(entity);
-        return Result.success(true);
+        GoodsDO goodsDO = getById(id);
+        if (goodsDO != null) {
+            goodsDO.setGoodsState(state);
+            goodsDAO.save(goodsDO);
+            return Result.success(true);
+        }
+        return Result.fail("商品不存在！");
     }
 
     @Override
@@ -131,13 +138,17 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
 
     @Override
     public Result<GoodsDTO> get(Long id) {
-        GoodsDO goodsDO = goodsDAO.findById(id).get();
-        GoodsDetailDO goodsDetailDO = goodsDetailDAO.findById(id).get();
-        GoodsDTO result = goodsAssembler.toDTO(goodsDO);
-        goodsAssembler.toDTO(goodsDetailDO, result);
-        buildSeller(accountDAO, result.getSeller());
-        builderSchool(schoolDAO, result.getSchool());
-        return Result.success(result);
+        GoodsDO goodsDO = getById(id);
+        if (goodsDO != null) {
+            GoodsDetailDO goodsDetailDO = goodsDetailDAO.findById(id).get();
+            GoodsDTO result = goodsAssembler.toDTO(goodsDO);
+            goodsAssembler.toDTO(goodsDetailDO, result);
+            buildSeller(accountDAO, result.getSeller());
+            builderSchool(schoolDAO, result.getSchool());
+            return Result.success(result);
+        } else {
+            return Result.fail("商品不存在！");
+        }
     }
 
     @Override
@@ -182,5 +193,10 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         return Result.success(paged);
     }
 
+
+    private GoodsDO getById(Long id) {
+        Optional<GoodsDO> goodsDO = goodsDAO.findById(id);
+        return goodsDO.orElse(null);
+    }
 
 }
