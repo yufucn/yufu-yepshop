@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author wang
  * @date 2022/1/15 22:01
@@ -42,23 +44,9 @@ public class GoodsController {
     }
 
     @ApiOperation(value = "搜索")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "schoolId", value = "学校Id", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "categoryId", value = "品类Id", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "condition", value = "成色Id", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "keyword", value = "搜素关键字", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "sortFilter", value = "排序", paramType = "query", dataType = "sortFilter")
-    })
-    @GetMapping("/search")
+    @PostMapping("/search")
     public Result<Page<GoodsListDTO>> searchGoods(
-            @RequestParam(required = false) String schoolId,
-            @RequestParam(required = false) String categoryId,
-            @RequestParam(required = false) String conditionId,
-            @RequestParam Integer page,
-            @RequestParam Integer perPage,
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) SortFilter sortFilter) {
-        GoodsQuery query = new GoodsQuery(schoolId, categoryId, conditionId, page, perPage, keyword, sortFilter);
+            @RequestBody GoodsQuery query) {
         return goodsService.search(query);
     }
 

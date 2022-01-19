@@ -26,6 +26,9 @@ public class GoodsDTO {
     @ApiModelProperty(value = "分类Id")
     private String categoryId;
 
+    @ApiModelProperty(value = "成色Id")
+    private String conditionId;
+
     @ApiModelProperty(value = "原始价格，单位分")
     private Integer originalPrice;
 

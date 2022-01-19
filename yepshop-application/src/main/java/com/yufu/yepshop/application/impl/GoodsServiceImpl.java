@@ -17,6 +17,7 @@ import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.enums.AuditState;
 import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.enums.SellerType;
+import com.yufu.yepshop.types.enums.SortFilter;
 import com.yufu.yepshop.types.query.GoodsQuery;
 import com.yufu.yepshop.types.value.SchoolValue;
 import com.yufu.yepshop.types.value.Seller;
@@ -26,7 +27,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -133,6 +136,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         GoodsListDTO dto = goodsAssembler.toListDTO(gDo);
         Seller seller = dto.getSeller();
         buildSeller(accountDAO, seller);
+        builderSchool(schoolDAO, dto.getSchool());
         return dto;
     }
 
@@ -155,7 +159,12 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     public Result<Page<GoodsListDTO>> search(GoodsQuery query) {
         Sort.Direction sortDirection = Sort.Direction.DESC;
         String column = "id";
-        switch (query.getSort()) {
+        String sort = query.getSort();
+        if(StringUtils.isEmpty(sort)){
+            sort = SortFilter.ALL.toString();
+        }
+
+        switch (SortFilter.valueOf(sort)) {
             case PRICE_ASC: {
                 sortDirection = Sort.Direction.ASC;
                 column = "price";
@@ -173,17 +182,21 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         Pageable pageable = PageRequest.of(query.getPage(), query.getPerPage(), sortDirection, column);
         Specification<GoodsDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
-            if (query.getKeyword() != null) {
+            if (!StringUtils.isEmpty(query.getKeyword())) {
                 list.add(z.like(x.get("title"), query.getKeyword()));
             }
-            if (query.getSchoolId() != null) {
-                list.add(z.equal(x.get("schoolId"), query.getSchoolId()));
+
+            if (query.getSchoolIds().size()>0) {
+                Expression<String> exp = x.get("schoolId");
+                list.add(exp.in(query.getSchoolIds()));
             }
-            if (query.getCategoryId() != null) {
-                list.add(z.equal(x.get("categoryId"), query.getCategoryId()));
+            if (query.getCategoryIds().size()>0) {
+                Expression<String> exp = x.get("categoryId");
+                list.add(exp.in(query.getCategoryIds()));
             }
-            if (query.getConditionId() != null) {
-                list.add(z.equal(x.get("conditionId"), query.getConditionId()));
+            if (query.getConditionIds().size()>0) {
+                Expression<String> exp = x.get("conditionId");
+                list.add(exp.in(query.getConditionIds()));
             }
             Predicate[] predicates = new Predicate[list.size()];
             return z.and(list.toArray(predicates));

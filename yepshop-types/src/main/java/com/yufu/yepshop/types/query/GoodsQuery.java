@@ -1,9 +1,13 @@
 package com.yufu.yepshop.types.query;
 
 import com.yufu.yepshop.types.enums.SortFilter;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * @author wang
@@ -13,11 +17,15 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class GoodsQuery {
-    private String schoolId;
-    private String categoryId;
-    private String conditionId;
-    private Integer page;
-    private Integer perPage;
+    @ApiModelProperty(value = "学校id集合")
+    private List<String> schoolIds;
+    @ApiModelProperty(value = "品类id集合")
+    private List<String> categoryIds;
+    @ApiModelProperty(value = "成色id集合")
+    private List<String> conditionIds;
+    private Integer page = 0;
+    private Integer perPage = 10;
     private String keyword;
-    private SortFilter sort;
+    @ApiModelProperty(value = "排序字段：ALL、PRICE_ASC、PRICE_DESC、LATEST")
+    private String sort;
 }

@@ -1,11 +1,12 @@
 package com.yufu.yepshop.identity.api;
 
+import com.yufu.yepshop.application.UserSchoolService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.identity.service.YufuUserService;
-import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import com.yufu.yepshop.shared.BaseController;
 import com.yufu.yepshop.types.command.BindLocationCommand;
 import com.yufu.yepshop.types.command.BindMobileCommand;
+import com.yufu.yepshop.types.command.BindSchoolCommand;
 import com.yufu.yepshop.types.dto.UserAccountDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,9 +22,13 @@ import org.springframework.web.bind.annotation.*;
 public class IdentityUserController extends BaseController {
 
     private final YufuUserService yufuUserService;
+    private final UserSchoolService userSchoolService;
 
-    public IdentityUserController(YufuUserService yufuUserService) {
+    public IdentityUserController(
+            YufuUserService yufuUserService,
+            UserSchoolService userSchoolService) {
         this.yufuUserService = yufuUserService;
+        this.userSchoolService = userSchoolService;
     }
 
     @ApiOperation(value = "基本信息")
@@ -38,9 +43,17 @@ public class IdentityUserController extends BaseController {
         return yufuUserService.bindMobile(command);
     }
 
+
     @ApiOperation(value = "绑定 - 位置")
     @PutMapping("/bind-location")
     public Result<Boolean> bindLocation(@RequestBody BindLocationCommand command) {
         return yufuUserService.bindLocation(command);
+    }
+
+
+    @ApiOperation(value = "绑定 - 学校")
+    @PutMapping("/bind-school")
+    public Result<Boolean> bindSchool(@RequestBody BindSchoolCommand command) {
+        return userSchoolService.bind(command);
     }
 }

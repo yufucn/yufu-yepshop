@@ -16,12 +16,14 @@ import javax.persistence.Id;
 public class UserDO {
     @Id
     private Long id;
-    private Long schoolId;
+    private Integer totalGoods;//UP + Sold
+    private Integer totalUp;
+    private Integer totalSold;
+
+    private Integer totalBuy;
+
     private Integer followers;
     private Integer following;
     private Integer totalView;
     private Integer totalCollect;
-    private Integer totalRelease;
-    private Integer totalSold;
-    private Integer totalBuy;
 }

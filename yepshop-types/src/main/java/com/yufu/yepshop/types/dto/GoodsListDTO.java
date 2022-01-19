@@ -3,6 +3,7 @@ package com.yufu.yepshop.types.dto;
 import com.yufu.yepshop.types.enums.AuditState;
 import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.value.GoodsValue;
+import com.yufu.yepshop.types.value.SchoolValue;
 import com.yufu.yepshop.types.value.Seller;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,11 +16,13 @@ import lombok.Setter;
 @Setter
 public class GoodsListDTO {
 
-    private String schoolId;
+    private SchoolValue school;
 
     private GoodsValue goods;
 
     private String categoryId;
+
+    private String conditionId;
 
     private Integer originalPrice;
 

@@ -1,5 +1,5 @@
 yufu:
-  version: 1.1.1
+  version: 1.1.2
 server:
   port: 5001
   compression:

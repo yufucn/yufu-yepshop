@@ -2,12 +2,11 @@ package com.yufu.yepshop.users.api;
 
 import com.yufu.yepshop.application.GoodsService;
 import com.yufu.yepshop.application.UserFollowService;
+import com.yufu.yepshop.application.UserSchoolService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.identity.service.YufuUserService;
 import com.yufu.yepshop.shared.BaseController;
-import com.yufu.yepshop.types.dto.GoodsListDTO;
-import com.yufu.yepshop.types.dto.UserAccountDTO;
-import com.yufu.yepshop.types.dto.UserListDTO;
+import com.yufu.yepshop.types.dto.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,19 +26,28 @@ public class ShopUserController extends BaseController {
     private final YufuUserService yufuUserService;
     private final GoodsService goodsService;
     private final UserFollowService userFollowService;
+    private final UserSchoolService userSchoolService;
 
     public ShopUserController(YufuUserService yufuUserService,
                               GoodsService goodsService,
-                              UserFollowService userFollowService) {
+                              UserFollowService userFollowService,
+                              UserSchoolService userSchoolService) {
         this.yufuUserService = yufuUserService;
         this.goodsService = goodsService;
         this.userFollowService = userFollowService;
+        this.userSchoolService = userSchoolService;
     }
 
     @ApiOperation(value = "详情")
     @GetMapping("/{id}")
-    public Result<UserAccountDTO> getUser(@PathVariable Long id) {
-        return yufuUserService.user(id);
+    public Result<UserDetailDTO> getUser(@PathVariable Long id) {
+        UserDetailDTO result = new UserDetailDTO();
+        Result<UserAccountDTO> userAccountDTO = yufuUserService.user(id);
+        result.setAccount(userAccountDTO.getData());
+        result.setUser(new UserDTO());
+        result.setSchools(userSchoolService.schools(id).getData());
+
+        return Result.success(result);
     }
 
 
