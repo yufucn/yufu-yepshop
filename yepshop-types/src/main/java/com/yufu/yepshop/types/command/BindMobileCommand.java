@@ -11,6 +11,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BindMobileCommand {
-    @ApiModelProperty(value = "用户手机号")
-    private String mobile;
+    @ApiModelProperty(value = "基础库 2.21.2 使用，动态令牌。可通过动态令牌换取用户手机号")
+    private String code;
+
+    private String encryptedData;
+
+    private String iv;
 }

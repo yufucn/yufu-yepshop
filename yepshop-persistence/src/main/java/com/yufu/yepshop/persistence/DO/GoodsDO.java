@@ -6,6 +6,7 @@ import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.value.GoodsValue;
 import com.yufu.yepshop.types.value.RegionValue;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -44,6 +45,8 @@ public class GoodsDO extends FullAuditedEntity {
      * 价格，单位为分
      */
     private Integer originalPrice;
+
+    private Integer postFee;
 
     private Integer totalComment;
 

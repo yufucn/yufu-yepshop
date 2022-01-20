@@ -32,6 +32,12 @@ public class GoodsDTO {
     @ApiModelProperty(value = "原始价格，单位分")
     private Integer originalPrice;
 
+    @ApiModelProperty(value = "价格，单位分")
+    private Integer price;
+
+    @ApiModelProperty(value = "邮费，单位分")
+    private Integer postFee;
+
     private RegionValue region;
 
     private Seller seller;

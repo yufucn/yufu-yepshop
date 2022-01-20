@@ -16,7 +16,7 @@ public interface YufuUserService {
 
     Result<UserAccountDTO> user(Long id);
 
-    Result<Boolean> bindMobile(BindMobileCommand command);
+    Result<String> bindMobile(BindMobileCommand command);
 
     Result<Boolean> bindLocation(BindLocationCommand command);
 }

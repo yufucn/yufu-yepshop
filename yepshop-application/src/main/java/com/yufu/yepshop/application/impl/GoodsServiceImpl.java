@@ -183,7 +183,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         Specification<GoodsDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             if (!StringUtils.isEmpty(query.getKeyword())) {
-                list.add(z.like(x.get("title"), query.getKeyword()));
+                list.add(z.like(x.get("title"), "%" + query.getKeyword()+ "%"));
             }
 
             if (query.getSchoolIds().size()>0) {

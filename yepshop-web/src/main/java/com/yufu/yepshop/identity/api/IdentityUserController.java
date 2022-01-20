@@ -39,17 +39,15 @@ public class IdentityUserController extends BaseController {
 
     @ApiOperation(value = "绑定 - 用户手机号")
     @PutMapping("/bind-mobile")
-    public Result<Boolean> bindMobile(@RequestBody BindMobileCommand command) {
+    public Result<String> bindMobile(@RequestBody BindMobileCommand command) {
         return yufuUserService.bindMobile(command);
     }
-
 
     @ApiOperation(value = "绑定 - 位置")
     @PutMapping("/bind-location")
     public Result<Boolean> bindLocation(@RequestBody BindLocationCommand command) {
         return yufuUserService.bindLocation(command);
     }
-
 
     @ApiOperation(value = "绑定 - 学校")
     @PutMapping("/bind-school")
