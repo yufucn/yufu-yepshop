@@ -2,11 +2,11 @@ package com.yufu.yepshop.identity.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.hutool.json.JSONObject;
-import com.yufu.yepshop.application.BaseService;
+import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.external.dto.WechatPhoneResponse;
 import com.yufu.yepshop.persistence.DO.UserAccountDO;
-import com.yufu.yepshop.persistence.converter.UserConvert;
+import com.yufu.yepshop.persistence.converter.UserAccountConvert;
 import com.yufu.yepshop.persistence.dao.UserAccountDAO;
 import com.yufu.yepshop.identity.service.YufuUserService;
 import com.yufu.yepshop.types.command.BindLocationCommand;
@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 public class YufuUserServiceImpl extends BaseService implements YufuUserService {
 
     private final UserAccountDAO userAccountDAO;
-    private final UserConvert userConvert = UserConvert.INSTANCE;
+    private final UserAccountConvert userAccountConvert = UserAccountConvert.INSTANCE;
     private final WxMaService wxMaService;
     private static final int MAX_FAILED_COUNT = 5;
 
@@ -65,8 +65,8 @@ public class YufuUserServiceImpl extends BaseService implements YufuUserService 
 
     @Override
     public Result<UserAccountDTO> user(Long id) {
-        UserAccountDO doo = userAccountDAO.findById(id).get();
-        return Result.success(userConvert.toDTO(doo));
+        UserAccountDO doo = userAccountDAO.findById(id).orElse(null);
+        return Result.success(userAccountConvert.toDTO(doo));
     }
 
     @Override

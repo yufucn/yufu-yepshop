@@ -15,9 +15,9 @@ import javax.persistence.EntityListeners;
  */
 @Getter
 @Setter
-@Entity(name = "yufu_view_history")
+@Entity(name = "yufu_goods_view")
 @EntityListeners(AuditingEntityListener.class)
-public class UserViewHistoryDO  extends AuditedEntity {
+public class GoodsViewDO extends AuditedEntity {
     private Integer viewCount;
     private Long goodsId;
 }

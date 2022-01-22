@@ -1,6 +1,6 @@
 package com.yufu.yepshop.application.impl;
 
-import com.yufu.yepshop.application.BaseService;
+import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.application.OrderService;
 import com.yufu.yepshop.common.Constants;
 import com.yufu.yepshop.common.Result;
@@ -18,10 +18,7 @@ import com.yufu.yepshop.types.command.UpdateOrderAddressCommand;
 import com.yufu.yepshop.types.dto.BuyerOrderDTO;
 import com.yufu.yepshop.types.dto.OrderDTO;
 import com.yufu.yepshop.types.dto.SellerOrderDTO;
-import com.yufu.yepshop.types.enums.OrderRole;
 import com.yufu.yepshop.types.enums.OrderState;
-import com.yufu.yepshop.types.enums.RateState;
-import com.yufu.yepshop.types.value.Seller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -159,13 +156,14 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 
     private BuyerOrderDTO convertBuyerDTO(OrderDO gDo) {
         BuyerOrderDTO dto = orderAssembler.toBuyerDTO(gDo);
-        Optional<UserAccountDO> sellerOptional = accountDAO.findById(gDo.getSellerId());
-        if (sellerOptional.isPresent()) {
-            UserAccountDO sellerDO = sellerOptional.get();
-            Seller seller = dto.getSeller();
-            seller.setNickName(sellerDO.getNickName());
-            seller.setAvatarUrl(sellerDO.getAvatarUrl());
-        }
+        buildSeller(accountDAO,dto.getSeller());
+//        Optional<UserAccountDO> sellerOptional = accountDAO.findById(gDo.getSellerId());
+//        if (sellerOptional.isPresent()) {
+//            UserAccountDO sellerDO = sellerOptional.get();
+//            Seller seller = dto.getSeller();
+//            seller.setNickName(sellerDO.getNickName());
+//            seller.setAvatarUrl(sellerDO.getAvatarUrl());
+//        }
         return dto;
     }
 

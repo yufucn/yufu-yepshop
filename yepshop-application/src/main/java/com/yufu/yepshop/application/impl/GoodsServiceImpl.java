@@ -1,12 +1,11 @@
 package com.yufu.yepshop.application.impl;
 
-import com.yufu.yepshop.application.BaseService;
+import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.application.GoodsService;
 import com.yufu.yepshop.common.Constants;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.persistence.DO.GoodsDO;
 import com.yufu.yepshop.persistence.DO.GoodsDetailDO;
-import com.yufu.yepshop.persistence.DO.SchoolDO;
 import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import com.yufu.yepshop.persistence.converter.GoodsConverter;
 import com.yufu.yepshop.persistence.dao.*;
@@ -19,7 +18,6 @@ import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.enums.SortFilter;
 import com.yufu.yepshop.types.query.GoodsQuery;
-import com.yufu.yepshop.types.value.SchoolValue;
 import com.yufu.yepshop.types.value.Seller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,7 +63,6 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         entity.setSellerId(user.getId());
         entity.setSellerType(SellerType.C);
         //默认上架、审核通过
-        entity.setGoodsState(GoodsState.UP);
         entity.setAuditState(AuditState.SUCCESS);
         goodsDAO.save(entity);
         Long id = entity.getId();
@@ -163,7 +160,6 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         if(StringUtils.isEmpty(sort)){
             sort = SortFilter.ALL.toString();
         }
-
         switch (SortFilter.valueOf(sort)) {
             case PRICE_ASC: {
                 sortDirection = Sort.Direction.ASC;
@@ -182,10 +178,11 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         Pageable pageable = PageRequest.of(query.getPage(), query.getPerPage(), sortDirection, column);
         Specification<GoodsDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
+            list.add(z.equal(x.get("goodsState"), GoodsState.UP));
+            list.add(z.equal(x.get("auditState"), AuditState.SUCCESS));
             if (!StringUtils.isEmpty(query.getKeyword())) {
                 list.add(z.like(x.get("title"), "%" + query.getKeyword()+ "%"));
             }
-
             if (query.getSchoolIds().size()>0) {
                 Expression<String> exp = x.get("schoolId");
                 list.add(exp.in(query.getSchoolIds()));

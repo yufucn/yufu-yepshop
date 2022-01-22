@@ -1,25 +1,15 @@
 package com.yufu.yepshop.application.impl;
 
-import com.yufu.yepshop.application.BaseService;
+import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.application.UserAddressService;
-import com.yufu.yepshop.common.Constants;
 import com.yufu.yepshop.common.Result;
-import com.yufu.yepshop.persistence.DO.GoodsDO;
-import com.yufu.yepshop.persistence.DO.OrderDO;
 import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import com.yufu.yepshop.persistence.DO.UserAddressDO;
 import com.yufu.yepshop.persistence.converter.UserAddressConvert;
 import com.yufu.yepshop.persistence.dao.UserAddressDAO;
 import com.yufu.yepshop.types.command.CreateUserAddressCommand;
 import com.yufu.yepshop.types.command.UpdateUserAddressCommand;
-import com.yufu.yepshop.types.dto.BuyerOrderDTO;
-import com.yufu.yepshop.types.dto.GoodsDTO;
 import com.yufu.yepshop.types.dto.UserAddressDTO;
-import com.yufu.yepshop.types.enums.AuditState;
-import com.yufu.yepshop.types.enums.GoodsState;
-import com.yufu.yepshop.types.enums.OrderState;
-import com.yufu.yepshop.types.enums.SellerType;
-import com.yufu.yepshop.types.value.Seller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

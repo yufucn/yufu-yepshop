@@ -11,4 +11,8 @@ import java.util.List;
  */
 public interface UserCollectService {
     Result<Boolean> collect(Long id);
+
+    Result<Boolean> cancelCollect(Long id);
+    Result<Boolean> collected(Long id);
+
 }

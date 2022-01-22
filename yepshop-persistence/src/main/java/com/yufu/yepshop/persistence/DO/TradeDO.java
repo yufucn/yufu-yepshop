@@ -5,6 +5,7 @@ import com.yufu.yepshop.types.enums.PayState;
 import com.yufu.yepshop.types.enums.PayType;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "yufu_trade")
+@EntityListeners(AuditingEntityListener.class)
 public class TradeDO extends FullAuditedEntity {
 
     @Enumerated(EnumType.STRING)

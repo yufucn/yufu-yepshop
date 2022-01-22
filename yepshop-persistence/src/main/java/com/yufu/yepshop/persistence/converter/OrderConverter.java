@@ -22,6 +22,11 @@ public interface OrderConverter {
      * @param entity Entity
      * @return DO
      */
+    @Mappings({
+            @Mapping(source = "buyer.id", target = "buyerId"),
+            @Mapping(source = "seller.id", target = "sellerId"),
+            @Mapping(source = "seller.type", target = "sellerType"),
+    })
     OrderDO toDO(OrderDTO entity);
 
     List<OrderItemDO> toDO(List<OrderItemDTO> value);

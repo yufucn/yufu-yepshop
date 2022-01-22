@@ -1,8 +1,9 @@
 package com.yufu.yepshop.identity.config;
 
 import com.yufu.yepshop.persistence.DO.UserAccountDO;
+import com.yufu.yepshop.persistence.DO.UserDO;
 import com.yufu.yepshop.persistence.dao.UserAccountDAO;
-import lombok.RequiredArgsConstructor;
+import com.yufu.yepshop.persistence.dao.UserDAO;
 import lombok.var;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,10 +18,15 @@ import java.util.Locale;
  * @date 2021/7/5 22:46
  */
 @Service(value = "yufuUserDetailsService")
-@RequiredArgsConstructor
 public class YufuUserDetailsService implements UserDetailsService {
 
     private final UserAccountDAO yufuUserRepository;
+    private final UserDAO userDAO;
+
+    public YufuUserDetailsService(UserAccountDAO yufuUserRepository, UserDAO userDAO) {
+        this.yufuUserRepository = yufuUserRepository;
+        this.userDAO = userDAO;
+    }
 
     //http://localhost:5000/oauth/authorize?client_id=user-client&response_type=code&scope=all&redirect_uri=http://www.baidu.com
     @Override
@@ -37,7 +43,9 @@ public class YufuUserDetailsService implements UserDetailsService {
         return null;
     }
 
-
+    public void update(UserAccountDO user) {
+        yufuUserRepository.save(user);
+    }
 
     public void register(UserAccountDO user) {
         user.setEnabled(true);
@@ -51,5 +59,9 @@ public class YufuUserDetailsService implements UserDetailsService {
             user.setNormalizedEmail(user.getEmail().toUpperCase(Locale.ROOT));
         }
         yufuUserRepository.save(user);
+
+        UserDO userDO = new UserDO();
+        userDO.setId(user.getId());
+        userDAO.save(userDO);
     }
 }

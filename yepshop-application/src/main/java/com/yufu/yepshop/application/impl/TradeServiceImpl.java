@@ -1,6 +1,6 @@
 package com.yufu.yepshop.application.impl;
 
-import com.yufu.yepshop.application.BaseService;
+import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.application.TradeService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.persistence.DO.OrderDO;
@@ -17,7 +17,6 @@ import com.yufu.yepshop.types.command.CreateOrderItemCommand;
 import com.yufu.yepshop.types.dto.OrderDTO;
 import com.yufu.yepshop.types.dto.OrderItemDTO;
 import com.yufu.yepshop.types.dto.TradeDTO;
-import com.yufu.yepshop.types.enums.OrderState;
 import com.yufu.yepshop.types.value.Buyer;
 import com.yufu.yepshop.types.value.Seller;
 import org.springframework.stereotype.Service;
@@ -65,6 +64,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
             trade.setOpenId(user.getOpenId());
             TradeDO doo = tradeConverter.toDO(trade);
             tradeDAO.save(doo);
+            trade.setId(doo.getId().toString());
 
             OrderDTO order = new OrderDTO();
             order.setTradeId(trade.getId());
@@ -78,8 +78,8 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 
             order.setTotalFee(orderCommand.getTotalFee());
             order.setPayment(orderCommand.getPayment());
-
             order.setDeliveryAddress(command.getDeliveryAddress());
+
             List<OrderItemDTO> items = new ArrayList<>();
             for (CreateOrderItemCommand itemCommand : orderCommand.getItems()) {
                 OrderItemDTO item = new OrderItemDTO();

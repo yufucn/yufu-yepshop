@@ -3,6 +3,7 @@ package com.yufu.yepshop.users.api;
 import com.yufu.yepshop.application.GoodsService;
 import com.yufu.yepshop.application.UserFollowService;
 import com.yufu.yepshop.application.UserSchoolService;
+import com.yufu.yepshop.application.UserService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.identity.service.YufuUserService;
 import com.yufu.yepshop.shared.BaseController;
@@ -19,20 +20,21 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "Shop - 用户")
 @RestController
-@RequestMapping("/api/v1/shop/user")
+@RequestMapping("/api/v1/shop/my")
 @Slf4j
 public class ShopUserController extends BaseController {
 
-    private final YufuUserService yufuUserService;
+    private final UserService userService;
     private final GoodsService goodsService;
     private final UserFollowService userFollowService;
     private final UserSchoolService userSchoolService;
 
-    public ShopUserController(YufuUserService yufuUserService,
+    public ShopUserController(
+                              UserService userService,
                               GoodsService goodsService,
                               UserFollowService userFollowService,
                               UserSchoolService userSchoolService) {
-        this.yufuUserService = yufuUserService;
+        this.userService = userService;
         this.goodsService = goodsService;
         this.userFollowService = userFollowService;
         this.userSchoolService = userSchoolService;
@@ -41,13 +43,7 @@ public class ShopUserController extends BaseController {
     @ApiOperation(value = "详情")
     @GetMapping("/{id}")
     public Result<UserDetailDTO> getUser(@PathVariable Long id) {
-        UserDetailDTO result = new UserDetailDTO();
-        Result<UserAccountDTO> userAccountDTO = yufuUserService.user(id);
-        result.setAccount(userAccountDTO.getData());
-        result.setUser(new UserDTO());
-        result.setSchools(userSchoolService.schools(id).getData());
-
-        return Result.success(result);
+        return userService.user(id);
     }
 
 
@@ -84,7 +80,6 @@ public class ShopUserController extends BaseController {
     @ApiOperation(value = "关注")
     @PostMapping("/follow/{id}")
     public Result<Boolean> follow(@PathVariable Long id) {
-
         return userFollowService.follow(id);
     }
 

@@ -1,5 +1,6 @@
 package com.yufu.yepshop.persistence.DO;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

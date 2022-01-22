@@ -1,4 +1,4 @@
-package com.yufu.yepshop.application;
+package com.yufu.yepshop.domain.service.impl;
 
 import com.yufu.yepshop.ConvertUtils;
 import com.yufu.yepshop.persistence.DO.SchoolDO;

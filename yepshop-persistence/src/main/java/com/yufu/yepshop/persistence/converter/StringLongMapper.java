@@ -10,10 +10,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class StringLongMapper {
     public Long stringToLong(String id) {
-        return ConvertUtils.getLongId(id);
+        return id != null && !id.isEmpty() ? Long.parseLong(id) : null;
     }
 
     public String longToString(Long id) {
-        return ConvertUtils.getStringId(id);
+        if (id != null) {
+            return id.toString();
+        }
+        return null;
     }
 }

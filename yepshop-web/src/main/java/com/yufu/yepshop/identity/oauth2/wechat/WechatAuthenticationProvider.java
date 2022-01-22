@@ -38,11 +38,11 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
         String unionId = sessionInfo.getUnionid();
         String openId = sessionInfo.getOpenid();
         UserAccountDO user = userDetailsService.loadUserByUsername(openId);
+        String sessionKey = sessionInfo.getSessionKey();
+        String encryptedData = authenticationToken.getEncryptedData();
+        String iv = authenticationToken.getIv();
+        WxMaUserInfo userInfo = wxMaService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
         if (user == null) {
-            String sessionKey = sessionInfo.getSessionKey();
-            String encryptedData = authenticationToken.getEncryptedData();
-            String iv = authenticationToken.getIv();
-            WxMaUserInfo userInfo = wxMaService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
             user = new UserAccountDO();
             user.setUnionId(unionId);
             user.setOpenId(openId);
@@ -58,7 +58,21 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
             regionValue.setCountry(userInfo.getCountry());
             user.setRegion(regionValue);
             userDetailsService.register(user);
+        } else {
+            user.setUserName(openId);
+            user.setAvatarUrl(userInfo.getAvatarUrl());
+            user.setGender(userInfo.getGender());
+            user.setNickName(userInfo.getNickName());
+            user.setLanguage(userInfo.getLanguage());
+            RegionValue regionValue = new RegionValue();
+            regionValue.setArea("");
+            regionValue.setProvince(userInfo.getProvince());
+            regionValue.setCity(userInfo.getCity());
+            regionValue.setCountry(userInfo.getCountry());
+            user.setRegion(regionValue);
+            userDetailsService.update(user);
         }
+
         WechatAuthenticationToken result = new WechatAuthenticationToken(user, new HashSet<>());
         result.setDetails(authentication.getDetails());
         return result;

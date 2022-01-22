@@ -1,10 +1,11 @@
 package com.yufu.yepshop.application.impl;
 
-import com.yufu.yepshop.application.BaseService;
-import com.yufu.yepshop.application.UserViewHistoryService;
+import com.yufu.yepshop.domain.service.impl.BaseService;
+import com.yufu.yepshop.application.GoodsViewService;
 import com.yufu.yepshop.common.Result;
-import com.yufu.yepshop.persistence.DO.UserViewHistoryDO;
-import com.yufu.yepshop.persistence.dao.UserViewHistoryDAO;
+import com.yufu.yepshop.persistence.DO.GoodsViewDO;
+import com.yufu.yepshop.persistence.dao.GoodsViewDAO;
+import com.yufu.yepshop.persistence.dao.UserDAO;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -17,32 +18,37 @@ import java.util.Optional;
  * @date 2022/1/16 11:40
  */
 @Service
-public class UserViewHistoryServiceImpl extends BaseService implements UserViewHistoryService {
-    private final UserViewHistoryDAO dao;
+public class GoodsViewServiceImpl extends BaseService implements GoodsViewService {
+    private final GoodsViewDAO dao;
+    private final UserDAO userDAO;
 
-    public UserViewHistoryServiceImpl(UserViewHistoryDAO dao) {
+
+    public GoodsViewServiceImpl(GoodsViewDAO dao, UserDAO userDAO) {
         this.dao = dao;
+        this.userDAO = userDAO;
     }
 
     @Override
     public Result<Boolean> view(Long id) {
-        Specification<UserViewHistoryDO> spc = (x, y, z) -> {
+        Long userId = currentUser().getId();
+        Specification<GoodsViewDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("goodsId"), id));
-            list.add(z.equal(x.get("creatorId"), currentUser().getId()));
+            list.add(z.equal(x.get("creatorId"), userId));
             Predicate[] predicates = new Predicate[list.size()];
             return z.and(list.toArray(predicates));
         };
-        Optional<UserViewHistoryDO> dooOptional = dao.findOne(spc);
+        Optional<GoodsViewDO> dooOptional = dao.findOne(spc);
         if (dooOptional.isPresent()) {
-            UserViewHistoryDO doo = dooOptional.get();
+            GoodsViewDO doo = dooOptional.get();
             doo.setViewCount(doo.getViewCount() + 1);
             dao.save(doo);
         } else {
-            UserViewHistoryDO userViewHistoryDO = new UserViewHistoryDO();
+            GoodsViewDO userViewHistoryDO = new GoodsViewDO();
             userViewHistoryDO.setViewCount(1);
             userViewHistoryDO.setGoodsId(id);
             dao.save(userViewHistoryDO);
+            userDAO.updateTotalView(userId);
         }
         return Result.success();
     }

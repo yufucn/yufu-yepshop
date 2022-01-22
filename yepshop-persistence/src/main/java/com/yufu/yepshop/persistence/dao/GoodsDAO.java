@@ -22,10 +22,15 @@ public interface GoodsDAO extends PagingAndSortingRepository<GoodsDO, Long>, Jpa
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update yufu_goods set total_collect=IFNULL(total_collect,0) + 1 where id = ?1", nativeQuery = true)
-    Integer updateCollect(Long id);
+    Integer collect(Long id);
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "update yufu_goods set totalComment=IFNULL(totalComment,0) + 1 where id = ?1", nativeQuery = true)
+    @Query(value = "update yufu_goods set total_collect=IFNULL(total_collect,1) - 1 where id = ?1", nativeQuery = true)
+    Integer cancelCollect(Long id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update yufu_goods set total_comment=IFNULL(total_comment,0) + 1 where id = ?1", nativeQuery = true)
     Integer updateComment(Long id);
 }

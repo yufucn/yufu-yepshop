@@ -3,6 +3,7 @@ package com.yufu.yepshop.types.value;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yufu.yepshop.types.enums.SellerType;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ConvertUtils {
 
     public static Long getLongId(String id) {
+
         return id != null && !id.isEmpty() ? Long.parseLong(id) : null;
     }
 

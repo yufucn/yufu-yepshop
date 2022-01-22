@@ -2,6 +2,7 @@ package com.yufu.yepshop.types.command;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.value.RegionValue;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -51,6 +52,9 @@ public class CreateGoodsCommand {
     @ApiModelProperty(value = "发货地")
     @NotNull(message = "发货地址不能为空")
     private RegionValue region;
+
+    @ApiModelProperty(value = "商品状态：UP、DRAFT")
+    private GoodsState goodsState;
 
     @JsonIgnore
     public String getTitleFromText() {
