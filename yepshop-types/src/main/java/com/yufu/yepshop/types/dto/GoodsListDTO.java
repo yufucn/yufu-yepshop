@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 /**
  * @author wang
  * @date 2022/1/9 22:16
@@ -45,4 +47,6 @@ public class GoodsListDTO {
     private Integer totalComment;
 
     private Integer totalCollect;
+
+    private Date viewDate;
 }

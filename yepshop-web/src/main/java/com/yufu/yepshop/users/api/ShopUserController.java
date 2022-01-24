@@ -27,17 +27,14 @@ public class ShopUserController extends BaseController {
     private final UserService userService;
     private final GoodsService goodsService;
     private final UserFollowService userFollowService;
-    private final UserSchoolService userSchoolService;
 
     public ShopUserController(
                               UserService userService,
                               GoodsService goodsService,
-                              UserFollowService userFollowService,
-                              UserSchoolService userSchoolService) {
+                              UserFollowService userFollowService) {
         this.userService = userService;
         this.goodsService = goodsService;
         this.userFollowService = userFollowService;
-        this.userSchoolService = userSchoolService;
     }
 
     @ApiOperation(value = "详情")
@@ -61,20 +58,20 @@ public class ShopUserController extends BaseController {
 
     @ApiOperation(value = "关注列表")
     @GetMapping("/{id}/following")
-    public Result<Page<UserListDTO>> getFollowing(
+    public Result<Page<UserAccountDTO>> getFollowing(
             @PathVariable Long id,
             @RequestParam Integer page,
             @RequestParam Integer perPage) {
-        return null;
+        return userFollowService.following(id, page, perPage);
     }
 
     @ApiOperation(value = "粉丝列表")
     @GetMapping("/{id}/followers")
-    public Result<Page<UserListDTO>> getFollowers(
+    public Result<Page<UserAccountDTO>> getFollowers(
             @PathVariable Long id,
             @RequestParam Integer page,
             @RequestParam Integer perPage) {
-        return null;
+        return userFollowService.follwers(id, page, perPage);
     }
 
     @ApiOperation(value = "关注")
@@ -94,16 +91,4 @@ public class ShopUserController extends BaseController {
     public Result<Boolean> followed(@PathVariable Long id) {
         return userFollowService.followed(id);
     }
-
-
-//    @ApiOperation(value = "订单 - 列表")
-//    @GetMapping("/{id}/orders")
-//    public Result<Page<GoodsListDTO>> getUserOrders(
-//            @PathVariable String id,
-//            @RequestParam Integer page,
-//            @RequestParam Integer perPage,
-//            @RequestParam OrderState orderState
-//    ) {
-//        return null;
-//    }
 }

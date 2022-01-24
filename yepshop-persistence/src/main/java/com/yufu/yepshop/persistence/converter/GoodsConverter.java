@@ -64,6 +64,8 @@ public interface GoodsConverter {
     })
     GoodsListDTO toListDTO(GoodsDO entity);
 
+    List<GoodsListDTO> toGoodsListDTO(List<GoodsDO> models);
+
     GoodsDTO toDTO(CreateGoodsCommand command);
 
     GoodsDO toDO(CreateGoodsCommand command);

@@ -27,4 +27,10 @@ public interface GoodsService {
     Result<GoodsDTO> get(Long id);
 
     Result<Page<GoodsListDTO>> search(GoodsQuery query);
+
+    Result<Page<GoodsListDTO>> collectionList(Integer page, Integer perPage);
+
+    Result<Page<GoodsListDTO>> viewList(Integer page, Integer perPage);
+
+    Result<Boolean> viewClear();
 }

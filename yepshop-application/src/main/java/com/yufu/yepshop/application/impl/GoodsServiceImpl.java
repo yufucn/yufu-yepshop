@@ -4,9 +4,7 @@ import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.application.GoodsService;
 import com.yufu.yepshop.common.Constants;
 import com.yufu.yepshop.common.Result;
-import com.yufu.yepshop.persistence.DO.GoodsDO;
-import com.yufu.yepshop.persistence.DO.GoodsDetailDO;
-import com.yufu.yepshop.persistence.DO.UserAccountDO;
+import com.yufu.yepshop.persistence.DO.*;
 import com.yufu.yepshop.persistence.converter.GoodsConverter;
 import com.yufu.yepshop.persistence.dao.*;
 import com.yufu.yepshop.types.command.CreateGoodsCommand;
@@ -19,10 +17,7 @@ import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.enums.SortFilter;
 import com.yufu.yepshop.types.query.GoodsQuery;
 import com.yufu.yepshop.types.value.Seller;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -30,7 +25,9 @@ import org.springframework.util.StringUtils;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author wang
@@ -42,17 +39,21 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     private final UserAccountDAO accountDAO;
     private final GoodsDetailDAO goodsDetailDAO;
     private final SchoolDAO schoolDAO;
+    private final UserCollectDAO userCollectDAO;
+    private final GoodsViewDAO goodsViewDAO;
     private final GoodsConverter goodsAssembler = GoodsConverter.INSTANCE;
 
     public GoodsServiceImpl(
             GoodsDAO goodsDAO,
             UserAccountDAO accountDAO,
             GoodsDetailDAO goodsDetailDAO,
-            SchoolDAO schoolDAO) {
+            SchoolDAO schoolDAO, UserCollectDAO userCollectDAO, GoodsViewDAO goodsViewDAO) {
         this.accountDAO = accountDAO;
         this.goodsDAO = goodsDAO;
         this.goodsDetailDAO = goodsDetailDAO;
         this.schoolDAO = schoolDAO;
+        this.userCollectDAO = userCollectDAO;
+        this.goodsViewDAO = goodsViewDAO;
     }
 
     @Override
@@ -157,7 +158,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         Sort.Direction sortDirection = Sort.Direction.DESC;
         String column = "id";
         String sort = query.getSort();
-        if(StringUtils.isEmpty(sort)){
+        if (StringUtils.isEmpty(sort)) {
             sort = SortFilter.ALL.toString();
         }
         switch (SortFilter.valueOf(sort)) {
@@ -181,17 +182,17 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
             list.add(z.equal(x.get("goodsState"), GoodsState.UP));
             list.add(z.equal(x.get("auditState"), AuditState.SUCCESS));
             if (!StringUtils.isEmpty(query.getKeyword())) {
-                list.add(z.like(x.get("title"), "%" + query.getKeyword()+ "%"));
+                list.add(z.like(x.get("title"), "%" + query.getKeyword() + "%"));
             }
-            if (query.getSchoolIds().size()>0) {
+            if (query.getSchoolIds().size() > 0) {
                 Expression<String> exp = x.get("schoolId");
                 list.add(exp.in(query.getSchoolIds()));
             }
-            if (query.getCategoryIds().size()>0) {
+            if (query.getCategoryIds().size() > 0) {
                 Expression<String> exp = x.get("categoryId");
                 list.add(exp.in(query.getCategoryIds()));
             }
-            if (query.getConditionIds().size()>0) {
+            if (query.getConditionIds().size() > 0) {
                 Expression<String> exp = x.get("conditionId");
                 list.add(exp.in(query.getConditionIds()));
             }
@@ -203,10 +204,91 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         return Result.success(paged);
     }
 
+    @Override
+    public Result<Page<GoodsListDTO>> collectionList(Integer page, Integer perPage) {
+        Long userId = currentUser().getId();
+        Sort.Direction sortDirection = Sort.Direction.DESC;
+        String column = "id";
+        Pageable pageable = PageRequest.of(page, perPage, sortDirection, column);
+        Specification<UserCollectDO> spc = (x, y, z) -> {
+            ArrayList<Predicate> list = new ArrayList<>();
+            list.add(z.equal(x.get("creatorId"), userId));
+            Predicate[] predicates = new Predicate[list.size()];
+            return z.and(list.toArray(predicates));
+        };
+        Page<UserCollectDO> paged = userCollectDAO.findAll(spc, pageable);
+        List<UserCollectDO> list = paged.getContent();
+        List<Long> ids = list.stream().map(UserCollectDO::getGoodsId).collect(Collectors.toList());
+        List<GoodsDO> goodsDOList = getByIds(ids);
+        List<GoodsListDTO> listDTOS = goodsAssembler.toGoodsListDTO(goodsDOList);
+        Page<GoodsListDTO> result = new PageImpl<>(listDTOS, paged.getPageable(), paged.getTotalElements());
+        return Result.success(result);
+    }
+
+    @Override
+    public Result<Page<GoodsListDTO>> viewList(Integer page, Integer perPage) {
+        Long userId = currentUser().getId();
+        Sort.Direction sortDirection = Sort.Direction.DESC;
+        String column = "id";
+        Pageable pageable = PageRequest.of(page, perPage, sortDirection, column);
+        Specification<GoodsViewDO> spc = (x, y, z) -> {
+            ArrayList<Predicate> list = new ArrayList<>();
+            list.add(z.equal(x.get("creatorId"), userId));
+            Predicate[] predicates = new Predicate[list.size()];
+            return z.and(list.toArray(predicates));
+        };
+        Page<GoodsViewDO> paged = goodsViewDAO.findAll(spc, pageable);
+        List<GoodsViewDO> list = paged.getContent();
+        List<Long> ids = list.stream().map(GoodsViewDO::getGoodsId).collect(Collectors.toList());
+        List<GoodsDO> goodsDOList = getByIds(ids);
+        List<GoodsListDTO> listDTOS = goodsAssembler.toGoodsListDTO(goodsDOList);
+        for (GoodsListDTO dto : listDTOS) {
+            Optional<GoodsViewDO> doo =
+                    list.stream().filter(a -> a.getGoodsId().toString().equals(dto.getGoods().getId())).findFirst();
+            doo.ifPresent(goodsViewDO -> dto.setViewDate(goodsViewDO.getCreationTime()));
+        }
+        Page<GoodsListDTO> result = new PageImpl<>(listDTOS, paged.getPageable(), paged.getTotalElements());
+        return Result.success(result);
+    }
+
+    @Override
+    public Result<Boolean> viewClear() {
+        userCollectDAO.deleteByCreatorId(currentUser().getId());
+        return Result.success(true);
+    }
+
+    private List<UserCollectDO> getCollects(List<Long> ids, Long userId) {
+        Specification<UserCollectDO> spc = (x, y, z) -> {
+            ArrayList<Predicate> list = new ArrayList<>();
+            list.add(z.equal(x.get("creatorId"), userId));
+            if (ids.size() > 0) {
+                Expression<Long> exp = x.get("goodsId");
+                list.add(exp.in(ids));
+            }
+            Predicate[] predicates = new Predicate[list.size()];
+            return z.and(list.toArray(predicates));
+        };
+        return userCollectDAO.findAll(spc);
+    }
 
     private GoodsDO getById(Long id) {
         Optional<GoodsDO> goodsDO = goodsDAO.findById(id);
         return goodsDO.orElse(null);
     }
 
+    private List<GoodsDO> getByIds(List<Long> ids) {
+        if (ids.size() == 0) {
+            return new ArrayList<>();
+        }
+        Specification<GoodsDO> spc = (x, y, z) -> {
+            ArrayList<Predicate> list = new ArrayList<>();
+            if (ids.size() > 0) {
+                Expression<Long> exp = x.get("id");
+                list.add(exp.in(ids));
+            }
+            Predicate[] predicates = new Predicate[list.size()];
+            return z.and(list.toArray(predicates));
+        };
+        return goodsDAO.findAll(spc);
+    }
 }

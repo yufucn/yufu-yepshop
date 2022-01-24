@@ -1,17 +1,19 @@
 package com.yufu.yepshop.users.api;
 
+import com.yufu.yepshop.application.GoodsService;
+import com.yufu.yepshop.application.UserFollowService;
 import com.yufu.yepshop.application.UserService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.shared.BaseController;
+import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.dto.UserAccountDTO;
-import com.yufu.yepshop.types.dto.UserDTO;
 import com.yufu.yepshop.types.dto.UserDetailDTO;
+import com.yufu.yepshop.types.dto.UserListDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author wang
@@ -24,9 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class ShopMyController extends BaseController {
 
     private final UserService userService;
+    private final GoodsService goodsService;
+    private final UserFollowService userFollowService;
 
-    public ShopMyController(UserService userService) {
+    public ShopMyController(
+            UserService userService,
+            GoodsService goodsService,
+            UserFollowService userFollowService) {
         this.userService = userService;
+        this.goodsService = goodsService;
+        this.userFollowService = userFollowService;
     }
 
     @ApiOperation(value = "详情")
@@ -34,5 +43,45 @@ public class ShopMyController extends BaseController {
     public Result<UserDetailDTO> getUser() {
         Long id = currentUser().getId();
         return userService.user(id);
+    }
+
+    @ApiOperation(value = "收藏")
+    @GetMapping("/collection")
+    public Result<Page<GoodsListDTO>> getUserGoods(
+            @RequestParam Integer page,
+            @RequestParam Integer perPage
+    ) {
+        return goodsService.collectionList(page, perPage);
+    }
+
+    @ApiOperation(value = "浏览")
+    @GetMapping("/view")
+    public Result<Page<GoodsListDTO>> view(
+            @RequestParam Integer page,
+            @RequestParam Integer perPage
+    ) {
+        return goodsService.viewList(page, perPage);
+    }
+
+    @ApiOperation(value = "清除浏览")
+    @GetMapping("/view-clear")
+    public Result<Boolean> viewClear() {
+        return goodsService.viewClear();
+    }
+
+    @ApiOperation(value = "关注")
+    @GetMapping("/following")
+    public Result<Page<UserAccountDTO>> getFollowing(
+            @RequestParam Integer page,
+            @RequestParam Integer perPage) {
+        return userFollowService.following(currentUser().getId(), page, perPage);
+    }
+
+    @ApiOperation(value = "粉丝")
+    @GetMapping("/followers")
+    public Result<Page<UserAccountDTO>> getFollowers(
+            @RequestParam Integer page,
+            @RequestParam Integer perPage) {
+        return userFollowService.follwers(currentUser().getId(), page, perPage);
     }
 }

@@ -1,6 +1,8 @@
 package com.yufu.yepshop.persistence.dao;
 
+import com.yufu.yepshop.persistence.DO.GoodsViewDO;
 import com.yufu.yepshop.persistence.DO.UserAccountDO;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,7 +16,7 @@ import java.util.Optional;
  * @date 2022/1/5 23:09
  */
 @Repository
-public interface UserAccountDAO extends CrudRepository<UserAccountDO, Long> {
+public interface UserAccountDAO extends CrudRepository<UserAccountDO, Long>, JpaSpecificationExecutor<UserAccountDO> {
     Optional<UserAccountDO> findByUserName(String userName);
 
     Optional<UserAccountDO> findByOpenId(String openId);

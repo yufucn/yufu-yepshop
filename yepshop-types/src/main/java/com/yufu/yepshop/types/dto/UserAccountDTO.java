@@ -50,4 +50,6 @@ public class UserAccountDTO {
     @ApiModelProperty(value = "所在地")
     private RegionValue region;
 
+    @ApiModelProperty(value = "我是否已关注")
+    private Boolean followed;
 }
