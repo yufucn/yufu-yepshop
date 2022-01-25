@@ -2,6 +2,7 @@ package com.yufu.yepshop.application;
 
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.types.dto.UserAccountDTO;
+import com.yufu.yepshop.types.dto.UserDetailDTO;
 import com.yufu.yepshop.types.dto.UserListDTO;
 import org.springframework.data.domain.Page;
 
@@ -16,7 +17,7 @@ public interface UserFollowService {
 
     Result<Boolean> unfollow(Long id);
 
-    Result<Page<UserAccountDTO>> following(Long userId,Integer page, Integer perPage);
+    Result<Page<UserDetailDTO>> following(Long userId, Integer page, Integer perPage);
 
-    Result<Page<UserAccountDTO>> follwers(Long userId,Integer page, Integer perPage);
+    Result<Page<UserDetailDTO>> follwers(Long userId,Integer page, Integer perPage);
 }

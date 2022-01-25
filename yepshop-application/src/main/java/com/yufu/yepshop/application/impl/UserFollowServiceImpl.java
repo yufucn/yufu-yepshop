@@ -1,5 +1,6 @@
 package com.yufu.yepshop.application.impl;
 
+import com.yufu.yepshop.domain.service.UserDomainService;
 import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.application.UserFollowService;
 import com.yufu.yepshop.common.Result;
@@ -8,8 +9,8 @@ import com.yufu.yepshop.persistence.converter.UserAccountConvert;
 import com.yufu.yepshop.persistence.dao.UserAccountDAO;
 import com.yufu.yepshop.persistence.dao.UserDAO;
 import com.yufu.yepshop.persistence.dao.UserFollowDAO;
-import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.dto.UserAccountDTO;
+import com.yufu.yepshop.types.dto.UserDetailDTO;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -31,15 +32,18 @@ public class UserFollowServiceImpl extends BaseService implements UserFollowServ
     private final UserFollowDAO userFollowDAO;
     private final UserDAO userDAO;
     private final UserAccountDAO userAccountDAO;
+    private final UserDomainService userDomainService;
     private final UserAccountConvert userAccountConvert = UserAccountConvert.INSTANCE;
 
     public UserFollowServiceImpl(
             UserFollowDAO userFollowDAO,
             UserDAO userDAO,
-            UserAccountDAO userAccountDAO) {
+            UserAccountDAO userAccountDAO,
+            UserDomainService userDomainService) {
         this.userFollowDAO = userFollowDAO;
         this.userDAO = userDAO;
         this.userAccountDAO = userAccountDAO;
+        this.userDomainService = userDomainService;
     }
 
     @Override
@@ -79,7 +83,7 @@ public class UserFollowServiceImpl extends BaseService implements UserFollowServ
     }
 
     @Override
-    public Result<Page<UserAccountDTO>> following(Long userId, Integer page, Integer perPage) {
+    public Result<Page<UserDetailDTO>> following(Long userId, Integer page, Integer perPage) {
         Sort.Direction sortDirection = Sort.Direction.DESC;
         String column = "id";
         Pageable pageable = PageRequest.of(page, perPage, sortDirection, column);
@@ -92,25 +96,27 @@ public class UserFollowServiceImpl extends BaseService implements UserFollowServ
         Page<UserFollowDO> paged = userFollowDAO.findAll(spc, pageable);
         List<UserFollowDO> list = paged.getContent();
         List<Long> ids = list.stream().map(UserFollowDO::getUserId).collect(Collectors.toList());
-        List<UserAccountDO> dOList = getUserAccountByIds(ids);
-        List<UserAccountDTO> listDTOS = userAccountConvert.toListDTO(dOList);
+        List<UserDetailDTO> detailDTOS = new ArrayList<>();
+        for (Long id : ids) {
+            detailDTOS.add(userDomainService.userDetail(id));
+        }
         Long currentUserId = currentUser().getId();
         if (!currentUserId.equals(userId)) {
             List<UserFollowDO> userFollowDOS = getUserFollowingByIds(currentUserId, ids);
-            for (UserAccountDTO dto : listDTOS) {
+            for (UserDetailDTO dto : detailDTOS) {
                 Optional<UserFollowDO> doo =
-                        userFollowDOS.stream().filter(a -> a.getUserId().toString().equals(dto.getId())).findFirst();
+                        userFollowDOS.stream().filter(a -> a.getUserId().toString().equals(dto.getAccount().getId())).findFirst();
                 if (doo.isPresent()) {
-                    dto.setFollowed(true);
+                    dto.getAccount().setFollowed(true);
                 }
             }
         }
-        Page<UserAccountDTO> result = new PageImpl<>(listDTOS, paged.getPageable(), paged.getTotalElements());
+        Page<UserDetailDTO> result = new PageImpl<>(detailDTOS, paged.getPageable(), paged.getTotalElements());
         return Result.success(result);
     }
 
     @Override
-    public Result<Page<UserAccountDTO>> follwers(Long userId, Integer page, Integer perPage) {
+    public Result<Page<UserDetailDTO>> follwers(Long userId, Integer page, Integer perPage) {
         Sort.Direction sortDirection = Sort.Direction.DESC;
         String column = "id";
         Pageable pageable = PageRequest.of(page, perPage, sortDirection, column);
@@ -123,22 +129,24 @@ public class UserFollowServiceImpl extends BaseService implements UserFollowServ
         Page<UserFollowDO> paged = userFollowDAO.findAll(spc, pageable);
         List<UserFollowDO> list = paged.getContent();
         List<Long> ids = list.stream().map(UserFollowDO::getCreatorId).collect(Collectors.toList());
-        List<UserAccountDO> dOList = getUserAccountByIds(ids);
-        List<UserAccountDTO> listDTOS = userAccountConvert.toListDTO(dOList);
+        List<UserDetailDTO> detailDTOS = new ArrayList<>();
+        for (Long id : ids) {
+            detailDTOS.add(userDomainService.userDetail(id));
+        }
 
         Long currentUserId = currentUser().getId();
         if (!currentUserId.equals(userId)) {
             List<UserFollowDO> userFollowDOS = getUserFollowingByIds(currentUserId, ids);
-            for (UserAccountDTO dto : listDTOS) {
+            for (UserDetailDTO dto : detailDTOS) {
                 Optional<UserFollowDO> doo =
-                        userFollowDOS.stream().filter(a -> a.getUserId().toString().equals(dto.getId())).findFirst();
+                        userFollowDOS.stream().filter(a -> a.getUserId().toString().equals(dto.getAccount().getId())).findFirst();
                 if (doo.isPresent()) {
-                    dto.setFollowed(true);
+                    dto.getAccount().setFollowed(true);
                 }
             }
         }
 
-        Page<UserAccountDTO> result = new PageImpl<>(listDTOS, paged.getPageable(), paged.getTotalElements());
+        Page<UserDetailDTO> result = new PageImpl<>(detailDTOS, paged.getPageable(), paged.getTotalElements());
         return Result.success(result);
     }
 
@@ -200,8 +208,7 @@ public class UserFollowServiceImpl extends BaseService implements UserFollowServ
             Predicate[] predicates = new Predicate[list1.size()];
             return z.and(list1.toArray(predicates));
         };
-        List<UserFollowDO> list1 = userFollowDAO.findAll(spc1);
-        return list1;
+        return userFollowDAO.findAll(spc1);
     }
 
     private List<UserAccountDO> getUserAccountByIds(List<Long> ids) {

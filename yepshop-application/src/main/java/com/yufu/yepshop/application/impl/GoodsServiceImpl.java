@@ -63,6 +63,8 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         entity.setTitle(command.getTitleFromText());
         entity.setSellerId(user.getId());
         entity.setSellerType(SellerType.C);
+        entity.setTotalCollect(0);
+        entity.setTotalComment(0);
         //默认上架、审核通过
         entity.setAuditState(AuditState.SUCCESS);
         goodsDAO.save(entity);
@@ -79,7 +81,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     public Result<Boolean> update(Long id, UpdateGoodsCommand command) {
         GoodsDO goodsDO = getById(id);
         if (goodsDO != null) {
-            goodsAssembler.toDO(command);
+            goodsAssembler.toDO(command, goodsDO);
             goodsDO.setTitle(command.getTitleFromText());
             goodsDAO.save(goodsDO);
 
@@ -109,6 +111,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     @Override
     public Result<Boolean> delete(Long id) {
         goodsDAO.deleteById(id);
+        goodsDetailDAO.deleteById(id);
         return Result.success(true);
     }
 

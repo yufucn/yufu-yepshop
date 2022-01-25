@@ -26,7 +26,7 @@ public interface GoodsConverter {
     /**
      * @return DO
      */
-    GoodsDO toDO(GoodsDTO UpdateGoodsCommand, @MappingTarget GoodsDO goodsDO);
+    GoodsDO toDO(GoodsDTO dto, @MappingTarget GoodsDO goodsDO);
 
     @Mapping(expression = "java(MapStruct.listToStr(entity.getImageUrlList()))", target = "imageUrls")
     GoodsDetailDO toDO(GoodsDTO entity, @MappingTarget GoodsDetailDO goodsDetailDO);
@@ -71,4 +71,6 @@ public interface GoodsConverter {
     GoodsDO toDO(CreateGoodsCommand command);
 
     GoodsDO toDO(UpdateGoodsCommand command);
+
+    GoodsDO toDO(UpdateGoodsCommand dto, @MappingTarget GoodsDO goodsDO);
 }

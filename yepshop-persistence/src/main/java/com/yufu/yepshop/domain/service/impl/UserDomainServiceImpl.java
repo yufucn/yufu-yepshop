@@ -27,9 +27,9 @@ import java.util.List;
 @Service
 public class UserDomainServiceImpl  extends BaseService implements UserDomainService {
 
-    private UserAccountDAO userAccountDAO;
-    private UserSchoolDAO userSchoolDAO;
-    private UserDAO userDAO;
+    private final UserAccountDAO userAccountDAO;
+    private final UserSchoolDAO userSchoolDAO;
+    private final UserDAO userDAO;
     private final UserAccountConvert userAccountConvert = UserAccountConvert.INSTANCE;
     private final UserSchoolConvert convert = UserSchoolConvert.INSTANCE;
     private final UserConvert userConvert = UserConvert.INSTANCE;

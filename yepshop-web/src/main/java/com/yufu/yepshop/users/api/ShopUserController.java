@@ -58,7 +58,7 @@ public class ShopUserController extends BaseController {
 
     @ApiOperation(value = "关注列表")
     @GetMapping("/{id}/following")
-    public Result<Page<UserAccountDTO>> getFollowing(
+    public Result<Page<UserDetailDTO>> getFollowing(
             @PathVariable Long id,
             @RequestParam Integer page,
             @RequestParam Integer perPage) {
@@ -67,7 +67,7 @@ public class ShopUserController extends BaseController {
 
     @ApiOperation(value = "粉丝列表")
     @GetMapping("/{id}/followers")
-    public Result<Page<UserAccountDTO>> getFollowers(
+    public Result<Page<UserDetailDTO>> getFollowers(
             @PathVariable Long id,
             @RequestParam Integer page,
             @RequestParam Integer perPage) {

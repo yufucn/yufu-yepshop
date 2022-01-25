@@ -71,7 +71,7 @@ public class ShopMyController extends BaseController {
 
     @ApiOperation(value = "关注")
     @GetMapping("/following")
-    public Result<Page<UserAccountDTO>> getFollowing(
+    public Result<Page<UserDetailDTO>> getFollowing(
             @RequestParam Integer page,
             @RequestParam Integer perPage) {
         return userFollowService.following(currentUser().getId(), page, perPage);
@@ -79,7 +79,7 @@ public class ShopMyController extends BaseController {
 
     @ApiOperation(value = "粉丝")
     @GetMapping("/followers")
-    public Result<Page<UserAccountDTO>> getFollowers(
+    public Result<Page<UserDetailDTO>> getFollowers(
             @RequestParam Integer page,
             @RequestParam Integer perPage) {
         return userFollowService.follwers(currentUser().getId(), page, perPage);

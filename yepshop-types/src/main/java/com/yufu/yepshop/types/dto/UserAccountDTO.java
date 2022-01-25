@@ -2,12 +2,14 @@ package com.yufu.yepshop.types.dto;
 
 import com.yufu.yepshop.types.value.Location;
 import com.yufu.yepshop.types.value.RegionValue;
+import com.yufu.yepshop.types.value.SchoolValue;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
+import java.util.List;
 
 /**
  * @author wang
