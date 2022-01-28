@@ -1,5 +1,6 @@
 package com.yufu.yepshop.application.impl;
 
+import com.yufu.yepshop.domain.service.UserDomainService;
 import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.application.GoodsService;
 import com.yufu.yepshop.common.Constants;
@@ -42,18 +43,20 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     private final UserCollectDAO userCollectDAO;
     private final GoodsViewDAO goodsViewDAO;
     private final GoodsConverter goodsAssembler = GoodsConverter.INSTANCE;
+    private final UserDomainService userDomainService;
 
     public GoodsServiceImpl(
             GoodsDAO goodsDAO,
             UserAccountDAO accountDAO,
             GoodsDetailDAO goodsDetailDAO,
-            SchoolDAO schoolDAO, UserCollectDAO userCollectDAO, GoodsViewDAO goodsViewDAO) {
+            SchoolDAO schoolDAO, UserCollectDAO userCollectDAO, GoodsViewDAO goodsViewDAO, UserDomainService userDomainService) {
         this.accountDAO = accountDAO;
         this.goodsDAO = goodsDAO;
         this.goodsDetailDAO = goodsDetailDAO;
         this.schoolDAO = schoolDAO;
         this.userCollectDAO = userCollectDAO;
         this.goodsViewDAO = goodsViewDAO;
+        this.userDomainService = userDomainService;
     }
 
     @Override
@@ -74,6 +77,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         detail.setText(command.getText());
         detail.setImageUrls(String.join(",", command.getImageUrlList()));
         goodsDetailDAO.save(detail);
+        userDomainService.bindSchool(Long.parseLong(command.getSchoolId()));
         return Result.success(id.toString(), "发布成功");
     }
 
@@ -91,7 +95,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
             detailDO.setText(command.getText());
             detailDO.setImageUrls(String.join(",", command.getImageUrlList()));
             goodsDetailDAO.save(detailDO);
-
+            userDomainService.bindSchool(Long.parseLong(command.getSchoolId()));
             return Result.success(true);
         }
         return Result.fail("商品不存在！");

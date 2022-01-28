@@ -31,7 +31,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @ApiOperation(value = "买家 - 列表(所有订单、待付款、待发货、待收货)")
+    @ApiOperation(value = "买家 - 列表(ALL全部、WAIT_BUYER_PAY待支付、WAIT_SELLER_SEND_GOODS待发货、WAIT_BUYER_CONFIRM_GOODS待收货、TRADE_FINISHED待评价)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orderState", value = "ALL、orderState所有值", paramType = "query", dataType = "String"),
     })
@@ -50,7 +50,7 @@ public class OrderController {
         return orderService.get(id);
     }
 
-    @ApiOperation(value = "卖家 - 列表(所有订单、待发货、已发货)")
+    @ApiOperation(value = "卖家 - 列表(ALL全部、WAIT_BUYER_PAY待用户支付、WAIT_SELLER_SEND_GOODS待发货、WAIT_BUYER_CONFIRM_GOODS待收货、TRADE_FINISHED待评价)")
     @GetMapping("/seller")
     public Result<Page<SellerOrderDTO>> getSellerOrders(
             @RequestParam Integer page,
@@ -75,6 +75,14 @@ public class OrderController {
             @PathVariable Long id
     ) {
         return orderService.sign(id);
+    }
+
+    @ApiOperation(value = "取消")
+    @PostMapping("/{id}/cancel")
+    public Result<Boolean> cancelGoods(
+            @PathVariable Long id
+    ) {
+        return orderService.cancel(id);
     }
 
     @ApiOperation(value = "评价")

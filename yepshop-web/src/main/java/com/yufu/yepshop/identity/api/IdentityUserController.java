@@ -8,6 +8,7 @@ import com.yufu.yepshop.types.command.BindLocationCommand;
 import com.yufu.yepshop.types.command.BindMobileCommand;
 import com.yufu.yepshop.types.command.BindSchoolCommand;
 import com.yufu.yepshop.types.dto.UserAccountDTO;
+import com.yufu.yepshop.types.dto.UserDetailDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +32,11 @@ public class IdentityUserController extends BaseController {
         this.userSchoolService = userSchoolService;
     }
 
-    @ApiOperation(value = "基本信息")
-    @GetMapping("/me")
-    public Result<UserAccountDTO> user() {
-        return yufuUserService.user(currentUser().getId());
-    }
+//    @ApiOperation(value = "基本信息")
+//    @GetMapping("/me")
+//    public Result<UserDetailDTO> user() {
+//        return yufuUserService.userDetail(currentUser().getId());
+//    }
 
     @ApiOperation(value = "绑定 - 用户手机号")
     @PutMapping("/bind-mobile")

@@ -156,6 +156,15 @@ public class OrderDO extends FullAuditedEntity {
     /**
      * 签收
      */
+    public void cancel() {
+        this.setOrderState(OrderState.TRADE_CLOSED);
+        Date now = new Date();
+        this.setCloseTime(now);
+    }
+
+    /**
+     * 签收
+     */
     public void sign() {
         this.setOrderState(OrderState.TRADE_FINISHED);
         Date now = new Date();

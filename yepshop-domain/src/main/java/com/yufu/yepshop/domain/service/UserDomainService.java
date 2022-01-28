@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface UserDomainService {
 
+    Boolean bindSchool(Long schoolId);
+
     Boolean bindSchool(BindSchoolCommand command);
 
     UserDetailDTO userDetail(Long id);

@@ -100,17 +100,16 @@ public class UserFollowServiceImpl extends BaseService implements UserFollowServ
         for (Long id : ids) {
             detailDTOS.add(userDomainService.userDetail(id));
         }
-        Long currentUserId = currentUser().getId();
-        if (!currentUserId.equals(userId)) {
-            List<UserFollowDO> userFollowDOS = getUserFollowingByIds(currentUserId, ids);
-            for (UserDetailDTO dto : detailDTOS) {
-                Optional<UserFollowDO> doo =
-                        userFollowDOS.stream().filter(a -> a.getUserId().toString().equals(dto.getAccount().getId())).findFirst();
-                if (doo.isPresent()) {
-                    dto.getAccount().setFollowed(true);
-                }
+
+        List<UserFollowDO> userFollowDOS = getUserFollowingByIds(currentUser().getId(), ids);
+        for (UserDetailDTO dto : detailDTOS) {
+            Optional<UserFollowDO> doo =
+                    userFollowDOS.stream().filter(a -> a.getUserId().toString().equals(dto.getAccount().getId())).findFirst();
+            if (doo.isPresent()) {
+                dto.getAccount().setFollowed(true);
             }
         }
+
         Page<UserDetailDTO> result = new PageImpl<>(detailDTOS, paged.getPageable(), paged.getTotalElements());
         return Result.success(result);
     }
@@ -134,15 +133,13 @@ public class UserFollowServiceImpl extends BaseService implements UserFollowServ
             detailDTOS.add(userDomainService.userDetail(id));
         }
 
-        Long currentUserId = currentUser().getId();
-        if (!currentUserId.equals(userId)) {
-            List<UserFollowDO> userFollowDOS = getUserFollowingByIds(currentUserId, ids);
-            for (UserDetailDTO dto : detailDTOS) {
-                Optional<UserFollowDO> doo =
-                        userFollowDOS.stream().filter(a -> a.getUserId().toString().equals(dto.getAccount().getId())).findFirst();
-                if (doo.isPresent()) {
-                    dto.getAccount().setFollowed(true);
-                }
+
+        List<UserFollowDO> userFollowDOS = getUserFollowingByIds(currentUser().getId(), ids);
+        for (UserDetailDTO dto : detailDTOS) {
+            Optional<UserFollowDO> doo =
+                    userFollowDOS.stream().filter(a -> a.getUserId().toString().equals(dto.getAccount().getId())).findFirst();
+            if (doo.isPresent()) {
+                dto.getAccount().setFollowed(true);
             }
         }
 

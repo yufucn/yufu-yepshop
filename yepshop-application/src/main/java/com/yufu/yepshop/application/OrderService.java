@@ -25,6 +25,8 @@ public interface OrderService {
 
     Result<Boolean> sign(Long id);
 
+    Result<Boolean> cancel(Long id);
+
     Result<Boolean> send(Long id, OrderSendCommand command);
 
     Result<Boolean> rate(Long id, OrderRateCommand command);

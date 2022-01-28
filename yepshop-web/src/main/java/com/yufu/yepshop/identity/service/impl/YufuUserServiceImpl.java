@@ -2,6 +2,7 @@ package com.yufu.yepshop.identity.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.hutool.json.JSONObject;
+import com.yufu.yepshop.domain.service.UserDomainService;
 import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.external.dto.WechatPhoneResponse;
@@ -12,6 +13,7 @@ import com.yufu.yepshop.identity.service.YufuUserService;
 import com.yufu.yepshop.types.command.BindLocationCommand;
 import com.yufu.yepshop.types.command.BindMobileCommand;
 import com.yufu.yepshop.types.dto.UserAccountDTO;
+import com.yufu.yepshop.types.dto.UserDetailDTO;
 import com.yufu.yepshop.types.value.Location;
 import lombok.var;
 import org.springframework.stereotype.Service;
@@ -27,11 +29,16 @@ public class YufuUserServiceImpl extends BaseService implements YufuUserService 
     private final UserAccountDAO userAccountDAO;
     private final UserAccountConvert userAccountConvert = UserAccountConvert.INSTANCE;
     private final WxMaService wxMaService;
+    private final UserDomainService userDomainService;
     private static final int MAX_FAILED_COUNT = 5;
 
-    public YufuUserServiceImpl(UserAccountDAO yufuUserRepository, WxMaService wxMaService) {
+    public YufuUserServiceImpl(
+            UserAccountDAO yufuUserRepository,
+            WxMaService wxMaService,
+            UserDomainService userDomainService) {
         this.userAccountDAO = yufuUserRepository;
         this.wxMaService = wxMaService;
+        this.userDomainService = userDomainService;
     }
 
     @Override
@@ -67,6 +74,11 @@ public class YufuUserServiceImpl extends BaseService implements YufuUserService 
     public Result<UserAccountDTO> user(Long id) {
         UserAccountDO doo = userAccountDAO.findById(id).orElse(null);
         return Result.success(userAccountConvert.toDTO(doo));
+    }
+
+    @Override
+    public Result<UserDetailDTO> userDetail(Long id) {
+        return Result.success(userDomainService.userDetail(id));
     }
 
     @Override

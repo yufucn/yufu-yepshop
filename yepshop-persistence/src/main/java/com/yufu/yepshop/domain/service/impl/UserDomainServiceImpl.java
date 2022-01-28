@@ -1,12 +1,14 @@
 package com.yufu.yepshop.domain.service.impl;
 
 import com.yufu.yepshop.domain.service.UserDomainService;
+import com.yufu.yepshop.persistence.DO.SchoolDO;
 import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import com.yufu.yepshop.persistence.DO.UserDO;
 import com.yufu.yepshop.persistence.DO.UserSchoolDO;
 import com.yufu.yepshop.persistence.converter.UserAccountConvert;
 import com.yufu.yepshop.persistence.converter.UserConvert;
 import com.yufu.yepshop.persistence.converter.UserSchoolConvert;
+import com.yufu.yepshop.persistence.dao.SchoolDAO;
 import com.yufu.yepshop.persistence.dao.UserAccountDAO;
 import com.yufu.yepshop.persistence.dao.UserDAO;
 import com.yufu.yepshop.persistence.dao.UserSchoolDAO;
@@ -25,9 +27,10 @@ import java.util.List;
  * @date 2022/1/23 0:18
  */
 @Service
-public class UserDomainServiceImpl  extends BaseService implements UserDomainService {
+public class UserDomainServiceImpl extends BaseService implements UserDomainService {
 
     private final UserAccountDAO userAccountDAO;
+    private final SchoolDAO schoolDAO;
     private final UserSchoolDAO userSchoolDAO;
     private final UserDAO userDAO;
     private final UserAccountConvert userAccountConvert = UserAccountConvert.INSTANCE;
@@ -36,11 +39,28 @@ public class UserDomainServiceImpl  extends BaseService implements UserDomainSer
 
     public UserDomainServiceImpl(
             UserAccountDAO userAccountDAO,
-            UserSchoolDAO userSchoolDAO,
+            SchoolDAO schoolDAO, UserSchoolDAO userSchoolDAO,
             UserDAO userDAO) {
         this.userAccountDAO = userAccountDAO;
+        this.schoolDAO = schoolDAO;
         this.userSchoolDAO = userSchoolDAO;
         this.userDAO = userDAO;
+    }
+
+    @Override
+    public Boolean bindSchool(Long schoolId) {
+        SchoolDO schoolDO = schoolDAO.findById(schoolId).orElse(null);
+        if (schoolDO != null) {
+            List<SchoolValue> schools = new ArrayList<>();
+            SchoolValue schoolValue = new SchoolValue();
+            schoolValue.setName(schoolDO.getName());
+            schoolValue.setId(schoolDO.getId().toString());
+            schools.add(schoolValue);
+            BindSchoolCommand command = new BindSchoolCommand();
+            command.setSchools(schools);
+            bindSchool(command);
+        }
+        return true;
     }
 
     @Override

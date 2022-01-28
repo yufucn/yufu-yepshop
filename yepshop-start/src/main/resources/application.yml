@@ -1,5 +1,5 @@
 yufu:
-  version: 1.1.10
+  version: 1.1.12
 server:
   port: 5001
   compression:
@@ -20,8 +20,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 wechat:
-  appid: ${wechat_appid:wx8e7de310601bf8d4}
-  secret: ${wechat_secret:475e822dbb4a49969240bcd7c1092522}
+  appid: ${wechat_appid:}
+  secret: ${wechat_secret:}
   token: ${wechat_token:}
   aesKey: ${wechat_aesKey:}
   pay:

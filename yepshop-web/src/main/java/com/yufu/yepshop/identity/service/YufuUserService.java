@@ -4,6 +4,7 @@ import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.types.command.BindLocationCommand;
 import com.yufu.yepshop.types.command.BindMobileCommand;
 import com.yufu.yepshop.types.dto.UserAccountDTO;
+import com.yufu.yepshop.types.dto.UserDetailDTO;
 
 /**
  * @author wang
@@ -15,6 +16,8 @@ public interface YufuUserService {
     void resetAccessFailedCount(String userName);
 
     Result<UserAccountDTO> user(Long id);
+
+    Result<UserDetailDTO> userDetail(Long id);
 
     Result<String> bindMobile(BindMobileCommand command);
 

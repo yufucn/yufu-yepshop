@@ -106,13 +106,13 @@ public class OrderServiceImpl extends BaseService implements OrderService {
     public Result<Boolean> changeAddress(Long id, UpdateOrderAddressCommand command) {
         OrderDO doo = getById(id);
         if (doo != null) {
-            if (doo.getOrderState() == OrderState.WAIT_BUYER_PAY) {
-                doo.setDeliveryAddress(command.getDeliveryAddress());
-                orderDAO.save(doo);
-                return Result.success("地址修改成功！");
-            } else {
-                return Result.fail("待支付的订单才能修改地址！");
-            }
+//            if (doo.getOrderState() == OrderState.WAIT_BUYER_PAY) {
+            doo.setDeliveryAddress(command.getDeliveryAddress());
+            orderDAO.save(doo);
+            return Result.success("地址修改成功！");
+//            } else {
+//                return Result.fail("待支付的订单才能修改地址！");
+//            }
         }
         return Result.fail("订单不存在，地址更新失败！");
     }
@@ -150,6 +150,17 @@ public class OrderServiceImpl extends BaseService implements OrderService {
             doo.sign();
             orderDAO.save(doo);
             return Result.success("签收成功");
+        }
+        return Result.fail("订单不存在");
+    }
+
+    @Override
+    public Result<Boolean> cancel(Long id) {
+        OrderDO doo = getById(id);
+        if (doo != null) {
+            doo.sign();
+            orderDAO.save(doo);
+            return Result.success("取消成功");
         }
         return Result.fail("订单不存在");
     }
