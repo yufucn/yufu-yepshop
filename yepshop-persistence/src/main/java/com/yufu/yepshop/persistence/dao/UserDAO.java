@@ -19,4 +19,19 @@ public interface UserDAO extends CrudRepository<UserDO, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "update yufu_user set total_view=IFNULL(total_view,0) + 1 where id = ?1", nativeQuery = true)
     Integer updateTotalView(Long id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update yufu_user set total_view=0 where id = ?1", nativeQuery = true)
+    Integer clearTotalView(Long id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update yufu_user set total_collect=IFNULL(total_collect,0) + 1 where id = ?1", nativeQuery = true)
+    Integer collect(Long id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update yufu_user set total_collect=IFNULL(total_collect,1) - 1 where id = ?1", nativeQuery = true)
+    Integer cancelCollect(Long id);
 }

@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 
 /**
  * @author wang
@@ -18,11 +15,16 @@ import javax.persistence.Enumerated;
 @Getter
 @Setter
 @Entity(name = "yufu_goods_comment")
+@Table(indexes = {
+        @Index(columnList = "goodsId")
+})
 @EntityListeners(AuditingEntityListener.class)
 public class GoodsCommentDO extends FullAuditedEntity {
     private Long goodsId;
 
     private String text;
+
+    private Integer totalReply;
 
     @Enumerated(EnumType.STRING)
     private AuditState auditState;

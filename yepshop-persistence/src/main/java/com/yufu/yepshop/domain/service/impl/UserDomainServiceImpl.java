@@ -15,9 +15,11 @@ import com.yufu.yepshop.persistence.dao.UserSchoolDAO;
 import com.yufu.yepshop.types.command.BindSchoolCommand;
 import com.yufu.yepshop.types.dto.UserDetailDTO;
 import com.yufu.yepshop.types.value.SchoolValue;
+import com.yufu.yepshop.types.value.UserValue;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,5 +100,35 @@ public class UserDomainServiceImpl extends BaseService implements UserDomainServ
         };
         List<UserSchoolDO> list = userSchoolDAO.findAll(spc);
         return convert.toDTO(list);
+    }
+
+    @Override
+    public List<UserValue> users(List<Long> ids) {
+        Specification<UserAccountDO> spc = (x, y, z) -> {
+            ArrayList<Predicate> list = new ArrayList<>();
+            if (ids.size() > 0) {
+                Expression<String> exp = x.get("id");
+                list.add(exp.in(ids));
+            }
+            Predicate[] predicates = new Predicate[list.size()];
+            return z.and(list.toArray(predicates));
+        };
+        return userAccountConvert.toUserValue(userAccountDAO.findAll(spc));
+    }
+
+    @Override
+    public UserValue user(Long id) {
+        List<Long> list = new ArrayList();
+        list.add(id);
+        List<UserValue> users = users(list);
+        if (list.size() > 0) {
+            return users.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean clearTotalView(Long id) {
+        return userDAO.clearTotalView(id) > 0;
     }
 }

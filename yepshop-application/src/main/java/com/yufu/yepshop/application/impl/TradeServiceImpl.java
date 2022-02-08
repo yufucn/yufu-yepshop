@@ -76,6 +76,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
             buyer.setId(user.getId().toString());
             order.setBuyer(buyer);
 
+            order.setPostFee(orderCommand.getPostFee());
             order.setTotalFee(orderCommand.getTotalFee());
             order.setPayment(orderCommand.getPayment());
             order.setDeliveryAddress(command.getDeliveryAddress());

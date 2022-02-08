@@ -2,7 +2,11 @@ package com.yufu.yepshop.application;
 
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.types.command.CreateGoodsCommand;
+import com.yufu.yepshop.types.command.CreateGoodsCommentCommand;
+import com.yufu.yepshop.types.command.CreateGoodsCommentReplyCommand;
 import com.yufu.yepshop.types.command.UpdateGoodsCommand;
+import com.yufu.yepshop.types.dto.CommentDTO;
+import com.yufu.yepshop.types.dto.CommentReplyDTO;
 import com.yufu.yepshop.types.dto.GoodsDTO;
 import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.enums.GoodsState;
@@ -33,4 +37,16 @@ public interface GoodsService {
     Result<Page<GoodsListDTO>> viewList(Integer page, Integer perPage);
 
     Result<Boolean> viewClear();
+
+    Result<Boolean> comment(Long id, CreateGoodsCommentCommand command);
+
+    Result<Boolean> commentReply(Long id, Long commentId, CreateGoodsCommentReplyCommand command);
+
+    Result<Page<CommentDTO>> commentsGoods(Long id, Integer page, Integer perPage);
+
+    Result<Page<CommentReplyDTO>> commentReplyGoodsList(
+            Long id,
+            Long commentId,
+            Integer page,
+            Integer perPage);
 }

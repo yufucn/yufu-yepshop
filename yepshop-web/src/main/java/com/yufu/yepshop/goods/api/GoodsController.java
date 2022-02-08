@@ -4,6 +4,10 @@ import com.yufu.yepshop.application.GoodsService;
 import com.yufu.yepshop.application.UserCollectService;
 import com.yufu.yepshop.application.GoodsViewService;
 import com.yufu.yepshop.common.Result;
+import com.yufu.yepshop.types.command.CreateGoodsCommentCommand;
+import com.yufu.yepshop.types.command.CreateGoodsCommentReplyCommand;
+import com.yufu.yepshop.types.dto.CommentDTO;
+import com.yufu.yepshop.types.dto.CommentReplyDTO;
 import com.yufu.yepshop.types.dto.GoodsDTO;
 import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.query.GoodsQuery;
@@ -74,30 +78,41 @@ public class GoodsController {
     }
 
 
-//    @ApiOperation(value = "评论")
-//    @PostMapping("/{id}/comments")
-//    public Result<Boolean> createGoodsComment(
-//            @PathVariable String id,
-//            @RequestBody CreateGoodsCommentCommand command) {
-//        return null;
-//    }
-//
-//    @ApiOperation(value = "评论 - 列表")
-//    @GetMapping("/{id}/comments")
-//    public Result<Boolean> commentsGoods(
-//            @PathVariable String id,
-//            @RequestParam Integer page,
-//            @RequestParam(name = "per_page") Integer perPage
-//    ) {
-//        return null;
-//    }
-//
-//    @ApiOperation(value = "评论 - 回复")
-//    @PostMapping("/{id}/comment/{commentId}/reply")
-//    public Result<Boolean> commentReplyGoods(
-//            @PathVariable String id,
-//            @PathVariable String commentId,
-//            @RequestBody CreateGoodsCommentReplyCommand command) {
-//        return null;
-//    }
+    @ApiOperation(value = "评论")
+    @PostMapping("/{id}/comments")
+    public Result<Boolean> createGoodsComment(
+            @PathVariable Long id,
+            @RequestBody CreateGoodsCommentCommand command) {
+        return goodsService.comment(id, command);
+    }
+
+    @ApiOperation(value = "评论 - 列表")
+    @GetMapping("/{id}/comments")
+    public Result<Page<CommentDTO>> commentsGoods(
+            @PathVariable Long id,
+            @RequestParam Integer page,
+            @RequestParam(name = "per_page") Integer perPage
+    ) {
+        return goodsService.commentsGoods(id, page, perPage);
+    }
+
+    @ApiOperation(value = "评论 - 回复")
+    @PostMapping("/{id}/comment/{commentId}/reply")
+    public Result<Boolean> commentReplyGoods(
+            @PathVariable Long id,
+            @PathVariable Long commentId,
+            @RequestBody CreateGoodsCommentReplyCommand command) {
+        return goodsService.commentReply(id, commentId, command);
+    }
+
+
+    @ApiOperation(value = "评论 - 回复 - 列表")
+    @GetMapping("/{id}/comment/{commentId}/replies")
+    public Result<Page<CommentReplyDTO>> commentReplyGoodsList(
+            @PathVariable Long id,
+            @PathVariable Long commentId,
+            @RequestParam Integer page,
+            @RequestParam(name = "per_page") Integer perPage) {
+        return goodsService.commentReplyGoodsList(id, commentId, page, perPage);
+    }
 }

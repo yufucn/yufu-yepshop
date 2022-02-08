@@ -6,6 +6,7 @@ import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.persistence.DO.UserCollectDO;
 import com.yufu.yepshop.persistence.dao.GoodsDAO;
 import com.yufu.yepshop.persistence.dao.UserCollectDAO;
+import com.yufu.yepshop.persistence.dao.UserDAO;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,17 @@ import java.util.List;
 @Service
 public class UserCollectServiceImpl extends BaseService implements UserCollectService {
 
-    private final UserCollectDAO dao;
+    private final UserCollectDAO userCollectDAO;
     private final GoodsDAO goodsDAO;
+    private final UserDAO userDAO;
 
-    public UserCollectServiceImpl(UserCollectDAO dao, GoodsDAO goodsDAO) {
-        this.dao = dao;
+    public UserCollectServiceImpl(
+            UserCollectDAO userCollectDAO,
+            GoodsDAO goodsDAO,
+            UserDAO userDAO) {
+        this.userCollectDAO = userCollectDAO;
         this.goodsDAO = goodsDAO;
+        this.userDAO = userDAO;
     }
 
     @Override
@@ -37,12 +43,13 @@ public class UserCollectServiceImpl extends BaseService implements UserCollectSe
             Predicate[] predicates = new Predicate[list.size()];
             return z.and(list.toArray(predicates));
         };
-        List<UserCollectDO> dooList = dao.findAll(spc);
+        List<UserCollectDO> dooList = userCollectDAO.findAll(spc);
         if (dooList.size() == 0) {
             UserCollectDO userCollectDO = new UserCollectDO();
             userCollectDO.setGoodsId(id);
-            dao.save(userCollectDO);
-            goodsDAO.collect(id);
+            userCollectDAO.save(userCollectDO);
+            goodsDAO.updateTotalCollect(id);
+            userDAO.collect(id);
             return Result.success();
         }
         return Result.fail("-1", "已收藏，请勿重复收藏！");
@@ -52,8 +59,9 @@ public class UserCollectServiceImpl extends BaseService implements UserCollectSe
     public Result<Boolean> cancelCollect(Long id) {
         UserCollectDO doo = find(id);
         if (doo != null) {
-            dao.delete(doo);
+            userCollectDAO.delete(doo);
             goodsDAO.cancelCollect(id);
+            userDAO.cancelCollect(id);
         }
         return Result.success("取消收藏成功！");
     }
@@ -75,6 +83,6 @@ public class UserCollectServiceImpl extends BaseService implements UserCollectSe
             Predicate[] predicates = new Predicate[list.size()];
             return z.and(list.toArray(predicates));
         };
-        return dao.findOne(spc).orElse(null);
+        return userCollectDAO.findOne(spc).orElse(null);
     }
 }

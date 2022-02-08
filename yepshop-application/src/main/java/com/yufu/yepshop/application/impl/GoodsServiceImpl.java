@@ -6,10 +6,15 @@ import com.yufu.yepshop.application.GoodsService;
 import com.yufu.yepshop.common.Constants;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.persistence.DO.*;
+import com.yufu.yepshop.persistence.converter.GoodsCommentConverter;
 import com.yufu.yepshop.persistence.converter.GoodsConverter;
 import com.yufu.yepshop.persistence.dao.*;
 import com.yufu.yepshop.types.command.CreateGoodsCommand;
+import com.yufu.yepshop.types.command.CreateGoodsCommentCommand;
+import com.yufu.yepshop.types.command.CreateGoodsCommentReplyCommand;
 import com.yufu.yepshop.types.command.UpdateGoodsCommand;
+import com.yufu.yepshop.types.dto.CommentDTO;
+import com.yufu.yepshop.types.dto.CommentReplyDTO;
 import com.yufu.yepshop.types.dto.GoodsDTO;
 import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.enums.AuditState;
@@ -18,6 +23,7 @@ import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.enums.SortFilter;
 import com.yufu.yepshop.types.query.GoodsQuery;
 import com.yufu.yepshop.types.value.Seller;
+import com.yufu.yepshop.types.value.UserValue;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -25,9 +31,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -42,21 +46,32 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     private final SchoolDAO schoolDAO;
     private final UserCollectDAO userCollectDAO;
     private final GoodsViewDAO goodsViewDAO;
-    private final GoodsConverter goodsAssembler = GoodsConverter.INSTANCE;
+    private final GoodsCommentDAO goodsCommentDAO;
+    private final GoodsCommentReplyDAO goodsCommentReplyDAO;
     private final UserDomainService userDomainService;
+
+    private final GoodsCommentConverter converter = GoodsCommentConverter.INSTANCE;
+
+    private final GoodsConverter goodsAssembler = GoodsConverter.INSTANCE;
 
     public GoodsServiceImpl(
             GoodsDAO goodsDAO,
             UserAccountDAO accountDAO,
             GoodsDetailDAO goodsDetailDAO,
-            SchoolDAO schoolDAO, UserCollectDAO userCollectDAO, GoodsViewDAO goodsViewDAO, UserDomainService userDomainService) {
+            SchoolDAO schoolDAO, UserCollectDAO userCollectDAO,
+            GoodsViewDAO goodsViewDAO,
+            UserDomainService userDomainService,
+            GoodsCommentDAO goodsCommentDAO,
+            GoodsCommentReplyDAO goodsCommentReplyDAO) {
         this.accountDAO = accountDAO;
         this.goodsDAO = goodsDAO;
         this.goodsDetailDAO = goodsDetailDAO;
         this.schoolDAO = schoolDAO;
         this.userCollectDAO = userCollectDAO;
         this.goodsViewDAO = goodsViewDAO;
+        this.goodsCommentDAO = goodsCommentDAO;
         this.userDomainService = userDomainService;
+        this.goodsCommentReplyDAO = goodsCommentReplyDAO;
     }
 
     @Override
@@ -260,8 +275,98 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
 
     @Override
     public Result<Boolean> viewClear() {
-        userCollectDAO.deleteByCreatorId(currentUser().getId());
+        Long uerId = currentUser().getId();
+        goodsViewDAO.clear(uerId);
+        userDomainService.clearTotalView(uerId);
         return Result.success(true);
+    }
+
+    @Override
+    public Result<Boolean> comment(Long id, CreateGoodsCommentCommand command) {
+        GoodsCommentDO commentDO = new GoodsCommentDO();
+        commentDO.setGoodsId(id);
+        commentDO.setText(command.getText());
+        commentDO.setAuditState(AuditState.SUCCESS);
+        goodsCommentDAO.save(commentDO);
+        goodsDAO.updateTotalComment(id);
+        return Result.success(true);
+    }
+
+    @Override
+    public Result<Boolean> commentReply(
+            Long id,
+            Long commentId,
+            CreateGoodsCommentReplyCommand command) {
+        GoodsCommentReplyDO commentReplyDO = new GoodsCommentReplyDO();
+        commentReplyDO.setCommentId(commentId);
+        commentReplyDO.setText(command.getText());
+        commentReplyDO.setReplyToUserId(Long.parseLong(command.getReplyToUserId()));
+        goodsCommentReplyDAO.save(commentReplyDO);
+        goodsCommentDAO.updateTotalReply(commentId);
+        return Result.success(true);
+    }
+
+    @Override
+    public Result<Page<CommentDTO>> commentsGoods(Long id, Integer page, Integer perPage) {
+        Sort.Direction sortDirection = Sort.Direction.ASC;
+        String column = "id";
+        Specification<GoodsCommentDO> spc = (x, y, z) -> {
+            ArrayList<Predicate> list = new ArrayList<>();
+            list.add(z.equal(x.get("goodsId"), id));
+            Predicate[] predicates = new Predicate[list.size()];
+            return z.and(list.toArray(predicates));
+        };
+        Pageable pageable = PageRequest.of(page, perPage, sortDirection, column);
+        Page<GoodsCommentDO> paged = goodsCommentDAO.findAll(spc, pageable);
+        List<GoodsCommentDO> list = paged.getContent();
+        if (list.size() > 0) {
+            List<CommentDTO> comments = new ArrayList<>();
+            Set<Long> userIds = list.stream().map(GoodsCommentDO::getCreatorId).collect(Collectors.toSet());
+            List<UserValue> users = userDomainService.users(new ArrayList<>(userIds));
+
+            for (GoodsCommentDO doo : list) {
+                CommentDTO dto = converter.toDTO(doo);
+                dto.setUser(users.stream().filter(s -> s.getId().equals(dto.getUser().getId())).findFirst().orElse(null));
+                comments.add(dto);
+            }
+            Page<CommentDTO> result = new PageImpl<>(comments, paged.getPageable(), paged.getTotalElements());
+            return Result.success(result);
+        }
+        return Result.success(null);
+    }
+
+    @Override
+    public Result<Page<CommentReplyDTO>> commentReplyGoodsList(Long id, Long commentId, Integer page, Integer perPage) {
+        Sort.Direction sortDirection = Sort.Direction.ASC;
+        String column = "id";
+        Specification<GoodsCommentReplyDO> spc = (x, y, z) -> {
+            ArrayList<Predicate> list = new ArrayList<>();
+            list.add(z.equal(x.get("commentId"), commentId));
+            Predicate[] predicates = new Predicate[list.size()];
+            return z.and(list.toArray(predicates));
+        };
+        Pageable pageable = PageRequest.of(page, perPage, sortDirection, column);
+        Page<GoodsCommentReplyDO> paged = goodsCommentReplyDAO.findAll(spc, pageable);
+        List<GoodsCommentReplyDO> list = paged.getContent();
+        if (list.size() > 0) {
+            List<CommentReplyDTO> comments = new ArrayList<>();
+            Set<Long> userIds = new HashSet<>();
+            List<Long> creatorIds = list.stream().map(GoodsCommentReplyDO::getCreatorId).collect(Collectors.toList());
+            List<Long> replyToUserIds = list.stream().map(GoodsCommentReplyDO::getReplyToUserId).collect(Collectors.toList());
+            userIds.addAll(creatorIds);
+            userIds.addAll(replyToUserIds);
+            List<UserValue> users = userDomainService.users(new ArrayList<>(userIds));
+
+            for (GoodsCommentReplyDO doo : list) {
+                CommentReplyDTO dto = converter.toReplyDTO(doo);
+                dto.setUser(users.stream().filter(s -> s.getId().equals(dto.getUser().getId())).findFirst().orElse(null));
+                dto.setToUser(users.stream().filter(s -> s.getId().equals(dto.getToUser().getId())).findFirst().orElse(null));
+                comments.add(dto);
+            }
+            Page<CommentReplyDTO> result = new PageImpl<>(comments, paged.getPageable(), paged.getTotalElements());
+            return Result.success(result);
+        }
+        return Result.success(null);
     }
 
     private List<UserCollectDO> getCollects(List<Long> ids, Long userId) {
