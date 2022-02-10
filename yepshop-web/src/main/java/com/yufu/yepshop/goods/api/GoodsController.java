@@ -96,6 +96,14 @@ public class GoodsController {
         return goodsService.commentsGoods(id, page, perPage);
     }
 
+    @ApiOperation(value = "评论 - 删除")
+    @DeleteMapping("/{id}/comment/{commentId}")
+    public Result<Boolean> deleteComment(
+            @PathVariable Long id,
+            @PathVariable Long commentId) {
+        return goodsService.commentDelete(id, commentId);
+    }
+
     @ApiOperation(value = "评论 - 回复")
     @PostMapping("/{id}/comment/{commentId}/reply")
     public Result<Boolean> commentReplyGoods(
@@ -114,5 +122,14 @@ public class GoodsController {
             @RequestParam Integer page,
             @RequestParam(name = "per_page") Integer perPage) {
         return goodsService.commentReplyGoodsList(id, commentId, page, perPage);
+    }
+
+    @ApiOperation(value = "评论 - 回复 - 删除")
+    @DeleteMapping("/{id}/comment/{commentId}/reply/{replyId}")
+    public Result<Boolean> commentReplyGoodsDelete(
+            @PathVariable Long id,
+            @PathVariable Long commentId,
+            @PathVariable Long replyId) {
+        return goodsService.commentReplyDelete(id, commentId, replyId);
     }
 }

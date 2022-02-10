@@ -3,7 +3,10 @@ package com.yufu.yepshop.persistence.DO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -14,17 +17,32 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @Entity(name = "yufu_user")
+@DynamicInsert
+@DynamicUpdate
 public class UserDO {
     @Id
     private Long id;
-    private Integer totalGoods;//UP + Sold
+
+    @Column(nullable = false, columnDefinition = "int default 0")
+    private Integer totalGoods;
+
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer totalUp;
+
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer totalSold;
 
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer totalBuy;
 
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer followers;
+
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer following;
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer totalView;
+
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer totalCollect;
 }

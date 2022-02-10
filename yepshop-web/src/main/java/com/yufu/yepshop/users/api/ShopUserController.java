@@ -1,11 +1,8 @@
 package com.yufu.yepshop.users.api;
 
 import com.yufu.yepshop.application.GoodsService;
-import com.yufu.yepshop.application.UserFollowService;
-import com.yufu.yepshop.application.UserSchoolService;
 import com.yufu.yepshop.application.UserService;
 import com.yufu.yepshop.common.Result;
-import com.yufu.yepshop.identity.service.YufuUserService;
 import com.yufu.yepshop.shared.BaseController;
 import com.yufu.yepshop.types.dto.*;
 import io.swagger.annotations.Api;
@@ -20,27 +17,28 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "Shop - 用户")
 @RestController
-@RequestMapping("/api/v1/shop/my")
+@RequestMapping("/api/v1/shop/user")
 @Slf4j
 public class ShopUserController extends BaseController {
 
     private final UserService userService;
     private final GoodsService goodsService;
-    private final UserFollowService userFollowService;
 
     public ShopUserController(
                               UserService userService,
-                              GoodsService goodsService,
-                              UserFollowService userFollowService) {
+                              GoodsService goodsService) {
         this.userService = userService;
         this.goodsService = goodsService;
-        this.userFollowService = userFollowService;
     }
 
     @ApiOperation(value = "详情")
     @GetMapping("/{id}")
     public Result<UserDetailDTO> getUser(@PathVariable Long id) {
-        return userService.user(id);
+        Result<Boolean> followed = userService.followed(id);
+        Result<UserDetailDTO> result =  userService.user(id);
+        UserDetailDTO user = result.getData();
+        user.getAccount().setFollowed(followed.getData());
+        return result;
     }
 
 
@@ -62,7 +60,7 @@ public class ShopUserController extends BaseController {
             @PathVariable Long id,
             @RequestParam Integer page,
             @RequestParam Integer perPage) {
-        return userFollowService.following(id, page, perPage);
+        return userService.following(id, page, perPage);
     }
 
     @ApiOperation(value = "粉丝列表")
@@ -71,24 +69,24 @@ public class ShopUserController extends BaseController {
             @PathVariable Long id,
             @RequestParam Integer page,
             @RequestParam Integer perPage) {
-        return userFollowService.follwers(id, page, perPage);
+        return userService.follwers(id, page, perPage);
     }
 
     @ApiOperation(value = "关注")
     @PostMapping("/follow/{id}")
     public Result<Boolean> follow(@PathVariable Long id) {
-        return userFollowService.follow(id);
+        return userService.follow(id);
     }
 
     @ApiOperation(value = "取消关注")
     @PostMapping("/unfollow/{id}")
     public Result<Boolean> unfollow(@PathVariable Long id) {
-        return userFollowService.unfollow(id);
+        return userService.unfollow(id);
     }
 
     @ApiOperation(value = "是否已关注")
     @GetMapping("/followed/{id}")
     public Result<Boolean> followed(@PathVariable Long id) {
-        return userFollowService.followed(id);
+        return userService.followed(id);
     }
 }

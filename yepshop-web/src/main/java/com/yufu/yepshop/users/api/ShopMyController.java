@@ -1,14 +1,11 @@
 package com.yufu.yepshop.users.api;
 
 import com.yufu.yepshop.application.GoodsService;
-import com.yufu.yepshop.application.UserFollowService;
 import com.yufu.yepshop.application.UserService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.shared.BaseController;
 import com.yufu.yepshop.types.dto.GoodsListDTO;
-import com.yufu.yepshop.types.dto.UserAccountDTO;
 import com.yufu.yepshop.types.dto.UserDetailDTO;
-import com.yufu.yepshop.types.dto.UserListDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,15 +24,12 @@ public class ShopMyController extends BaseController {
 
     private final UserService userService;
     private final GoodsService goodsService;
-    private final UserFollowService userFollowService;
 
     public ShopMyController(
             UserService userService,
-            GoodsService goodsService,
-            UserFollowService userFollowService) {
+            GoodsService goodsService) {
         this.userService = userService;
         this.goodsService = goodsService;
-        this.userFollowService = userFollowService;
     }
 
     @ApiOperation(value = "详情")
@@ -74,7 +68,7 @@ public class ShopMyController extends BaseController {
     public Result<Page<UserDetailDTO>> getFollowing(
             @RequestParam Integer page,
             @RequestParam Integer perPage) {
-        return userFollowService.following(currentUser().getId(), page, perPage);
+        return userService.following(currentUser().getId(), page, perPage);
     }
 
     @ApiOperation(value = "粉丝")
@@ -82,6 +76,6 @@ public class ShopMyController extends BaseController {
     public Result<Page<UserDetailDTO>> getFollowers(
             @RequestParam Integer page,
             @RequestParam Integer perPage) {
-        return userFollowService.follwers(currentUser().getId(), page, perPage);
+        return userService.follwers(currentUser().getId(), page, perPage);
     }
 }

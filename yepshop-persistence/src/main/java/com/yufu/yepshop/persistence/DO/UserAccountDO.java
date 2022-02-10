@@ -68,6 +68,7 @@ public class UserAccountDO extends FullAuditedEntity implements UserDetails {
 
     private Boolean credentialsNonExpired;
 
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer accessFailedCount;
 
     private String avatarUrl;

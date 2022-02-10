@@ -40,7 +40,11 @@ public interface GoodsService {
 
     Result<Boolean> comment(Long id, CreateGoodsCommentCommand command);
 
+    Result<Boolean> commentDelete(Long id, Long commentId);
+
     Result<Boolean> commentReply(Long id, Long commentId, CreateGoodsCommentReplyCommand command);
+
+    Result<Boolean> commentReplyDelete(Long id, Long commentId, Long replyId);
 
     Result<Page<CommentDTO>> commentsGoods(Long id, Integer page, Integer perPage);
 

@@ -293,6 +293,13 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     }
 
     @Override
+    public Result<Boolean> commentDelete(Long id, Long commentId) {
+        goodsCommentReplyDAO.deleteByCommentId(commentId);
+        goodsCommentDAO.deleteById(commentId);
+        return Result.success(true);
+    }
+
+    @Override
     public Result<Boolean> commentReply(
             Long id,
             Long commentId,
@@ -307,12 +314,19 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     }
 
     @Override
+    public Result<Boolean> commentReplyDelete(Long id, Long commentId, Long replyId) {
+        goodsCommentReplyDAO.deleteById(replyId);
+        return Result.success(true);
+    }
+
+    @Override
     public Result<Page<CommentDTO>> commentsGoods(Long id, Integer page, Integer perPage) {
         Sort.Direction sortDirection = Sort.Direction.ASC;
         String column = "id";
         Specification<GoodsCommentDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("goodsId"), id));
+            list.add(z.equal(x.get("auditState"), AuditState.SUCCESS));
             Predicate[] predicates = new Predicate[list.size()];
             return z.and(list.toArray(predicates));
         };

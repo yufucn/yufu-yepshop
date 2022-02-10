@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -22,6 +24,8 @@ import javax.persistence.*;
 @Setter
 @Entity(name = "yufu_goods")
 @EntityListeners(AuditingEntityListener.class)
+@DynamicInsert
+@DynamicUpdate
 public class GoodsDO extends FullAuditedEntity {
 
     private Long schoolId;
@@ -36,6 +40,7 @@ public class GoodsDO extends FullAuditedEntity {
     /**
      * 价格，单位为分
      */
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer price;
 
     private Long categoryId;
@@ -45,12 +50,16 @@ public class GoodsDO extends FullAuditedEntity {
     /**
      * 价格，单位为分
      */
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer originalPrice;
 
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer postFee;
 
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer totalComment;
 
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer totalCollect;
 
     @Enumerated(EnumType.STRING)

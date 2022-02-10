@@ -5,6 +5,8 @@ import com.yufu.yepshop.types.enums.*;
 import com.yufu.yepshop.types.value.DeliveryAddressValue;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -20,6 +22,8 @@ import java.util.List;
 @Setter
 @Entity(name = "yufu_order")
 @EntityListeners(AuditingEntityListener.class)
+@DynamicInsert
+@DynamicUpdate
 public class OrderDO extends FullAuditedEntity {
 
     private Long sellerId;
@@ -49,21 +53,25 @@ public class OrderDO extends FullAuditedEntity {
     /**
      * 实付金额
      */
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer payment;
 
     /**
      * 商品总金额
      */
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer totalFee;
 
     /**
      * 系统优惠金额
      */
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer discountFee;
 
     /**
      * 邮费
      */
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer postFee;
 
     /**
@@ -79,11 +87,13 @@ public class OrderDO extends FullAuditedEntity {
     /**
      * 买家获得积分,返点的积分。格 式:100;单位:个
      */
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer buyerPointFee;
 
     /**
      * 卖家获得积分,返点的积分。格 式:100;单位:个
      */
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer sellerPointFee;
 
     @Enumerated(EnumType.STRING)
