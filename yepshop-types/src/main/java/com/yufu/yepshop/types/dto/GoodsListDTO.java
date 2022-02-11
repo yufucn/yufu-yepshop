@@ -49,4 +49,6 @@ public class GoodsListDTO {
     private Integer totalCollect;
 
     private Date viewDate;
+
+    private Date creationTime;
 }

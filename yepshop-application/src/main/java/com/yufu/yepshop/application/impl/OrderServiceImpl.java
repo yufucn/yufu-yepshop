@@ -165,6 +165,12 @@ public class OrderServiceImpl extends BaseService implements OrderService {
         return Result.fail("订单不存在");
     }
 
+    @Override
+    public Result<Boolean> changePayment(Long id, Integer payment) {
+        orderDAO.updatePayment(id,payment);
+        return Result.success("修改成功");
+    }
+
     private BuyerOrderDTO convertBuyerDTO(OrderDO gDo) {
         BuyerOrderDTO dto = orderAssembler.toBuyerDTO(gDo);
         buildSeller(accountDAO,dto.getSeller());

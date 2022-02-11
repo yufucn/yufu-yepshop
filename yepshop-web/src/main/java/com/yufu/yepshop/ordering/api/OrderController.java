@@ -31,7 +31,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @ApiOperation(value = "买家 - 列表(ALL全部、WAIT_BUYER_PAY待支付、WAIT_SELLER_SEND_GOODS待发货、WAIT_BUYER_CONFIRM_GOODS待收货、TRADE_FINISHED待评价)")
+    @ApiOperation(value = "买家 - 列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orderState", value = "ALL、orderState所有值", paramType = "query", dataType = "String"),
     })
@@ -50,7 +50,7 @@ public class OrderController {
         return orderService.get(id);
     }
 
-    @ApiOperation(value = "卖家 - 列表(ALL全部、WAIT_BUYER_PAY待用户支付、WAIT_SELLER_SEND_GOODS待发货、WAIT_BUYER_CONFIRM_GOODS待收货、TRADE_FINISHED待评价)")
+    @ApiOperation(value = "卖家 - 列表")
     @GetMapping("/seller")
     public Result<Page<SellerOrderDTO>> getSellerOrders(
             @RequestParam Integer page,
@@ -67,6 +67,15 @@ public class OrderController {
             @RequestBody OrderSendCommand command
     ) {
         return orderService.send(id, command);
+    }
+
+    @ApiOperation(value = "卖家 - 修改价格")
+    @PostMapping("/{id}/change-payment")
+    public Result<Boolean> changePayment(
+            @PathVariable Long id,
+            @RequestParam Integer payment
+    ) {
+        return orderService.changePayment(id, payment);
     }
 
     @ApiOperation(value = "买家 - 确认收货")
@@ -102,4 +111,6 @@ public class OrderController {
     ) {
         return orderService.changeAddress(id, command);
     }
+
+
 }

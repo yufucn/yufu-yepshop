@@ -16,6 +16,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.List;
 
 /**
  * @author wang
@@ -38,6 +41,15 @@ public class GoodsController {
         this.goodsService = goodsService;
         this.userCollectService = userCollectService;
         this.viewHistoryService = viewHistoryService;
+    }
+
+    @ApiOperation(value = "跑马灯")
+    @PostMapping("/tip")
+    public Result<Page<GoodsListDTO>> tipGoods(
+            @RequestParam Integer page,
+            @RequestParam(name = "per_page") Integer perPage
+    ) {
+        return goodsService.tipGoods(page, perPage);
     }
 
     @ApiOperation(value = "搜索")

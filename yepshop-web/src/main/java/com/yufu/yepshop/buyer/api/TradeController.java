@@ -33,5 +33,4 @@ public class TradeController {
     public Result<Boolean> create(@RequestBody CheckoutCommand command) {
         return tradeService.checkout(command);
     }
-
 }

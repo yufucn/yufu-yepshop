@@ -22,6 +22,7 @@ import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.enums.SortFilter;
 import com.yufu.yepshop.types.query.GoodsQuery;
+import com.yufu.yepshop.types.value.SchoolValue;
 import com.yufu.yepshop.types.value.Seller;
 import com.yufu.yepshop.types.value.UserValue;
 import org.springframework.data.domain.*;
@@ -152,6 +153,10 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         return Result.success(paged);
     }
 
+    private GoodsListDTO justConvert(GoodsDO gDo) {
+        return goodsAssembler.toListDTO(gDo);
+    }
+
     private GoodsListDTO convert(GoodsDO gDo) {
         GoodsListDTO dto = goodsAssembler.toListDTO(gDo);
         Seller seller = dto.getSeller();
@@ -223,6 +228,28 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         };
         Page<GoodsListDTO> paged =
                 goodsDAO.findAll(spc, pageable).map(this::convert);
+        return Result.success(paged);
+    }
+
+    @Override
+    public Result<Page<GoodsListDTO>> tipGoods(Integer page, Integer perPage) {
+        Long userId = currentUser().getId();
+        List<SchoolValue> schools = userDomainService.schools(userId);
+        Specification<GoodsDO> spc = (x, y, z) -> {
+            ArrayList<Predicate> list = new ArrayList<>();
+            list.add(z.equal(x.get("goodsState"), GoodsState.UP));
+            list.add(z.equal(x.get("auditState"), AuditState.SUCCESS));
+
+            if (schools.size() > 0) {
+                Expression<String> exp = x.get("schoolId");
+                list.add(exp.in(schools.stream().map(SchoolValue::getId).collect(Collectors.toList())));
+            }
+            Predicate[] predicates = new Predicate[list.size()];
+            return z.and(list.toArray(predicates));
+        };
+        Pageable pageable = PageRequest.of(page, perPage, Sort.Direction.DESC, "id");
+        Page<GoodsListDTO> paged =
+                goodsDAO.findAll(spc,pageable).map(this::justConvert);
         return Result.success(paged);
     }
 

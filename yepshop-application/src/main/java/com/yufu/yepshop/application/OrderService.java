@@ -27,6 +27,8 @@ public interface OrderService {
 
     Result<Boolean> cancel(Long id);
 
+    Result<Boolean> changePayment(Long id,Integer payment);
+
     Result<Boolean> send(Long id, OrderSendCommand command);
 
     Result<Boolean> rate(Long id, OrderRateCommand command);

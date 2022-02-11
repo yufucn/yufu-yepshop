@@ -13,6 +13,8 @@ import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.query.GoodsQuery;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 /**
  * @author wang
  * @date 2022/1/9 18:24
@@ -31,6 +33,8 @@ public interface GoodsService {
     Result<GoodsDTO> get(Long id);
 
     Result<Page<GoodsListDTO>> search(GoodsQuery query);
+
+    Result<Page<GoodsListDTO>> tipGoods(Integer page, Integer perPage);
 
     Result<Page<GoodsListDTO>> collectionList(Integer page, Integer perPage);
 
