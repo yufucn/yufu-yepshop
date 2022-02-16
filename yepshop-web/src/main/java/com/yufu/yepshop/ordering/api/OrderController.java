@@ -7,6 +7,7 @@ import com.yufu.yepshop.types.command.OrderSendCommand;
 import com.yufu.yepshop.types.command.UpdateOrderAddressCommand;
 import com.yufu.yepshop.types.dto.BuyerOrderDTO;
 import com.yufu.yepshop.types.dto.OrderDTO;
+import com.yufu.yepshop.types.dto.OrderRateDTO;
 import com.yufu.yepshop.types.dto.SellerOrderDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -15,6 +16,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author wang
@@ -49,6 +52,8 @@ public class OrderController {
     public Result<OrderDTO> get(@PathVariable Long id) {
         return orderService.get(id);
     }
+
+
 
     @ApiOperation(value = "卖家 - 列表")
     @GetMapping("/seller")
@@ -101,6 +106,12 @@ public class OrderController {
             @RequestBody OrderRateCommand command
     ) {
         return orderService.rate(id, command);
+    }
+
+    @ApiOperation(value = "评价 - 列表")
+    @GetMapping("/{id}/rates")
+    public Result<List<OrderRateDTO>> rates(@PathVariable Long id) {
+        return orderService.rates(id);
     }
 
     @ApiOperation(value = "买家 - 修改地址")

@@ -14,12 +14,12 @@ import javax.persistence.*;
  */
 @Getter
 @Setter
-@Entity(name = "yufu_goods_comment_reply")
+@Entity(name = "yufu_requirement_comment_reply")
 @Table(indexes = {
         @Index(columnList = "commentId")
 })
 @EntityListeners(AuditingEntityListener.class)
-public class GoodsCommentReplyDO extends FullAuditedEntity {
+public class RequirementCommentReplyDO extends FullAuditedEntity {
 
     private Long commentId;
 

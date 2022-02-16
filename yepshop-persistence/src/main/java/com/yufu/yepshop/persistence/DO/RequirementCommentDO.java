@@ -16,15 +16,15 @@ import javax.persistence.*;
  */
 @Getter
 @Setter
-@Entity(name = "yufu_goods_comment")
+@Entity(name = "yufu_requirement_comment")
 @Table(indexes = {
-        @Index(columnList = "goodsId")
+        @Index(columnList = "requirementId")
 })
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-public class GoodsCommentDO extends FullAuditedEntity {
-    private Long goodsId;
+public class RequirementCommentDO extends FullAuditedEntity {
+    private Long requirementId;
 
     private String text;
 

@@ -1,5 +1,6 @@
 package com.yufu.yepshop.types.value;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;

@@ -10,9 +10,13 @@ import java.util.List;
  * @date 2022/1/16 10:51
  */
 public interface UserCollectService {
-    Result<Boolean> collect(Long id);
+    Result<Boolean> goodscollect(Long id);
 
-    Result<Boolean> cancelCollect(Long id);
-    Result<Boolean> collected(Long id);
+    Result<Boolean> cancelGoodsCollect(Long id);
 
+    Result<Boolean> goodsCollected(Long id);
+
+    Result<Boolean> requirementCollect(Long id);
+
+    Result<Boolean> cancelRequirementCollect(Long id);
 }

@@ -2,8 +2,8 @@ package com.yufu.yepshop.application;
 
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.types.command.CreateGoodsCommand;
-import com.yufu.yepshop.types.command.CreateGoodsCommentCommand;
-import com.yufu.yepshop.types.command.CreateGoodsCommentReplyCommand;
+import com.yufu.yepshop.types.command.CreateCommentCommand;
+import com.yufu.yepshop.types.command.CreateCommentReplyCommand;
 import com.yufu.yepshop.types.command.UpdateGoodsCommand;
 import com.yufu.yepshop.types.dto.CommentDTO;
 import com.yufu.yepshop.types.dto.CommentReplyDTO;
@@ -12,8 +12,6 @@ import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.query.GoodsQuery;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 /**
  * @author wang
@@ -42,11 +40,11 @@ public interface GoodsService {
 
     Result<Boolean> viewClear();
 
-    Result<Boolean> comment(Long id, CreateGoodsCommentCommand command);
+    Result<String> comment(Long id, CreateCommentCommand command);
 
     Result<Boolean> commentDelete(Long id, Long commentId);
 
-    Result<Boolean> commentReply(Long id, Long commentId, CreateGoodsCommentReplyCommand command);
+    Result<String> commentReply(Long id, Long commentId, CreateCommentReplyCommand command);
 
     Result<Boolean> commentReplyDelete(Long id, Long commentId, Long replyId);
 

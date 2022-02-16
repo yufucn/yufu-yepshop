@@ -51,8 +51,8 @@ public class GoodsDTO {
     @ApiModelProperty(value = "详细描述")
     private String text;
 
-    @ApiModelProperty(value = "评论数")
-    private Integer totalComment;
+//    @ApiModelProperty(value = "评论数")
+//    private Integer totalComment;
 
     @ApiModelProperty(value = "收藏数")
     private Integer totalCollect;

@@ -8,6 +8,7 @@ import com.yufu.yepshop.persistence.dao.UserAccountDAO;
 import com.yufu.yepshop.types.value.Buyer;
 import com.yufu.yepshop.types.value.SchoolValue;
 import com.yufu.yepshop.types.value.Seller;
+import com.yufu.yepshop.types.value.UserValue;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
@@ -19,6 +20,16 @@ import java.util.Optional;
 public class BaseService {
     protected UserAccountDO currentUser() {
         return (UserAccountDO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    protected void buildUser(UserAccountDAO accountDAO, UserValue user) {
+        if (user != null) {
+            UserAccountDO doo = findUser(accountDAO, ConvertUtils.getLongId(user.getId()));
+            if (doo != null) {
+                user.setNickName(doo.getNickName());
+                user.setAvatarUrl(doo.getAvatarUrl());
+            }
+        }
     }
 
     protected void buildSeller(UserAccountDAO accountDAO, Seller seller) {

@@ -4,8 +4,8 @@ import com.yufu.yepshop.application.GoodsService;
 import com.yufu.yepshop.application.UserCollectService;
 import com.yufu.yepshop.application.GoodsViewService;
 import com.yufu.yepshop.common.Result;
-import com.yufu.yepshop.types.command.CreateGoodsCommentCommand;
-import com.yufu.yepshop.types.command.CreateGoodsCommentReplyCommand;
+import com.yufu.yepshop.types.command.CreateCommentCommand;
+import com.yufu.yepshop.types.command.CreateCommentReplyCommand;
 import com.yufu.yepshop.types.dto.CommentDTO;
 import com.yufu.yepshop.types.dto.CommentReplyDTO;
 import com.yufu.yepshop.types.dto.GoodsDTO;
@@ -16,9 +16,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.stylesheets.LinkStyle;
-
-import java.util.List;
 
 /**
  * @author wang
@@ -62,19 +59,19 @@ public class GoodsController {
     @ApiOperation(value = "收藏")
     @PostMapping("/{id}/collect")
     public Result<Boolean> collectGoods(@PathVariable Long id) {
-        return userCollectService.collect(id);
+        return userCollectService.goodscollect(id);
     }
 
     @ApiOperation(value = "取消收藏")
     @PostMapping("/{id}/cancel-collect")
     public Result<Boolean> cancelCollect(@PathVariable Long id) {
-        return userCollectService.cancelCollect(id);
+        return userCollectService.cancelGoodsCollect(id);
     }
 
     @ApiOperation(value = "是否已收藏")
     @GetMapping("/{id}/collected")
     public Result<Boolean> collected(@PathVariable Long id) {
-        return userCollectService.collected(id);
+        return userCollectService.goodsCollected(id);
     }
 
     @ApiOperation(value = "浏览")
@@ -92,9 +89,9 @@ public class GoodsController {
 
     @ApiOperation(value = "评论")
     @PostMapping("/{id}/comments")
-    public Result<Boolean> createGoodsComment(
+    public Result<String> createGoodsComment(
             @PathVariable Long id,
-            @RequestBody CreateGoodsCommentCommand command) {
+            @RequestBody CreateCommentCommand command) {
         return goodsService.comment(id, command);
     }
 
@@ -118,10 +115,10 @@ public class GoodsController {
 
     @ApiOperation(value = "评论 - 回复")
     @PostMapping("/{id}/comment/{commentId}/reply")
-    public Result<Boolean> commentReplyGoods(
+    public Result<String> commentReplyGoods(
             @PathVariable Long id,
             @PathVariable Long commentId,
-            @RequestBody CreateGoodsCommentReplyCommand command) {
+            @RequestBody CreateCommentReplyCommand command) {
         return goodsService.commentReply(id, commentId, command);
     }
 

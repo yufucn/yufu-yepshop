@@ -9,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class CreateGoodsCommentReplyCommand {
+public class CreateCommentReplyCommand {
 
     private String text;
 

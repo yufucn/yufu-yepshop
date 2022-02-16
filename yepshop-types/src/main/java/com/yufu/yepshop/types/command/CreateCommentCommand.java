@@ -9,6 +9,6 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class CreateGoodsCommentCommand {
+public class CreateCommentCommand {
     private String text;
 }

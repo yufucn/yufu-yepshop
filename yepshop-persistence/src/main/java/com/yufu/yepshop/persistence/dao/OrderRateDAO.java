@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author wang
  * @date 2022/1/18 23:19
@@ -13,4 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRateDAO
         extends PagingAndSortingRepository<OrderRateDO, Long>, JpaSpecificationExecutor<OrderRateDO> {
+
+    List<OrderRateDO> getByOrderId(Long orderId);
 }

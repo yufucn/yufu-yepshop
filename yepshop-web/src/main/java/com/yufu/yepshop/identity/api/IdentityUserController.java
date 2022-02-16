@@ -32,12 +32,6 @@ public class IdentityUserController extends BaseController {
         this.userSchoolService = userSchoolService;
     }
 
-//    @ApiOperation(value = "基本信息")
-//    @GetMapping("/me")
-//    public Result<UserDetailDTO> user() {
-//        return yufuUserService.userDetail(currentUser().getId());
-//    }
-
     @ApiOperation(value = "绑定 - 用户手机号")
     @PutMapping("/bind-mobile")
     public Result<String> bindMobile(@RequestBody BindMobileCommand command) {

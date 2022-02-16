@@ -56,8 +56,8 @@ public class GoodsDO extends FullAuditedEntity {
     @Column(nullable = false, columnDefinition = "int default 0")
     private Integer postFee;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer totalComment;
+//    @Column(nullable = false, columnDefinition = "int default 0")
+//    private Integer totalComment;
 
     @Column(nullable = false, columnDefinition = "int default 0")
     private Integer totalCollect;

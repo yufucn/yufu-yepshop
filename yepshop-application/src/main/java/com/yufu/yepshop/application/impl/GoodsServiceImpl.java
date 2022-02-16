@@ -10,8 +10,8 @@ import com.yufu.yepshop.persistence.converter.GoodsCommentConverter;
 import com.yufu.yepshop.persistence.converter.GoodsConverter;
 import com.yufu.yepshop.persistence.dao.*;
 import com.yufu.yepshop.types.command.CreateGoodsCommand;
-import com.yufu.yepshop.types.command.CreateGoodsCommentCommand;
-import com.yufu.yepshop.types.command.CreateGoodsCommentReplyCommand;
+import com.yufu.yepshop.types.command.CreateCommentCommand;
+import com.yufu.yepshop.types.command.CreateCommentReplyCommand;
 import com.yufu.yepshop.types.command.UpdateGoodsCommand;
 import com.yufu.yepshop.types.dto.CommentDTO;
 import com.yufu.yepshop.types.dto.CommentReplyDTO;
@@ -83,7 +83,6 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         entity.setSellerId(user.getId());
         entity.setSellerType(SellerType.C);
         entity.setTotalCollect(0);
-        entity.setTotalComment(0);
         //默认上架、审核通过
         entity.setAuditState(AuditState.SUCCESS);
         goodsDAO.save(entity);
@@ -93,7 +92,6 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         detail.setText(command.getText());
         detail.setImageUrls(String.join(",", command.getImageUrlList()));
         goodsDetailDAO.save(detail);
-        userDomainService.bindSchool(Long.parseLong(command.getSchoolId()));
         return Result.success(id.toString(), "发布成功");
     }
 
@@ -249,7 +247,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         };
         Pageable pageable = PageRequest.of(page, perPage, Sort.Direction.DESC, "id");
         Page<GoodsListDTO> paged =
-                goodsDAO.findAll(spc,pageable).map(this::justConvert);
+                goodsDAO.findAll(spc, pageable).map(this::justConvert);
         return Result.success(paged);
     }
 
@@ -309,14 +307,13 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     }
 
     @Override
-    public Result<Boolean> comment(Long id, CreateGoodsCommentCommand command) {
+    public Result<String> comment(Long id, CreateCommentCommand command) {
         GoodsCommentDO commentDO = new GoodsCommentDO();
         commentDO.setGoodsId(id);
         commentDO.setText(command.getText());
         commentDO.setAuditState(AuditState.SUCCESS);
         goodsCommentDAO.save(commentDO);
-        goodsDAO.updateTotalComment(id);
-        return Result.success(true);
+        return Result.success(commentDO.getId().toString(), "评论成功");
     }
 
     @Override
@@ -327,28 +324,30 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     }
 
     @Override
-    public Result<Boolean> commentReply(
+    public Result<String> commentReply(
             Long id,
             Long commentId,
-            CreateGoodsCommentReplyCommand command) {
+            CreateCommentReplyCommand command) {
         GoodsCommentReplyDO commentReplyDO = new GoodsCommentReplyDO();
         commentReplyDO.setCommentId(commentId);
         commentReplyDO.setText(command.getText());
         commentReplyDO.setReplyToUserId(Long.parseLong(command.getReplyToUserId()));
+        commentReplyDO.setAuditState(AuditState.SUCCESS);
         goodsCommentReplyDAO.save(commentReplyDO);
-        goodsCommentDAO.updateTotalReply(commentId);
-        return Result.success(true);
+        goodsCommentDAO.updateTotalReply(commentId, 1);
+        return Result.success(commentReplyDO.getId().toString(), "评论回复成功");
     }
 
     @Override
     public Result<Boolean> commentReplyDelete(Long id, Long commentId, Long replyId) {
         goodsCommentReplyDAO.deleteById(replyId);
+        goodsCommentDAO.updateTotalReply(commentId, -1);
         return Result.success(true);
     }
 
     @Override
     public Result<Page<CommentDTO>> commentsGoods(Long id, Integer page, Integer perPage) {
-        Sort.Direction sortDirection = Sort.Direction.ASC;
+        Sort.Direction sortDirection = Sort.Direction.DESC;
         String column = "id";
         Specification<GoodsCommentDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();

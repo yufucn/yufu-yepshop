@@ -48,7 +48,7 @@ public class GoodsViewServiceImpl extends BaseService implements GoodsViewServic
             userViewHistoryDO.setViewCount(1);
             userViewHistoryDO.setGoodsId(id);
             dao.save(userViewHistoryDO);
-            userDAO.updateTotalView(userId);
+            userDAO.updateTotalView(userId, 1);
         }
         return Result.success();
     }

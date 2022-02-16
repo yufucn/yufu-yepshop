@@ -4,9 +4,7 @@ import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.application.UserCollectService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.persistence.DO.UserCollectDO;
-import com.yufu.yepshop.persistence.dao.GoodsDAO;
-import com.yufu.yepshop.persistence.dao.UserCollectDAO;
-import com.yufu.yepshop.persistence.dao.UserDAO;
+import com.yufu.yepshop.persistence.dao.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +33,7 @@ public class UserCollectServiceImpl extends BaseService implements UserCollectSe
     }
 
     @Override
-    public Result<Boolean> collect(Long id) {
+    public Result<Boolean> goodscollect(Long id) {
         Specification<UserCollectDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("goodsId"), id));
@@ -48,31 +46,41 @@ public class UserCollectServiceImpl extends BaseService implements UserCollectSe
             UserCollectDO userCollectDO = new UserCollectDO();
             userCollectDO.setGoodsId(id);
             userCollectDAO.save(userCollectDO);
-            goodsDAO.updateTotalCollect(id);
-            userDAO.collect(id);
+            goodsDAO.updateTotalCollect(id, 1);
+            userDAO.collect(id,1);
             return Result.success();
         }
         return Result.fail("-1", "已收藏，请勿重复收藏！");
     }
 
     @Override
-    public Result<Boolean> cancelCollect(Long id) {
+    public Result<Boolean> cancelGoodsCollect(Long id) {
         UserCollectDO doo = find(id);
         if (doo != null) {
             userCollectDAO.delete(doo);
-            goodsDAO.cancelCollect(id);
-            userDAO.cancelCollect(id);
+            goodsDAO.updateTotalCollect(id, -1);
+            userDAO.collect(id, -1);
         }
         return Result.success("取消收藏成功！");
     }
 
     @Override
-    public Result<Boolean> collected(Long id) {
+    public Result<Boolean> goodsCollected(Long id) {
         UserCollectDO doo = find(id);
         if (doo != null) {
             return Result.success(true, "已收藏");
         }
         return Result.success(false, "未收藏");
+    }
+
+    @Override
+    public Result<Boolean> requirementCollect(Long id) {
+        return null;
+    }
+
+    @Override
+    public Result<Boolean> cancelRequirementCollect(Long id) {
+        return null;
     }
 
     private UserCollectDO find(Long id) {

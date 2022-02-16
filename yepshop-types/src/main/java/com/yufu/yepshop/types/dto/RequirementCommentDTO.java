@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author wang
@@ -13,9 +12,9 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class CommentDTO {
+public class RequirementCommentDTO {
 
-    private String goodsId;
+    private String requirementId;
 
     private String id;
 

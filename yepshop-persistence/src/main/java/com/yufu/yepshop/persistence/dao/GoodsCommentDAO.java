@@ -21,6 +21,6 @@ public interface GoodsCommentDAO extends CrudRepository<GoodsCommentDO, Long>,
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "update yufu_goods_comment set total_reply=IFNULL(total_reply,0) + 1 where id = ?1", nativeQuery = true)
-    Integer updateTotalReply(Long id);
+    @Query(value = "update yufu_goods_comment set total_reply=IFNULL(total_reply,0) + ?2 where id = ?1", nativeQuery = true)
+    Integer updateTotalReply(Long id, Integer num);
 }

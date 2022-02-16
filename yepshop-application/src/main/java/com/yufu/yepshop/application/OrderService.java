@@ -6,8 +6,11 @@ import com.yufu.yepshop.types.command.OrderSendCommand;
 import com.yufu.yepshop.types.command.UpdateOrderAddressCommand;
 import com.yufu.yepshop.types.dto.BuyerOrderDTO;
 import com.yufu.yepshop.types.dto.OrderDTO;
+import com.yufu.yepshop.types.dto.OrderRateDTO;
 import com.yufu.yepshop.types.dto.SellerOrderDTO;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 /**
  * @author wang
@@ -32,4 +35,6 @@ public interface OrderService {
     Result<Boolean> send(Long id, OrderSendCommand command);
 
     Result<Boolean> rate(Long id, OrderRateCommand command);
+
+    Result<List<OrderRateDTO>> rates(Long id);
 }

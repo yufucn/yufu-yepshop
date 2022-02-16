@@ -17,6 +17,7 @@ import com.yufu.yepshop.types.command.OrderSendCommand;
 import com.yufu.yepshop.types.command.UpdateOrderAddressCommand;
 import com.yufu.yepshop.types.dto.BuyerOrderDTO;
 import com.yufu.yepshop.types.dto.OrderDTO;
+import com.yufu.yepshop.types.dto.OrderRateDTO;
 import com.yufu.yepshop.types.dto.SellerOrderDTO;
 import com.yufu.yepshop.types.enums.OrderState;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -141,6 +143,12 @@ public class OrderServiceImpl extends BaseService implements OrderService {
             return Result.success("评价成功");
         }
         return Result.fail("订单不存在");
+    }
+
+    @Override
+    public Result<List<OrderRateDTO>> rates(Long id) {
+        List<OrderRateDO> list = orderRateDAO.getByOrderId(id);
+        return Result.success(orderRateConverter.toListDTO(list));
     }
 
     @Override
