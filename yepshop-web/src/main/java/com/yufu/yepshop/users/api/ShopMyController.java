@@ -1,12 +1,16 @@
 package com.yufu.yepshop.users.api;
 
 import com.yufu.yepshop.application.GoodsService;
+import com.yufu.yepshop.application.RequirementService;
 import com.yufu.yepshop.application.UserService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.shared.BaseController;
 import com.yufu.yepshop.types.dto.GoodsListDTO;
+import com.yufu.yepshop.types.dto.RequirementListDTO;
 import com.yufu.yepshop.types.dto.UserDetailDTO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,12 +28,15 @@ public class ShopMyController extends BaseController {
 
     private final UserService userService;
     private final GoodsService goodsService;
+    private final RequirementService requirementService;
 
     public ShopMyController(
             UserService userService,
-            GoodsService goodsService) {
+            GoodsService goodsService,
+            RequirementService requirementService) {
         this.userService = userService;
         this.goodsService = goodsService;
+        this.requirementService = requirementService;
     }
 
     @ApiOperation(value = "详情")
@@ -77,5 +84,18 @@ public class ShopMyController extends BaseController {
             @RequestParam Integer page,
             @RequestParam Integer perPage) {
         return userService.follwers(currentUser().getId(), page, perPage);
+    }
+
+    @ApiOperation(value = "求购 - 列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "requirementState", value = "ALL、UP,BOUGHT,DRAFT", paramType = "query", dataType = "String"),
+    })
+    @GetMapping("/requirements")
+    public Result<Page<RequirementListDTO>> getGoods(
+            @RequestParam Integer page,
+            @RequestParam Integer perPage,
+            @RequestParam String requirementState
+    ) {
+        return requirementService.pagedList(currentUser().getId(), page, perPage, requirementState);
     }
 }
