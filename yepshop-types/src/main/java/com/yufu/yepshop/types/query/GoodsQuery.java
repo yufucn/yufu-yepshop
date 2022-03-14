@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Setter
 @Getter
-@AllArgsConstructor
+//@AllArgsConstructor
 public class GoodsQuery {
     @ApiModelProperty(value = "学校id集合")
     private List<String> schoolIds;

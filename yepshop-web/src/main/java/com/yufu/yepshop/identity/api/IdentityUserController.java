@@ -4,9 +4,7 @@ import com.yufu.yepshop.application.UserSchoolService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.identity.service.YufuUserService;
 import com.yufu.yepshop.shared.BaseController;
-import com.yufu.yepshop.types.command.BindLocationCommand;
-import com.yufu.yepshop.types.command.BindMobileCommand;
-import com.yufu.yepshop.types.command.BindSchoolCommand;
+import com.yufu.yepshop.types.command.*;
 import com.yufu.yepshop.types.dto.UserAccountDTO;
 import com.yufu.yepshop.types.dto.UserDetailDTO;
 import io.swagger.annotations.Api;
@@ -48,5 +46,17 @@ public class IdentityUserController extends BaseController {
     @PutMapping("/bind-school")
     public Result<Boolean> bindSchool(@RequestBody BindSchoolCommand command) {
         return userSchoolService.bind(command);
+    }
+
+    @ApiOperation(value = "设置 - 头像")
+    @PutMapping("/set-avatar")
+    public Result<Boolean> bindAvatarUrl(@RequestBody BindAvatarUrlCommand command) {
+        return yufuUserService.bindAvatarUrl(command);
+    }
+
+    @ApiOperation(value = "设置 - 昵称")
+    @PutMapping("/set-nickname")
+    public Result<Boolean> bindAvatarUrl(@RequestBody BindNickNameCommand command) {
+        return yufuUserService.bindNickName(command);
     }
 }

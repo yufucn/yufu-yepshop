@@ -19,6 +19,7 @@ public class UploadConfigDTO {
     private String accessKeySecret;
     private String securityToken;
     private String prefix;
+    private String avatarPrefix;
     private String expiration;
     private String arn;
     private String assumedRoleId;
@@ -28,5 +29,11 @@ public class UploadConfigDTO {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date now = new Date();
         return String.format("goods/%s/%s/", userId, sdf.format(now));
+    }
+
+    public String buildAvatarPrefix(String userId) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date now = new Date();
+        return String.format("avatar/%s/%s/", userId, sdf.format(now));
     }
 }

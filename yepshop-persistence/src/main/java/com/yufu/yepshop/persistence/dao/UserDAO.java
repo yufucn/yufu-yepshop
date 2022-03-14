@@ -18,16 +18,16 @@ public interface UserDAO extends CrudRepository<UserDO, Long> {
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update yufu_user set total_view=IFNULL(total_view,0) + ?2 where id = ?1", nativeQuery = true)
-    Integer updateTotalView(Long id, Integer num);
+    Integer updateTotalView(Long userId, Integer num);
 
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update yufu_user set total_view=0 where id = ?1", nativeQuery = true)
-    Integer clearTotalView(Long id);
+    Integer clearTotalView(Long userId);
 
 
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update yufu_user set total_collect=IFNULL(total_collect,0) + ?2 where id = ?1", nativeQuery = true)
-    Integer collect(Long id, Integer num);
+    Integer collect(Long userId, Integer num);
 }

@@ -59,10 +59,7 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
             user.setRegion(regionValue);
             userDetailsService.register(user);
         } else {
-            user.setUserName(openId);
-            user.setAvatarUrl(userInfo.getAvatarUrl());
             user.setGender(userInfo.getGender());
-            user.setNickName(userInfo.getNickName());
             user.setLanguage(userInfo.getLanguage());
             RegionValue regionValue = new RegionValue();
             regionValue.setArea("");
@@ -77,7 +74,6 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
         result.setDetails(authentication.getDetails());
         return result;
     }
-
 
     @Override
     public boolean supports(Class<?> authentication) {

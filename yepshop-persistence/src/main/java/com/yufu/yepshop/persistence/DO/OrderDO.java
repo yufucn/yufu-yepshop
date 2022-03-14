@@ -74,6 +74,10 @@ public class OrderDO extends FullAuditedEntity {
     @Column(nullable = false, columnDefinition = "int default 0")
     private Integer postFee;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 16)
+    private PostFeeType postFeeType;
+
     /**
      * 付款时间
      */

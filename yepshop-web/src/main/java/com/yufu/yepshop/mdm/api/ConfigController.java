@@ -56,8 +56,10 @@ public class ConfigController extends BaseController {
         UploadConfigDTO configDTO = new UploadConfigDTO();
         String userId = currentUser().getId().toString();
         String prefix = configDTO.buildPrefix(userId);
+        String avatarPrefix = configDTO.buildAvatarPrefix(userId);
         configDTO.setRegion(region);
         configDTO.setPrefix(prefix);
+        configDTO.setAvatarPrefix(avatarPrefix);
         configDTO.setBucket(bucket);
         configDTO.setHost(host);
         DefaultProfile profile = DefaultProfile.getProfile(

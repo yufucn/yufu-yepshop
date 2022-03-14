@@ -3,6 +3,7 @@ package com.yufu.yepshop.persistence.DO;
 import com.yufu.yepshop.domain.types.auditing.FullAuditedEntity;
 import com.yufu.yepshop.types.enums.AuditState;
 import com.yufu.yepshop.types.enums.GoodsState;
+import com.yufu.yepshop.types.enums.PostFeeType;
 import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.value.GoodsValue;
 import com.yufu.yepshop.types.value.RegionValue;
@@ -65,6 +66,10 @@ public class GoodsDO extends FullAuditedEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 1)
     private SellerType sellerType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 16)
+    private PostFeeType postFeeType;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 16)

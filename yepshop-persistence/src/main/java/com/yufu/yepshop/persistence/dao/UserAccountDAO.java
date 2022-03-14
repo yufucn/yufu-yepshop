@@ -23,6 +23,10 @@ public interface UserAccountDAO extends CrudRepository<UserAccountDO, Long>, Jpa
 
     Optional<UserAccountDO> findByEmail(String email);
 
+    UserAccountDO findByMobile(String mobile);
+
+    UserAccountDO findByMobileAndPassword(String mobile, String password);
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update yufu_user_account set mobile=?1 where id = ?2", nativeQuery = true)
@@ -32,4 +36,14 @@ public interface UserAccountDAO extends CrudRepository<UserAccountDO, Long>, Jpa
     @Modifying(clearAutomatically = true)
     @Query(value = "update yufu_user_account set latitude=?1,longitude=?2 where id = ?3", nativeQuery = true)
     Integer updateLocation(Double latitude, Double longitude, Long id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update yufu_user_account set nick_name=?1 where id = ?2", nativeQuery = true)
+    Integer updateNickName(String nickName, Long id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update yufu_user_account set avatar_url=?1 where id = ?2", nativeQuery = true)
+    Integer updateAvatarUrl(String avatarUrl, Long id);
 }

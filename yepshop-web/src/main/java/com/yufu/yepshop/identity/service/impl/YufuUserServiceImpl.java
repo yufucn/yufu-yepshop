@@ -10,8 +10,10 @@ import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import com.yufu.yepshop.persistence.converter.UserAccountConvert;
 import com.yufu.yepshop.persistence.dao.UserAccountDAO;
 import com.yufu.yepshop.identity.service.YufuUserService;
+import com.yufu.yepshop.types.command.BindAvatarUrlCommand;
 import com.yufu.yepshop.types.command.BindLocationCommand;
 import com.yufu.yepshop.types.command.BindMobileCommand;
+import com.yufu.yepshop.types.command.BindNickNameCommand;
 import com.yufu.yepshop.types.dto.UserAccountDTO;
 import com.yufu.yepshop.types.dto.UserDetailDTO;
 import com.yufu.yepshop.types.value.Location;
@@ -107,6 +109,18 @@ public class YufuUserServiceImpl extends BaseService implements YufuUserService 
     public Result<Boolean> bindLocation(BindLocationCommand command) {
         Location location = command.getLocation();
         userAccountDAO.updateLocation(location.getLatitude(), location.getLongitude(), currentUser().getId());
+        return Result.success();
+    }
+
+    @Override
+    public Result<Boolean> bindAvatarUrl(BindAvatarUrlCommand command) {
+        userAccountDAO.updateAvatarUrl(command.getAvatarUrl(), currentUser().getId());
+        return Result.success();
+    }
+
+    @Override
+    public Result<Boolean> bindNickName(BindNickNameCommand command) {
+        userAccountDAO.updateNickName(command.getNickName(), currentUser().getId());
         return Result.success();
     }
 }

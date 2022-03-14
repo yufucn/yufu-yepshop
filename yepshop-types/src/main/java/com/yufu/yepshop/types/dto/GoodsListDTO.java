@@ -2,6 +2,7 @@ package com.yufu.yepshop.types.dto;
 
 import com.yufu.yepshop.types.enums.AuditState;
 import com.yufu.yepshop.types.enums.GoodsState;
+import com.yufu.yepshop.types.enums.PostFeeType;
 import com.yufu.yepshop.types.value.GoodsValue;
 import com.yufu.yepshop.types.value.SchoolValue;
 import com.yufu.yepshop.types.value.Seller;
@@ -37,6 +38,9 @@ public class GoodsListDTO {
 
     @ApiModelProperty(value = "邮费，单位分")
     private Integer postFee;
+
+    @ApiModelProperty(value = "FREE(卖家承担运费),COLLECT(到付)")
+    private PostFeeType postFeeType;
 
     private Seller seller;
 

@@ -1,5 +1,6 @@
 package com.yufu.yepshop.types.command;
 
+import com.yufu.yepshop.types.enums.PostFeeType;
 import com.yufu.yepshop.types.value.CategoryValue;
 import com.yufu.yepshop.types.value.RegionValue;
 import io.swagger.annotations.ApiModelProperty;
@@ -32,6 +33,9 @@ public class UpdateGoodsCommand {
     private Integer originalPrice;
 
     private Integer postFee;
+
+    @ApiModelProperty(value = "FREE(卖家承担运费),COLLECT(到付)")
+    private PostFeeType postFeeType;
 
     @ApiModelProperty(value = "学校Id，弹窗让用户选择一个学校，提交接口后，缓存在小程序")
     private String schoolId;

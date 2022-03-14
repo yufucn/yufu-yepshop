@@ -1,6 +1,7 @@
 package com.yufu.yepshop.types.dto;
 
 import com.yufu.yepshop.types.enums.OrderState;
+import com.yufu.yepshop.types.enums.PostFeeType;
 import com.yufu.yepshop.types.enums.RateState;
 import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.value.Buyer;
@@ -56,6 +57,9 @@ public class OrderDTO {
      */
     @ApiModelProperty(value = "邮费")
     private Integer postFee;
+
+    @ApiModelProperty(value = "FREE(卖家承担运费),COLLECT(到付)")
+    private PostFeeType postFeeType;
 
     /**
      * 付款时间

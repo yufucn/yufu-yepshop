@@ -62,6 +62,15 @@ public class YufuUserDetailsService implements UserDetailsService {
 
         UserDO userDO = new UserDO();
         userDO.setId(user.getId());
+        userDO.setFollowing(0);
+        userDO.setTotalView(0);
+        userDO.setFollowers(0);
+        userDO.setTotalUp(0);
+        userDO.setTotalSold(0);
+        userDO.setTotalCollect(0);
+        userDO.setTotalGoods(0);
+        userDO.setTotalBuy(0);
+        userDO.setTotalGoods(0);
         userDAO.save(userDO);
     }
 }

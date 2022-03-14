@@ -25,7 +25,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <properties>
-        <yepshop.version>1.1.19</yepshop.version>
+        <yepshop.version>1.1.28</yepshop.version>
         <spring-boot.version>2.5.4</spring-boot.version>
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
@@ -172,6 +172,11 @@
                 <groupId>com.github.wechatpay-apiv3</groupId>
                 <artifactId>wechatpay-apache-httpclient</artifactId>
                 <version>${wechatpay-apiv3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.whvcse</groupId>
+                <artifactId>easy-captcha</artifactId>
+                <version>1.6.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -34,10 +34,11 @@ public class UserCollectServiceImpl extends BaseService implements UserCollectSe
 
     @Override
     public Result<Boolean> goodscollect(Long id) {
+        Long userId = currentUser().getId();
         Specification<UserCollectDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("goodsId"), id));
-            list.add(z.equal(x.get("creatorId"), currentUser().getId()));
+            list.add(z.equal(x.get("creatorId"), userId));
             Predicate[] predicates = new Predicate[list.size()];
             return z.and(list.toArray(predicates));
         };
@@ -47,7 +48,7 @@ public class UserCollectServiceImpl extends BaseService implements UserCollectSe
             userCollectDO.setGoodsId(id);
             userCollectDAO.save(userCollectDO);
             goodsDAO.updateTotalCollect(id, 1);
-            userDAO.collect(id,1);
+            userDAO.collect(userId, 1);
             return Result.success();
         }
         return Result.fail("-1", "已收藏，请勿重复收藏！");
@@ -55,11 +56,12 @@ public class UserCollectServiceImpl extends BaseService implements UserCollectSe
 
     @Override
     public Result<Boolean> cancelGoodsCollect(Long id) {
+        Long userId = currentUser().getId();
         UserCollectDO doo = find(id);
         if (doo != null) {
             userCollectDAO.delete(doo);
             goodsDAO.updateTotalCollect(id, -1);
-            userDAO.collect(id, -1);
+            userDAO.collect(userId, -1);
         }
         return Result.success("取消收藏成功！");
     }

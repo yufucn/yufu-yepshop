@@ -209,15 +209,15 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
             if (!StringUtils.isEmpty(query.getKeyword())) {
                 list.add(z.like(x.get("title"), "%" + query.getKeyword() + "%"));
             }
-            if (query.getSchoolIds().size() > 0) {
+            if (query.getSchoolIds() != null && query.getSchoolIds().size() > 0) {
                 Expression<String> exp = x.get("schoolId");
                 list.add(exp.in(query.getSchoolIds()));
             }
-            if (query.getCategoryIds().size() > 0) {
+            if (query.getCategoryIds() != null && query.getCategoryIds().size() > 0) {
                 Expression<String> exp = x.get("categoryId");
                 list.add(exp.in(query.getCategoryIds()));
             }
-            if (query.getConditionIds().size() > 0) {
+            if (query.getConditionIds() != null && query.getConditionIds().size() > 0) {
                 Expression<String> exp = x.get("conditionId");
                 list.add(exp.in(query.getConditionIds()));
             }

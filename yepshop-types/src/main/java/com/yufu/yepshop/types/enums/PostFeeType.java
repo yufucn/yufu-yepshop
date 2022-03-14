@@ -9,14 +9,11 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum ShippingType {
+public enum PostFeeType {
     /**
-     * 物流方式
-     * free(卖家承担运费),post(平邮),express(快 递),ems(EMS),virtual(虚拟发货)
+     * 运费方式
+     * FREE(卖家承担运费),COLLECT(到付)
      */
     FREE,
-    POST,
-    EXPRESS,
-    EMS,
-    VIRTUAL;
+    COLLECT
 }
