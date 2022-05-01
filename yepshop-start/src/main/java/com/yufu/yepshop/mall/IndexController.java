@@ -37,14 +37,14 @@ public class IndexController {
         Result<List<SliderDTO>> sliders = sliderService.list(Platform.PC, "index", "top");
         GoodsQuery query = new GoodsQuery();
         query.setPage(0);
-        query.setPerPage(5);
+        query.setPerPage(10);
         query.setCategoryIds(Collections.singletonList("929736513221169152"));
         query.setSort("ALL");
         Result<Page<GoodsListDTO>> goods = goodsService.search(query);
 
         GoodsQuery query2 = new GoodsQuery();
         query2.setPage(0);
-        query2.setPerPage(5);
+        query2.setPerPage(10);
         query2.setCategoryIds(Collections.singletonList("929736560784576512"));
         query2.setSort("ALL");
         Result<Page<GoodsListDTO>> recommendGoodses = goodsService.search(query2);

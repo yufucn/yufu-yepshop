@@ -32,6 +32,11 @@ public class GoodsWebController {
     }
 
 
+    @GetMapping({"/join", "/join.html"})
+    public String joinPage(@RequestParam Map<String, Object> params, HttpServletRequest request) {
+        return "mall/join";
+    }
+
     @GetMapping({"/add", "/add.html"})
     public String addPage(@RequestParam Map<String, Object> params, HttpServletRequest request) {
         return "mall/add";
@@ -42,7 +47,7 @@ public class GoodsWebController {
         if (StringUtils.isEmpty(params.get("page"))) {
             params.put("page", 1);
         }
-        params.put("limit", Constants.GOODS_SEARCH_PAGE_LIMIT);
+        params.put("limit", 100);
         //封装分类数据
         if (params.containsKey("goodsCategoryId") && !StringUtils.isEmpty(params.get("goodsCategoryId") + "")) {
 //            Long categoryId = Long.valueOf(params.get("goodsCategoryId") + "");
@@ -70,6 +75,7 @@ public class GoodsWebController {
         List<MallSearchGoodsVO> newBeeMallSearchGoods = new ArrayList<>();
         GoodsQuery query= new GoodsQuery();
         query.setKeyword(keyword);
+        query.setPerPage(100);
         Result<Page<GoodsListDTO>> goods = goodsService.search(query);
         for (GoodsListDTO g :goods.getData()) {
             MallSearchGoodsVO vo = new MallSearchGoodsVO();

@@ -75,8 +75,9 @@
         </th:block>
     </div>
 
-    <div id="flash">
+    <div id="recommend">
         <h2>最新闲置 - 校服</h2>
+        <a href="/search" class="more">查看更多>></a>
         <ul>
             <!-- 已配置新品则显示配置内容 -->
             <th:block th:unless="${#lists.isEmpty(newGoodses)}">
@@ -98,8 +99,8 @@
     </div>
 
     <div id="recommend">
-        <h2>最新闲置 - 书籍</h2>
-        <!--        <a href="##" class="more">查看更多>></a>-->
+        <h2>最新闲置 - 其他</h2>
+        <a href="/search" class="more">查看更多>></a>
         <ul>
             <!-- 已配置推荐商品则显示配置内容 -->
             <th:block th:unless="${#lists.isEmpty(recommendGoodses)}">
@@ -107,7 +108,7 @@
                     <li>
                         <a th:href="@{'/goods/detail/'+${recommendGoods.goods.id}}">
                             <div class="info discount">
-                                书籍
+                                其他
                             </div>
                             <img th:src="@{${recommendGoods.goods.picUrl}}" th:alt="${recommendGoods.goods.title}">
                             <p class="name" th:text="${recommendGoods.goods.title}">NewBeeMall</p>

@@ -31,12 +31,12 @@ public class PersonalController {
     @Autowired
     private YufuUserDetailsService yufuUserDetailsService;
 
-    @GetMapping({"/login", "login.html"})
+    @GetMapping({"/login-user", "login.html"})
     public String loginPage() {
         return "mall/login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login-user")
     @ResponseBody
     public ResultT login(@RequestParam("loginName") String loginName,
                          @RequestParam("verifyCode") String verifyCode,

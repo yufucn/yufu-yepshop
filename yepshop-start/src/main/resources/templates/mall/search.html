@@ -68,7 +68,10 @@
                     <div class="item_brand"><a th:href="@{'/goods/detail/'+${goods.goodsId}}" target="_blank"
                                                th:text="${goods.goodsName}">ltd</a></div>
                     <div class="item_sub_intro" th:text="${goods.goodsIntro}">ltd</div>
-                    <div class="item_price" th:text="${goods.sellingPrice+'.00元'}">1299.00元</div>
+                    <div class="item_price">
+                                <i>¥</i>
+                        <span class="item_price" th:text="${#numbers.formatDecimal(goods.sellingPrice/100.00,1,'COMMA',2,'POINT')}">1299.00元</span>
+                    </div>
                 </div>
             </th:block>
         </th:block>

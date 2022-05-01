@@ -1,10 +1,14 @@
 yufu:
-  version: 1.1.28
+  version: 1.1.30
 server:
   port: 5001
   compression:
     enabled: true
 spring:
+  redis:
+    host: ${redis_host:localhost}
+    port: ${redis_port:6379}
+    password: ${redis_password:password}
   jackson:
     time-zone: GMT+8
   application:

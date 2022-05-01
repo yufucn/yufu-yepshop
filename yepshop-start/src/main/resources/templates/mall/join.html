@@ -12,57 +12,32 @@
 
     <div class="dc">
         <div class="content w">
-            <div class="title fl">闲置详情</div>
+            <div class="title fl">商家入驻</div>
             <div class="clear"></div>
         </div>
     </div>
 
     <div class="intro mt20 w clearfix">
-        <div class="left fl" style="position: relative;">
-            <div class="swiper-container fl">
-                <img th:src="@{${goodsDetail.goods.picUrl}}">
-            </div>
-        </div>
-        <div class="right fr">
-            <div class="h3 ml20 mt20" th:text="${goodsDetail.goods.title}">NewBeeMall</div>
-            <div class="item_price mr40 ml20 mt10">
-                <i>¥</i><th:block th:text="${#numbers.formatDecimal(goodsDetail.price/100.00,1,'COMMA',2,'POINT')}"></th:block>
-                <del>
-                    <th:block th:text="${#numbers.formatDecimal(goodsDetail.originalPrice/100.00,1,'COMMA',2,'POINT')}"></th:block>
-                </del>
-            </div>
-
-            <div class="order">
-                <input class="car" type="button"  value="加入购物车"/>
-                <input class="car" type="button" value="立即购买"/>
-            </div>
-            <div class="tb-extra ml20" id="J_tbExtra">
-<!--                <dl>-->
-<!--                    <dt>发布:</dt>-->
-<!--                    <dd th:text="${goodsDetail.seller.nickName}">发布人</dd>-->
-<!--                </dl>-->
-                <dl>
-                    <dt>学校:</dt>
-                    <dd th:text="${goodsDetail.school.name}">发布人</dd>
-                </dl>
-                <dl>
-                    <dt>时间:</dt>
-                    <dd th:text="${goodsDetail.creationTime}">发布人</dd>
-                </dl>
-                <dl>
-                    <dt>发布者:</dt>
-                    <dd>王先生</dd>
-                </dl>
-                <dl>
-                    <dt>联系方式:</dt>
-                    <dd>1381335293零</dd>
-                </dl>
-            </div>
-        </div>
-        <div class="clear"></div>
+        <img th:src="@{/mall/image/join.png}">
     </div>
-    <!-- 这里使用的是 th:utext 标签，用 th:text 不会解析 html，用 th:utext 会解析 html -->
-    <div class="goods mt20 w clearfix" th:text="${goodsDetail.text}">
+
+    <div class="goods mt20 w clearfix">
+        1、入驻申请<br>
+        （1）核对资质信息：商家先根据卖家指南确认自身符合南京有诚校邦要求。<br>
+        （2）提交入驻申请：商家按照要求将入驻申请通过邮箱发送至平台相关人员邮箱 yepxiao(AT)aliyun.com - (AT)请用@替换。<br>
+        （3）双方快速沟通：运营部会对商家的资质进行初步审核，第一时间给予入驻结果反馈并与商家取得联系。<br>
+        （4）确认合作意向：招商负责人会就合作条款、要求、注意事项等进行详细沟通，双方确认合作意向。<br>
+        <br>
+        2、合同签订<br>
+        （1）快速发送合同： 招商负责人快递正式版合同到商家处。<br>
+        （2）提交合同资质：商家按照要求签订合同、并提交相关资质文件到相关招商负责人。<br>
+        （3）资质合同审核：运营部、市场部、法务部、财务部审核合同与资质文件。<br>
+        <br>
+        3、开店准备<br>
+        （1）交纳相关费用：商家交纳保证金和技术服务费。<br>
+        （2）商家上线培训：客服进行上架商品及开店培训。<br>
+        （3）准备产品资料：商家准备需要合作产品的相关图片及说明。<br>
+        （4）开店销售协助: 我公司技术人员将根据商家客户要求，把合作商品挂到平台进行销售<br>
     </div>
     <div class="mt20"></div>
 </div>
