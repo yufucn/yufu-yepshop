@@ -71,6 +71,20 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.3.9" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.3.9" level="project" />
     <orderEntry type="library" name="Maven: com.github.wechatpay-apiv3:wechatpay-apache-httpclient:0.4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-redis:2.5.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-redis:2.5.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-keyvalue:2.5.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-oxm:5.3.9" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.3.9" level="project" />
+    <orderEntry type="library" name="Maven: io.lettuce:lettuce-core:6.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.67.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-handler:4.1.67.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-resolver:4.1.67.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.67.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.67.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport:4.1.67.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.projectreactor:reactor-core:3.4.9" level="project" />
+    <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.aliyun:aliyun-java-sdk-sts:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.aliyun:aliyun-java-sdk-core:4.4.6" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.7" level="project" />
@@ -191,6 +205,7 @@
     <orderEntry type="library" name="Maven: org.attoparser:attoparser:2.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.unbescape:unbescape:1.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: com.github.whvcse:easy-captcha:1.6.2" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.18" level="project" />
     <orderEntry type="library" name="Maven: cn.hutool:hutool-all:5.5.8" level="project" />
     <orderEntry type="library" name="Maven: org.mapstruct:mapstruct:1.4.2.Final" level="project" />
