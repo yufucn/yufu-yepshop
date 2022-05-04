@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper;
@@ -40,6 +41,7 @@ import java.util.*;
 @Configuration
 @EnableAuthorizationServer
 @RequiredArgsConstructor
+@Order(1)
 public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     private final DataSource dataSource;
