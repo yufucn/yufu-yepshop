@@ -1,17 +1,26 @@
 package com.yufu.yepshop.application;
 
 import com.yufu.yepshop.common.Result;
+import com.yufu.yepshop.external.dto.WechatPayResponse;
 import com.yufu.yepshop.types.command.CheckoutCommand;
 import com.yufu.yepshop.types.command.CreateGoodsCommand;
 import com.yufu.yepshop.types.command.CreateOrderCommand;
+import com.yufu.yepshop.types.command.PayCommand;
+import com.yufu.yepshop.types.dto.CheckoutDTO;
+import com.yufu.yepshop.types.event.PaymentReceivedEvent;
+
+import java.text.ParseException;
 
 /**
  * @author wang
  * @date 2022/1/12 0:23
  */
 public interface TradeService {
-    Result<Boolean> checkout(CheckoutCommand command);
+    Result<WechatPayResponse> checkout(CheckoutCommand command);
 
+    Result<Boolean> paySuccess(PaymentReceivedEvent event) throws ParseException;
+
+    Result<WechatPayResponse> pay(PayCommand command);
 //    // 下单
 //    BuyerOrderDTO checkout(@Valid CheckoutCommand cmd);
 //

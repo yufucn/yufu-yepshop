@@ -156,6 +156,10 @@ public class OrderDO extends FullAuditedEntity {
         this.setSellerPointFee(this.getPayment());
     }
 
+    public  void prePay(){
+        this.setOrderState(OrderState.WAIT_BUYER_PAY);
+    }
+
     /**
      * 评价
      */

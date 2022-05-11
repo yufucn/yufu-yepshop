@@ -169,11 +169,6 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         if (goodsDO != null) {
             GoodsDetailDO goodsDetailDO = goodsDetailDAO.findById(id).get();
             GoodsDTO result = goodsAssembler.toDTO(goodsDO);
-            List<String> urls = new ArrayList<>();
-            for (String url : result.getImageUrlList()) {
-                urls.add(url + "?x-oss-process=style/detail");
-            }
-            result.setImageUrlList(urls.toArray(new String[0]));
             goodsAssembler.toDTO(goodsDetailDO, result);
             buildSeller(accountDAO, result.getSeller());
             builderSchool(schoolDAO, result.getSchool());

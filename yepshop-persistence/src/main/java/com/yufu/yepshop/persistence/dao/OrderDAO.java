@@ -9,6 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * @author wang
@@ -21,4 +22,6 @@ public interface OrderDAO extends PagingAndSortingRepository<OrderDO, Long>, Jpa
     @Modifying(clearAutomatically = true)
     @Query(value = "update yufu_order set payment=?2 where id = ?1", nativeQuery = true)
     Integer updatePayment(Long id, Integer payment);
+
+    List<OrderDO> findByTradeId(Long tradeId);
 }

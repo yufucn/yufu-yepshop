@@ -18,6 +18,7 @@ public class BuyerOrderDTO {
     private Seller seller;
     private Integer totalFee;
     private Integer payment;
+    private String tradeId;
     private OrderState orderState;
     private List<OrderItemDTO> items;
 }

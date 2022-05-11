@@ -44,4 +44,8 @@ public class TradeDO extends FullAuditedEntity {
      * 付款时间
      */
     private Date payTime;
+
+    public boolean hasPayed() {
+        return payState == PayState.TAY_SUCCESS;
+    }
 }

@@ -1,5 +1,5 @@
 yufu:
-  version: 1.2.2
+  version: 1.2.7
 server:
   port: 5001
   compression:
@@ -24,11 +24,11 @@ wechat:
   secret: ${wechat_secret:}
   token: ${wechat_token:}
   aesKey: ${wechat_aesKey:}
-  pay:
-    privateKey: ${wechat_pay_privateKey}
-    mchId: ${wechat_pay_mchId}
-    mchSerialNo: ${wechat_pay_mchSerialNo}
-    notifyUrl: ${notify_url}
+  privateKeyPath: ${wechat_pay_privateKeyPath}
+  mchId: ${wechat_pay_mchId}
+  mchSerialNo: ${wechat_pay_mchSerialNo}
+  notifyUrl: ${notify_url}
+  apiV3Key: ${apiV3Key}
 aliyun:
   bucket: ${aliyun_bucket}
   ak: ${aliyun_ak}
