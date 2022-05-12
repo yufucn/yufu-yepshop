@@ -23,5 +23,5 @@ public interface OrderDAO extends PagingAndSortingRepository<OrderDO, Long>, Jpa
     @Query(value = "update yufu_order set payment=?2 where id = ?1", nativeQuery = true)
     Integer updatePayment(Long id, Integer payment);
 
-    List<OrderDO> findByTradeId(Long tradeId);
+    OrderDO findByTradeId(Long tradeId);
 }

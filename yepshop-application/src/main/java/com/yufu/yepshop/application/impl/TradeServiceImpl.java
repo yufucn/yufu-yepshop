@@ -131,27 +131,30 @@ public class TradeServiceImpl extends BaseService implements TradeService {
         tradeDO.setCombineId(event.getTransactionId());
         tradeDAO.save(tradeDO);
 
-        List<OrderDO> orders = orderDAO.findByTradeId(tradeId);
-        for (OrderDO order :
-                orders) {
-            order.pay();
-            order.setPayTime(payTime);
-            orderDAO.save(order);
-        }
+        OrderDO order = orderDAO.findByTradeId(tradeId);
+        order.pay();
+        order.setPayTime(payTime);
+        orderDAO.save(order);
         return Result.success(true);
     }
 
     @Override
     public Result<WechatPayResponse> pay(PayCommand command) {
         List<TradeDTO> trades = new ArrayList<>();
-        Optional<TradeDO> t = tradeDAO.findById(command.getTradeId());
-        if (!t.isPresent()){
+        Long id = Long.parseLong(command.getTradeId());
+        Optional<TradeDO> t = tradeDAO.findById(id);
+        if (!t.isPresent()) {
             return Result.fail("交易不存在！");
         }
         TradeDO tradeDO = t.get();
-        List<OrderDO> orders = orderDAO.findByTradeId(command.getTradeId());
+        if (tradeDO.hasPayed()) {
+            return Result.fail("订单已支付！");
+        }
+        OrderDO order = orderDAO.findByTradeId(id);
         TradeDTO dto = tradeConverter.toDTO(tradeDO);
-        List<OrderDTO> ordersDto = orderConverter.toDTO()
+        OrderDTO orderDto = orderConverter.toDTO(order);
+        dto.setOrder(orderDto);
+        trades.add(dto);
         WechatPayResponse payId = externalWeChatPayService.pay(trades);
         return Result.success(payId);
     }

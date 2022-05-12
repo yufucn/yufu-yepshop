@@ -10,7 +10,6 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@AllArgsConstructor
 public class PayCommand {
-    private Long tradeId;
+    private String tradeId;
 }

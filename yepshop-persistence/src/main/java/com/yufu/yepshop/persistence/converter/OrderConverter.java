@@ -48,6 +48,8 @@ public interface OrderConverter {
     })
     OrderDTO toDTO(OrderDO doo);
 
+    List<OrderDTO> toListDTO(List<OrderDO> orders);
+
 
     List<OrderItemDTO> toDTO(List<OrderItemDO> value);
 
