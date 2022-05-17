@@ -7,8 +7,12 @@ import com.wechat.pay.contrib.apache.httpclient.exception.ValidationException;
 import com.wechat.pay.contrib.apache.httpclient.notification.Notification;
 import com.wechat.pay.contrib.apache.httpclient.notification.NotificationHandler;
 import com.wechat.pay.contrib.apache.httpclient.notification.NotificationRequest;
+import com.yufu.yepshop.application.GoodsService;
+import com.yufu.yepshop.application.OrderService;
 import com.yufu.yepshop.application.TradeService;
+import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.external.impl.ExternalWeChatPayServiceImpl;
+import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.event.PaymentReceivedEvent;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +46,9 @@ public class CallbackController {
 
     @Autowired
     private TradeService tradeService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     @PostMapping("/wechat")
     public Map<String, String> wechat(HttpServletRequest request, HttpServletResponse response) throws ValidationException, ParseException {
@@ -77,8 +84,10 @@ public class CallbackController {
                 String trade_state = jsonObject.getStr("trade_state");
                 String success_time = jsonObject.getStr("success_time");
                 String transaction_id = jsonObject.getStr("transaction_id");
+                String attach = jsonObject.getStr("attach");
                 if ("SUCCESS".equals(trade_state)) {
                     tradeService.paySuccess(new PaymentReceivedEvent(outTradeNo, transaction_id, success_time));
+                    goodsService.update(Long.parseLong(attach), GoodsState.SOLD);
                 }
 //                log.info("解密后的明文:{}",plainBody);
 
@@ -100,6 +109,11 @@ public class CallbackController {
 
     }
 
+    @PostMapping("/transfer")
+    public Result<String> transfer(){
+       String s =  externalWeChatPayService.transfer();
+       return Result.success(s);
+    }
 
     private String getRequestBody(HttpServletRequest request) {
 

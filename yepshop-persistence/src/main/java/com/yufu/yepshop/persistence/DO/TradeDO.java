@@ -48,4 +48,8 @@ public class TradeDO extends FullAuditedEntity {
     public boolean hasPayed() {
         return payState == PayState.TAY_SUCCESS;
     }
+
+    public void payCancel(){
+         setPayState(PayState.TAY_CANCEL);
+    }
 }

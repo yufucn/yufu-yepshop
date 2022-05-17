@@ -235,4 +235,12 @@ public class OrderDO extends FullAuditedEntity {
         this.setOrderState(OrderState.TRADE_CLOSED);
     }
 
+    /**
+     * 系统关闭
+     */
+    public void closeBySystem() {
+        this.setCloseTime(new Date());
+        this.setOrderState(OrderState.TRADE_CLOSED_BY_SYSTEM);
+    }
+
 }

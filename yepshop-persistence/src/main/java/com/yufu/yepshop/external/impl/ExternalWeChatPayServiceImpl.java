@@ -2,6 +2,7 @@ package com.yufu.yepshop.external.impl;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -122,7 +123,7 @@ public class ExternalWeChatPayServiceImpl {
         return "ok";
     }
 
-    public Boolean verifiedSign(String serialNo,String signStr, String signature) throws UnsupportedEncodingException {
+    public Boolean verifiedSign(String serialNo, String signStr, String signature) throws UnsupportedEncodingException {
         return verifier.verify(serialNo, signStr.getBytes("utf-8"), signature);
     }
 
@@ -139,7 +140,7 @@ public class ExternalWeChatPayServiceImpl {
                 nonce.getBytes(StandardCharsets.UTF_8), ciphertext);
     }
 
-    public Map<String,String> convertWechatPayMsgToMap(String plainBody) {
+    public Map<String, String> convertWechatPayMsgToMap(String plainBody) {
 
         Map<String, String> paramsMap = new HashMap<>(2);
 
@@ -160,6 +161,52 @@ public class ExternalWeChatPayServiceImpl {
     }
 
 
+    private String cut(String source, int length) {
+        if (source != null) {
+            if (source.length() <= length) {
+                return source;
+            }
+            return source.substring(0, length - 1);
+        }
+        return "";
+    }
+
+    public String transfer(){
+        HttpPost httpPost = new HttpPost("https://api.mch.weixin.qq.com/v3/transfer/batches");
+        httpPost.addHeader("Accept", "application/json");
+        httpPost.addHeader("Content-type", "application/json; charset=utf-8");
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode rootNode = objectMapper.createObjectNode();
+        String tid = "973349170452762624";
+        rootNode
+                .put("appid", wechatConfig.getAppid())
+                .put("out_batch_no", tid)
+                .put("batch_name", "测试打款")
+                .put("batch_remark", "测试打款")
+                .put("total_amount", 1)
+                .put("total_num", 1)
+        ;
+        ArrayNode jsonConditions = rootNode.putArray("transfer_detail_list");
+        ObjectNode jsonCondition = new ObjectMapper().createObjectNode();
+        jsonCondition.put("out_detail_no", tid);
+        jsonCondition.put("transfer_amount", 1);
+        jsonCondition.put("transfer_remark", "测试打款");
+        jsonCondition.put("openid", "o3aJ55ozZhjwPc0ExOy4P0uy9hMw");
+        jsonConditions.add(jsonCondition);
+        try {
+            objectMapper.writeValue(bos, rootNode);
+            httpPost.setEntity(new StringEntity(bos.toString("UTF-8"), "UTF-8"));
+            this.buildClient();
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+            String s = EntityUtils.toString(response.getEntity());
+            JSONObject jsonObject = JSONUtil.parseObj(s);
+            return s;
+        }
+        catch (Exception e) {
+            return e.getMessage();
+        }
+    }
     public WechatPayResponse pay(List<TradeDTO> trades) {
         if (trades.size() == 1) {
             TradeDTO trade = trades.get(0);
@@ -174,9 +221,11 @@ public class ExternalWeChatPayServiceImpl {
 
             rootNode.put("mchid", wechatConfig.getMchId())
                     .put("appid", wechatConfig.getAppid())
-                    .put("description", item.getGoods().getTitle())
+                    .put("description", cut(item.getGoods().getTitle(), 127))
                     .put("notify_url", wechatConfig.getNotifyUrl())
-                    .put("out_trade_no", trade.getId());
+                    .put("out_trade_no", trade.getId())
+                    .put("attach", item.getGoods().getId())
+            ;
 //            rootNode.putObject("amount")
 //                    .put("total", order.getPayment());
             // todo:调试阶段金额为1分钱

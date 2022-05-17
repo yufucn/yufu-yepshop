@@ -5,19 +5,16 @@ import com.yufu.yepshop.application.TradeService;
 import com.yufu.yepshop.common.Result;
 import com.yufu.yepshop.external.dto.WechatPayResponse;
 import com.yufu.yepshop.external.impl.ExternalWeChatPayServiceImpl;
-import com.yufu.yepshop.persistence.DO.OrderDO;
-import com.yufu.yepshop.persistence.DO.OrderItemDO;
-import com.yufu.yepshop.persistence.DO.TradeDO;
-import com.yufu.yepshop.persistence.DO.UserAccountDO;
+import com.yufu.yepshop.persistence.DO.*;
 import com.yufu.yepshop.persistence.converter.OrderConverter;
 import com.yufu.yepshop.persistence.converter.TradeConverter;
+import com.yufu.yepshop.persistence.dao.GoodsDAO;
 import com.yufu.yepshop.persistence.dao.OrderDAO;
 import com.yufu.yepshop.persistence.dao.TradeDAO;
 import com.yufu.yepshop.types.command.CheckoutCommand;
 import com.yufu.yepshop.types.command.CreateOrderCommand;
 import com.yufu.yepshop.types.command.CreateOrderItemCommand;
 import com.yufu.yepshop.types.command.PayCommand;
-import com.yufu.yepshop.types.dto.CheckoutDTO;
 import com.yufu.yepshop.types.dto.OrderDTO;
 import com.yufu.yepshop.types.dto.OrderItemDTO;
 import com.yufu.yepshop.types.dto.TradeDTO;
@@ -25,11 +22,9 @@ import com.yufu.yepshop.types.enums.PayState;
 import com.yufu.yepshop.types.event.PaymentReceivedEvent;
 import com.yufu.yepshop.types.value.Buyer;
 import com.yufu.yepshop.types.value.Seller;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -44,6 +39,7 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 //    private final TradeRepository tradeRepository;
     private final OrderDAO orderDAO;
     private final TradeDAO tradeDAO;
+    private final GoodsDAO goodsDAO;
     private final TradeConverter tradeConverter = TradeConverter.INSTANCE;
     private final OrderConverter orderConverter = OrderConverter.INSTANCE;
     private final ExternalWeChatPayServiceImpl externalWeChatPayService;
@@ -53,12 +49,14 @@ public class TradeServiceImpl extends BaseService implements TradeService {
 //                            TradeRepository tradeRepository,
             OrderDAO orderDAO,
             TradeDAO tradeDAO,
+            GoodsDAO goodsDAO,
             ExternalWeChatPayServiceImpl externalWeChatPayService
     ) {
 //        this.orderRepository = orderRepository;
 //        this.tradeRepository = tradeRepository;
         this.orderDAO = orderDAO;
         this.tradeDAO = tradeDAO;
+        this.goodsDAO = goodsDAO;
         this.externalWeChatPayService = externalWeChatPayService;
     }
 
@@ -150,9 +148,29 @@ public class TradeServiceImpl extends BaseService implements TradeService {
         if (tradeDO.hasPayed()) {
             return Result.fail("订单已支付！");
         }
-        OrderDO order = orderDAO.findByTradeId(id);
+        OrderDO orderDO = orderDAO.findByTradeId(id);
         TradeDTO dto = tradeConverter.toDTO(tradeDO);
-        OrderDTO orderDto = orderConverter.toDTO(order);
+        OrderDTO orderDto = orderConverter.toDTO(orderDO);
+
+        OrderItemDTO item = orderDto.getItems().get(0);
+        Long goodsId = Long.parseLong(item.getGoods().getId());
+        Optional<GoodsDO> goodOptional = goodsDAO.findById(goodsId);
+        if (!goodOptional.isPresent()) {
+            tradeDO.payCancel();
+            tradeDAO.save(tradeDO);
+            orderDO.closeBySystem();
+            orderDAO.save(orderDO);
+            return Result.fail("闲置已被删除！");
+        }
+        GoodsDO goods = goodOptional.get();
+        if (!goods.canBuy()) {
+            tradeDO.payCancel();
+            tradeDAO.save(tradeDO);
+            orderDO.closeBySystem();
+            orderDAO.save(orderDO);
+            return Result.fail("闲置已被卖出！");
+        }
+
         dto.setOrder(orderDto);
         trades.add(dto);
         WechatPayResponse payId = externalWeChatPayService.pay(trades);

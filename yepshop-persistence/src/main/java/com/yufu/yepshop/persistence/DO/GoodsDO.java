@@ -81,4 +81,8 @@ public class GoodsDO extends FullAuditedEntity {
 
     @Embedded
     private RegionValue region;
+
+    public boolean canBuy() {
+        return goodsState == GoodsState.UP && auditState == AuditState.SUCCESS;
+    }
 }
