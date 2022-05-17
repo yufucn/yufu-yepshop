@@ -17,5 +17,5 @@ public enum AuditState {
      */
     PENDING,
     BLOCK,
-    SUCCESS,
+    SUCCESS
 }

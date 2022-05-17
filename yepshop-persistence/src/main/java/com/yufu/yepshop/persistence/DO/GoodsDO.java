@@ -83,6 +83,6 @@ public class GoodsDO extends FullAuditedEntity {
     private RegionValue region;
 
     public boolean canBuy() {
-        return goodsState == GoodsState.UP && auditState == AuditState.SUCCESS;
+        return goodsState == GoodsState.UP && auditState != AuditState.BLOCK;
     }
 }

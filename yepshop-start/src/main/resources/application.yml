@@ -10,7 +10,7 @@ spring:
   application:
     name: yepshop-service
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
   datasource:
@@ -19,6 +19,8 @@ spring:
     password: ${mysql_password:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+yepxiao:
+  filterAuditState: ${filter_audit_state:SUCCESS,PENDING}
 wechat:
   appid: ${wechat_appid:}
   secret: ${wechat_secret:}

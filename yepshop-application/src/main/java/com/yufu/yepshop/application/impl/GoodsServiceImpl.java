@@ -1,5 +1,6 @@
 package com.yufu.yepshop.application.impl;
 
+import com.yufu.yepshop.config.YepxiaoConfig;
 import com.yufu.yepshop.domain.service.UserDomainService;
 import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.application.GoodsService;
@@ -55,15 +56,19 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
 
     private final GoodsConverter goodsAssembler = GoodsConverter.INSTANCE;
 
+    private final YepxiaoConfig yepxiaoConfig;
+
     public GoodsServiceImpl(
             GoodsDAO goodsDAO,
             UserAccountDAO accountDAO,
             GoodsDetailDAO goodsDetailDAO,
-            SchoolDAO schoolDAO, UserCollectDAO userCollectDAO,
+            SchoolDAO schoolDAO,
+            UserCollectDAO userCollectDAO,
             GoodsViewDAO goodsViewDAO,
             UserDomainService userDomainService,
             GoodsCommentDAO goodsCommentDAO,
-            GoodsCommentReplyDAO goodsCommentReplyDAO) {
+            GoodsCommentReplyDAO goodsCommentReplyDAO,
+            YepxiaoConfig yepxiaoConfig) {
         this.accountDAO = accountDAO;
         this.goodsDAO = goodsDAO;
         this.goodsDetailDAO = goodsDetailDAO;
@@ -73,6 +78,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         this.goodsCommentDAO = goodsCommentDAO;
         this.userDomainService = userDomainService;
         this.goodsCommentReplyDAO = goodsCommentReplyDAO;
+        this.yepxiaoConfig = yepxiaoConfig;
     }
 
     @Override
@@ -84,7 +90,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         entity.setSellerType(SellerType.C);
         entity.setTotalCollect(0);
         //默认上架、审核通过
-        entity.setAuditState(AuditState.SUCCESS);
+        entity.setAuditState(AuditState.PENDING);
         goodsDAO.save(entity);
         Long id = entity.getId();
         GoodsDetailDO detail = new GoodsDetailDO();
@@ -101,8 +107,8 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         if (goodsDO != null) {
             goodsAssembler.toDO(command, goodsDO);
             goodsDO.setTitle(command.getTitleFromText());
+            goodsDO.setAuditState(AuditState.PENDING);
             goodsDAO.save(goodsDO);
-
             GoodsDetailDO detailDO = new GoodsDetailDO();
 
             detailDO.setId(goodsDO.getId());
@@ -120,6 +126,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         GoodsDO goodsDO = getById(id);
         if (goodsDO != null) {
             goodsDO.setGoodsState(state);
+
             goodsDAO.save(goodsDO);
             return Result.success(true);
         }
@@ -205,7 +212,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         Specification<GoodsDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("goodsState"), GoodsState.UP));
-            list.add(z.equal(x.get("auditState"), AuditState.SUCCESS));
+            list.add(x.get("auditState").in(yepxiaoConfig.status()));
             if (!StringUtils.isEmpty(query.getKeyword())) {
                 list.add(z.like(x.get("title"), "%" + query.getKeyword() + "%"));
             }
@@ -236,8 +243,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         Specification<GoodsDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("goodsState"), GoodsState.UP));
-            list.add(z.equal(x.get("auditState"), AuditState.SUCCESS));
-
+            list.add(x.get("auditState").in(yepxiaoConfig.status()));
             if (schools.size() > 0) {
                 Expression<String> exp = x.get("schoolId");
                 list.add(exp.in(schools.stream().map(SchoolValue::getId).collect(Collectors.toList())));
@@ -311,7 +317,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         GoodsCommentDO commentDO = new GoodsCommentDO();
         commentDO.setGoodsId(id);
         commentDO.setText(command.getText());
-        commentDO.setAuditState(AuditState.SUCCESS);
+        commentDO.setAuditState(AuditState.PENDING);
         goodsCommentDAO.save(commentDO);
         return Result.success(commentDO.getId().toString(), "评论成功");
     }
@@ -332,7 +338,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         commentReplyDO.setCommentId(commentId);
         commentReplyDO.setText(command.getText());
         commentReplyDO.setReplyToUserId(Long.parseLong(command.getReplyToUserId()));
-        commentReplyDO.setAuditState(AuditState.SUCCESS);
+        commentReplyDO.setAuditState(AuditState.PENDING);
         goodsCommentReplyDAO.save(commentReplyDO);
         goodsCommentDAO.updateTotalReply(commentId, 1);
         return Result.success(commentReplyDO.getId().toString(), "评论回复成功");
@@ -352,7 +358,7 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         Specification<GoodsCommentDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("goodsId"), id));
-            list.add(z.equal(x.get("auditState"), AuditState.SUCCESS));
+            list.add(x.get("auditState").in(yepxiaoConfig.status()));
             Predicate[] predicates = new Predicate[list.size()];
             return z.and(list.toArray(predicates));
         };

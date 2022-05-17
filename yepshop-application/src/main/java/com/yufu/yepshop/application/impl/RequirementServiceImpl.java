@@ -3,6 +3,7 @@ package com.yufu.yepshop.application.impl;
 import com.yufu.yepshop.application.RequirementService;
 import com.yufu.yepshop.common.Constants;
 import com.yufu.yepshop.common.Result;
+import com.yufu.yepshop.config.YepxiaoConfig;
 import com.yufu.yepshop.domain.service.UserDomainService;
 import com.yufu.yepshop.domain.service.impl.BaseService;
 import com.yufu.yepshop.persistence.DO.*;
@@ -39,6 +40,7 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
     private final RequirementCommentReplyDAO requirementCommentReplyDAO;
     private final SchoolDAO schoolDAO;
     private final UserAccountDAO accountDAO;
+    private final YepxiaoConfig yepxiaoConfig;
 
     private final RequirementConverter requirementConverter = RequirementConverter.INSTANCE;
     private final RequirementCommentConverter requirementCommentConverter = RequirementCommentConverter.INSTANCE;
@@ -47,13 +49,15 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
                                   RequirementDAO requirementDAO,
                                   RequirementCommentDAO requirementCommentDAO,
                                   RequirementCommentReplyDAO requirementCommentReplyDAO,
-                                  SchoolDAO schoolDAO, UserAccountDAO accountDAO) {
+                                  SchoolDAO schoolDAO, UserAccountDAO accountDAO,
+                                  YepxiaoConfig yepxiaoConfig) {
         this.userDomainService = userDomainService;
         this.requirementDAO = requirementDAO;
         this.requirementCommentDAO = requirementCommentDAO;
         this.requirementCommentReplyDAO = requirementCommentReplyDAO;
         this.schoolDAO = schoolDAO;
         this.accountDAO = accountDAO;
+        this.yepxiaoConfig = yepxiaoConfig;
     }
 
     @Override
@@ -61,7 +65,7 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
         RequirementDO entity = requirementConverter.toDO(command);
         //默认上架、审核通过
         entity.setRequirementState(RequirementState.UP);
-        entity.setAuditState(AuditState.SUCCESS);
+        entity.setAuditState(AuditState.PENDING);
         requirementDAO.save(entity);
         Long id = entity.getId();
         return Result.success(id.toString(), "发布成功");
@@ -135,7 +139,7 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
         Specification<RequirementDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("requirementState"), RequirementState.UP));
-            list.add(z.equal(x.get("auditState"), AuditState.SUCCESS));
+            list.add(x.get("auditState").in(yepxiaoConfig.status()));
             if (!StringUtils.isEmpty(query.getKeyword())) {
                 list.add(z.like(x.get("title"), "%" + query.getKeyword() + "%"));
             }
@@ -166,7 +170,7 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
         Specification<RequirementDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("requirementState"), RequirementState.UP));
-            list.add(z.equal(x.get("auditState"), AuditState.SUCCESS));
+            list.add(x.get("auditState").in(yepxiaoConfig.status()));
 
             if (schools.size() > 0) {
                 Expression<String> exp = x.get("schoolId");
@@ -186,7 +190,7 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
         RequirementCommentDO commentDO = new RequirementCommentDO();
         commentDO.setRequirementId(id);
         commentDO.setText(command.getText());
-        commentDO.setAuditState(AuditState.SUCCESS);
+        commentDO.setAuditState(AuditState.PENDING);
         requirementCommentDAO.save(commentDO);
         return Result.success(commentDO.getId().toString(), "评论成功");
     }
@@ -204,7 +208,7 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
         commentReplyDO.setCommentId(commentId);
         commentReplyDO.setText(command.getText());
         commentReplyDO.setReplyToUserId(Long.parseLong(command.getReplyToUserId()));
-        commentReplyDO.setAuditState(AuditState.SUCCESS);
+        commentReplyDO.setAuditState(AuditState.PENDING);
         requirementCommentReplyDAO.save(commentReplyDO);
         requirementCommentDAO.updateTotalReply(commentId, 1);
         return Result.success(commentReplyDO.getId().toString(), "评论回复成功");
@@ -224,7 +228,7 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
         Specification<RequirementCommentDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("requirementId"), id));
-            list.add(z.equal(x.get("auditState"), AuditState.SUCCESS));
+            list.add(x.get("auditState").in(yepxiaoConfig.status()));
             Predicate[] predicates = new Predicate[list.size()];
             return z.and(list.toArray(predicates));
         };
