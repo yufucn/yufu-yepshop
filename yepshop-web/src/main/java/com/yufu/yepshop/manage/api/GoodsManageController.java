@@ -26,9 +26,9 @@ public class GoodsManageController {
         this.goodsService = goodsService;
     }
 
-    @ApiOperation(value = "删除")
-    @DeleteMapping("/{id}")
+    @ApiOperation(value = "屏蔽")
+    @DeleteMapping("/{id}/block")
     public Result<Boolean> deleteGoods(@PathVariable Long id) {
-        return goodsService.delete(id);
+        return goodsService.block(id);
     }
 }

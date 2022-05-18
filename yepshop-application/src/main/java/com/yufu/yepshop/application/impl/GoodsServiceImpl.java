@@ -141,6 +141,17 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     }
 
     @Override
+    public Result<Boolean> block(Long id) {
+        GoodsDO goodsDO = getById(id);
+        if (goodsDO != null) {
+            goodsDO.setAuditState(AuditState.BLOCK);
+            goodsDAO.save(goodsDO);
+            return Result.success(true);
+        }
+        return Result.fail("商品不存在！");
+    }
+
+    @Override
     public Result<Page<GoodsListDTO>> pagedList(Long creatorId, Integer page, Integer perPage, String goodsState) {
         Pageable pageable = PageRequest.of(page, perPage, Sort.Direction.DESC, "id");
         Specification<GoodsDO> spc = (x, y, z) -> {
@@ -212,7 +223,11 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         Specification<GoodsDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
             list.add(z.equal(x.get("goodsState"), GoodsState.UP));
-            list.add(x.get("auditState").in(yepxiaoConfig.status()));
+            if (StringUtils.isEmpty(query.getAuditState())) {
+                list.add(x.get("auditState").in(yepxiaoConfig.status()));
+            } else {
+                list.add(z.equal(x.get("auditState"), AuditState.valueOf(query.getAuditState())));
+            }
             if (!StringUtils.isEmpty(query.getKeyword())) {
                 list.add(z.like(x.get("title"), "%" + query.getKeyword() + "%"));
             }

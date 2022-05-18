@@ -15,7 +15,6 @@ import java.util.List;
  */
 @Setter
 @Getter
-//@AllArgsConstructor
 public class GoodsQuery {
     @ApiModelProperty(value = "学校id集合")
     private List<String> schoolIds;
@@ -28,4 +27,5 @@ public class GoodsQuery {
     private String keyword;
     @ApiModelProperty(value = "排序字段：ALL、PRICE_ASC、PRICE_DESC、LATEST")
     private String sort;
+    private String auditState;
 }

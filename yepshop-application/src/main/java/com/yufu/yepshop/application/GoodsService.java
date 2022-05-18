@@ -26,6 +26,8 @@ public interface GoodsService {
 
     Result<Boolean> delete(Long id);
 
+    Result<Boolean> block(Long id);
+
     Result<Page<GoodsListDTO>> pagedList(Long creatorId, Integer page, Integer perPage, String goodsState);
 
     Result<GoodsDTO> get(Long id);
