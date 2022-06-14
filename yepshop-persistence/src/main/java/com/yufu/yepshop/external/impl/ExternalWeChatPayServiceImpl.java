@@ -226,11 +226,8 @@ public class ExternalWeChatPayServiceImpl {
                     .put("out_trade_no", trade.getId())
                     .put("attach", item.getGoods().getId())
             ;
-//            rootNode.putObject("amount")
-//                    .put("total", order.getPayment());
-            // todo:调试阶段金额为1分钱
             rootNode.putObject("amount")
-                    .put("total", 1);
+                    .put("total", order.getPayment());
             rootNode.putObject("payer")
                     .put("openid", trade.getOpenId());
             try {

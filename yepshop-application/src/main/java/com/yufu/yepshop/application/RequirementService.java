@@ -22,6 +22,10 @@ public interface RequirementService {
 
     Result<Boolean> delete(Long id);
 
+    Result<Boolean> block(Long id);
+
+    Result<Boolean> approved(Long id);
+
     Result<Page<RequirementListDTO>> pagedList(Long creatorId, Integer page, Integer perPage, String goodsState);
 
     Result<RequirementListDTO> get(Long id);

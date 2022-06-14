@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -55,6 +56,7 @@ public class YufuUserDetailsService implements UserDetailsService {
         user.setCredentialsNonExpired(true);
         user.setAccessFailedCount(0);
         user.setNormalizedUserName(user.getUsername().toUpperCase(Locale.ROOT));
+        user.setCreationTime(new Date());
         if (user.getEmail() != null) {
             user.setNormalizedEmail(user.getEmail().toUpperCase(Locale.ROOT));
         }

@@ -28,4 +28,7 @@ public class GoodsQuery {
     @ApiModelProperty(value = "排序字段：ALL、PRICE_ASC、PRICE_DESC、LATEST")
     private String sort;
     private String auditState;
+    private String goodsState;
+    private String start;
+    private String end;
 }

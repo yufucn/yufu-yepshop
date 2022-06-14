@@ -5,10 +5,7 @@ import com.yufu.yepshop.common.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author wang
@@ -27,8 +24,14 @@ public class GoodsManageController {
     }
 
     @ApiOperation(value = "屏蔽")
-    @DeleteMapping("/{id}/block")
+    @PutMapping("/{id}/block")
     public Result<Boolean> deleteGoods(@PathVariable Long id) {
         return goodsService.block(id);
+    }
+
+    @ApiOperation(value = "通过")
+    @PutMapping("/{id}/approved")
+    public Result<Boolean> approvedGoods(@PathVariable Long id) {
+        return goodsService.approved(id);
     }
 }

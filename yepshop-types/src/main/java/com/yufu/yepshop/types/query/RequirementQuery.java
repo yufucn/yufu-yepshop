@@ -24,4 +24,6 @@ public class RequirementQuery {
     private Integer page = 0;
     private Integer perPage = 10;
     private String keyword;
+    private String auditState;
+    private String requirementState;
 }

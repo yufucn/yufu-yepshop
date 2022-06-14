@@ -1,5 +1,6 @@
 package com.yufu.yepshop.types.dto;
 
+import com.yufu.yepshop.types.enums.AuditState;
 import com.yufu.yepshop.types.value.UserValue;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,4 +27,6 @@ public class CommentDTO {
     private UserValue user;
 
     private Integer totalReply;
+
+    private AuditState auditState;
 }

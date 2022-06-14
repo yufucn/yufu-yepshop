@@ -8,6 +8,7 @@ import com.yufu.yepshop.persistence.DO.UserAccountDO;
 import com.yufu.yepshop.types.value.RegionValue;
 import lombok.Data;
 import me.chanjar.weixin.common.error.WxErrorException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -49,7 +50,7 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
             user.setUserName(openId);
             user.setAvatarUrl(userInfo.getAvatarUrl());
             user.setGender(userInfo.getGender());
-            user.setNickName(userInfo.getNickName());
+            user.setNickName(filterEmoji(userInfo.getNickName()));
             user.setLanguage(userInfo.getLanguage());
             RegionValue regionValue = new RegionValue();
             regionValue.setArea("");
@@ -73,6 +74,14 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
         WechatAuthenticationToken result = new WechatAuthenticationToken(user, new HashSet<>());
         result.setDetails(authentication.getDetails());
         return result;
+    }
+
+    public String filterEmoji(String source) {
+        if(StringUtils.isNotBlank(source)){
+            return source.replaceAll("[\\ud800\\udc00-\\udbff\\udfff\\ud800-\\udfff]", "");
+        }else{
+            return source;
+        }
     }
 
     @Override

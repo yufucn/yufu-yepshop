@@ -100,6 +100,28 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
     }
 
     @Override
+    public Result<Boolean> block(Long id) {
+        RequirementDO doo = getById(id);
+        if (doo != null) {
+            doo.setAuditState(AuditState.BLOCK);
+            requirementDAO.save(doo);
+            return Result.success(true);
+        }
+        return Result.fail("求购不存在！");
+    }
+
+    @Override
+    public Result<Boolean> approved(Long id) {
+        RequirementDO doo = getById(id);
+        if (doo != null) {
+            doo.setAuditState(AuditState.SUCCESS);
+            requirementDAO.save(doo);
+            return Result.success(true);
+        }
+        return Result.fail("求购不存在！");
+    }
+
+    @Override
     public Result<Page<RequirementListDTO>> pagedList(Long creatorId, Integer page, Integer perPage, String requirementState) {
         Pageable pageable = PageRequest.of(page, perPage, Sort.Direction.DESC, "id");
         Specification<RequirementDO> spc = (x, y, z) -> {
@@ -138,8 +160,17 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
         Pageable pageable = PageRequest.of(query.getPage(), query.getPerPage(), sortDirection, column);
         Specification<RequirementDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
-            list.add(z.equal(x.get("requirementState"), RequirementState.UP));
-            list.add(x.get("auditState").in(yepxiaoConfig.status()));
+            if (StringUtils.isEmpty(query.getRequirementState())) {
+                list.add(z.equal(x.get("requirementState"), RequirementState.UP));
+            }
+
+            if (StringUtils.isEmpty(query.getAuditState())) {
+                list.add(x.get("auditState").in(yepxiaoConfig.status()));
+            } else {
+                if (!"ALL".equals(query.getAuditState())) {
+                    list.add(z.equal(x.get("auditState"), AuditState.valueOf(query.getAuditState())));
+                }
+            }
             if (!StringUtils.isEmpty(query.getKeyword())) {
                 list.add(z.like(x.get("title"), "%" + query.getKeyword() + "%"));
             }

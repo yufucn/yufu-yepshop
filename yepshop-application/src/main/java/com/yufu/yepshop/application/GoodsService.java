@@ -10,6 +10,7 @@ import com.yufu.yepshop.types.dto.CommentReplyDTO;
 import com.yufu.yepshop.types.dto.GoodsDTO;
 import com.yufu.yepshop.types.dto.GoodsListDTO;
 import com.yufu.yepshop.types.enums.GoodsState;
+import com.yufu.yepshop.types.query.CommentQuery;
 import com.yufu.yepshop.types.query.GoodsQuery;
 import org.springframework.data.domain.Page;
 
@@ -27,6 +28,8 @@ public interface GoodsService {
     Result<Boolean> delete(Long id);
 
     Result<Boolean> block(Long id);
+
+    Result<Boolean> approved(Long id);
 
     Result<Page<GoodsListDTO>> pagedList(Long creatorId, Integer page, Integer perPage, String goodsState);
 
@@ -51,6 +54,8 @@ public interface GoodsService {
     Result<Boolean> commentReplyDelete(Long id, Long commentId, Long replyId);
 
     Result<Page<CommentDTO>> commentsGoods(Long id, Integer page, Integer perPage);
+
+    Result<Page<CommentDTO>> commentsGoods(CommentQuery query);
 
     Result<Page<CommentReplyDTO>> commentReplyGoodsList(
             Long id,

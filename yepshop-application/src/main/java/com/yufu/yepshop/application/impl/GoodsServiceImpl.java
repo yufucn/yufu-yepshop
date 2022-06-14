@@ -22,6 +22,7 @@ import com.yufu.yepshop.types.enums.AuditState;
 import com.yufu.yepshop.types.enums.GoodsState;
 import com.yufu.yepshop.types.enums.SellerType;
 import com.yufu.yepshop.types.enums.SortFilter;
+import com.yufu.yepshop.types.query.CommentQuery;
 import com.yufu.yepshop.types.query.GoodsQuery;
 import com.yufu.yepshop.types.value.SchoolValue;
 import com.yufu.yepshop.types.value.Seller;
@@ -33,6 +34,8 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -152,6 +155,17 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     }
 
     @Override
+    public Result<Boolean> approved(Long id) {
+        GoodsDO goodsDO = getById(id);
+        if (goodsDO != null) {
+            goodsDO.setAuditState(AuditState.SUCCESS);
+            goodsDAO.save(goodsDO);
+            return Result.success(true);
+        }
+        return Result.fail("商品不存在！");
+    }
+
+    @Override
     public Result<Page<GoodsListDTO>> pagedList(Long creatorId, Integer page, Integer perPage, String goodsState) {
         Pageable pageable = PageRequest.of(page, perPage, Sort.Direction.DESC, "id");
         Specification<GoodsDO> spc = (x, y, z) -> {
@@ -222,11 +236,20 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
         Pageable pageable = PageRequest.of(query.getPage(), query.getPerPage(), sortDirection, column);
         Specification<GoodsDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
-            list.add(z.equal(x.get("goodsState"), GoodsState.UP));
+            if (StringUtils.isEmpty(query.getGoodsState())) {
+                list.add(z.equal(x.get("goodsState"), GoodsState.UP));
+            } else {
+                if (!"ALL".equals(query.getGoodsState())) {
+                    list.add(z.equal(x.get("goodsState"), GoodsState.valueOf(query.getGoodsState())));
+                }
+            }
+
             if (StringUtils.isEmpty(query.getAuditState())) {
                 list.add(x.get("auditState").in(yepxiaoConfig.status()));
             } else {
-                list.add(z.equal(x.get("auditState"), AuditState.valueOf(query.getAuditState())));
+                if (!"ALL".equals(query.getAuditState())) {
+                    list.add(z.equal(x.get("auditState"), AuditState.valueOf(query.getAuditState())));
+                }
             }
             if (!StringUtils.isEmpty(query.getKeyword())) {
                 list.add(z.like(x.get("title"), "%" + query.getKeyword() + "%"));
@@ -242,6 +265,15 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
             if (query.getConditionIds() != null && query.getConditionIds().size() > 0) {
                 Expression<String> exp = x.get("conditionId");
                 list.add(exp.in(query.getConditionIds()));
+            }
+            if (query.getStart()!=null && query.getEnd()!=null){
+                try {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    list.add(z.greaterThanOrEqualTo(x.get("creationTime"), simpleDateFormat.parse(query.getStart())));
+                    list.add(z.lessThanOrEqualTo(x.get("creationTime"), simpleDateFormat.parse(query.getEnd())));
+                } catch (ParseException e) {
+                }
+
             }
             Predicate[] predicates = new Predicate[list.size()];
             return z.and(list.toArray(predicates));
@@ -388,6 +420,37 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
             for (GoodsCommentDO doo : list) {
                 CommentDTO dto = converter.toDTO(doo);
                 dto.setUser(users.stream().filter(s -> s.getId().equals(dto.getUser().getId())).findFirst().orElse(null));
+                comments.add(dto);
+            }
+            Page<CommentDTO> result = new PageImpl<>(comments, paged.getPageable(), paged.getTotalElements());
+            return Result.success(result);
+        }
+        return Result.success(null);
+    }
+
+    @Override
+    public Result<Page<CommentDTO>> commentsGoods(CommentQuery query) {
+        Sort.Direction sortDirection = Sort.Direction.DESC;
+        String column = "id";
+        Specification<GoodsCommentDO> spc = (x, y, z) -> {
+            ArrayList<Predicate> list = new ArrayList<>();
+            if (StringUtils.isEmpty(query.getAuditState())) {
+                list.add(x.get("auditState").in(yepxiaoConfig.status()));
+            } else {
+                if (!"ALL".equals(query.getAuditState())) {
+                    list.add(z.equal(x.get("auditState"), AuditState.valueOf(query.getAuditState())));
+                }
+            }
+            Predicate[] predicates = new Predicate[list.size()];
+            return z.and(list.toArray(predicates));
+        };
+        Pageable pageable = PageRequest.of(query.getPage(), query.getPerPage(), sortDirection, column);
+        Page<GoodsCommentDO> paged = goodsCommentDAO.findAll(spc, pageable);
+        List<GoodsCommentDO> list = paged.getContent();
+        if (list.size() > 0) {
+            List<CommentDTO> comments = new ArrayList<>();
+            for (GoodsCommentDO doo : list) {
+                CommentDTO dto = converter.toDTO(doo);
                 comments.add(dto);
             }
             Page<CommentDTO> result = new PageImpl<>(comments, paged.getPageable(), paged.getTotalElements());
