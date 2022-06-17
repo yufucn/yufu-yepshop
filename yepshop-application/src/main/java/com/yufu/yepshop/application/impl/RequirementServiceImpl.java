@@ -197,6 +197,9 @@ public class RequirementServiceImpl extends BaseService implements RequirementSe
     @Override
     public Result<Page<RequirementListDTO>> tip(Integer page, Integer perPage) {
         Long userId = currentUser().getId();
+        if (userId == null) {
+            return Result.success();
+        }
         List<SchoolValue> schools = userDomainService.schools(userId);
         Specification<RequirementDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();

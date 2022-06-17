@@ -27,9 +27,20 @@ public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter {
                 //只对 /api/* 应用 resource server 过滤
                 .requestMatchers().antMatchers("/api/**")
                 .and()
-                .authorizeRequests().antMatchers("/oauth/**", "/login/**", "/logout/**").permitAll()
+                .authorizeRequests().antMatchers(
+                "/oauth/**"
+                , "/login/**"
+                , "/logout/**"
+                , "/api/v1/mdm/category/**"
+                , "/api/v1/mdm/region/**"
+                , "/api/v1/mdm/school/**"
+                , "/api/v1/shop/goods/**"
+                , "/api/v1/shop/requirements/**"
+                , "/api/v1/shop/slider"
+        ).permitAll()
                 .and()
                 .authorizeRequests()
+
                 .anyRequest().authenticated();
     }
 }

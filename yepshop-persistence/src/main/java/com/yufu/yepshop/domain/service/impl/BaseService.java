@@ -19,7 +19,11 @@ import java.util.Optional;
  */
 public class BaseService {
     protected UserAccountDO currentUser() {
-        return (UserAccountDO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal != null && principal != "anonymousUser") {
+            return (UserAccountDO) principal;
+        }
+        return new UserAccountDO();
     }
 
     protected void buildUser(UserAccountDAO accountDAO, UserValue user) {

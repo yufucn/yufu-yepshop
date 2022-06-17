@@ -286,6 +286,9 @@ public class GoodsServiceImpl extends BaseService implements GoodsService {
     @Override
     public Result<Page<GoodsListDTO>> tipGoods(Integer page, Integer perPage) {
         Long userId = currentUser().getId();
+        if (userId == null) {
+            return Result.success();
+        }
         List<SchoolValue> schools = userDomainService.schools(userId);
         Specification<GoodsDO> spc = (x, y, z) -> {
             ArrayList<Predicate> list = new ArrayList<>();
